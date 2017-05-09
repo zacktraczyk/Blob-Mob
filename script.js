@@ -28,7 +28,6 @@ var c = document.getElementById('canvas');
             var cool = 0;
             var health = 100;
             var dead = false;
-            var rememberplay = false;
             var score = 0;
             var highscore = localStorage.getItem("highscore");
             var recent = 'right';
@@ -149,14 +148,6 @@ var c = document.getElementById('canvas');
                     highscore = 0;
                     localStorage.setItem("highscore", score);
                 }
-            }
-            
-            function reminderplay() {
-                 if (reminderplay == false) {
-                    ctx.fillStyle = 'black';
-                    ctx.font = "10px monospace";
-                    ctx.fillText("PRESS SPACE TO ATTACK BOI", 10 , h-20);
-                 }
             }
             
             function reset(){
@@ -1100,8 +1091,6 @@ var c = document.getElementById('canvas');
                     enemySpawn();
                     
                     enemeySpeed();
-                            
-                    reminderplay();
                     
                     if (cool > 0 && regeneration == false) {
                         cool--;
