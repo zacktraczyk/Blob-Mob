@@ -153,8 +153,7 @@ var c = document.getElementById('canvas');
             
             function reminderplay() {
                  if (reminderplay == false) {
-                    ctx.fillStyle = randomColor;
-                    ctx.fillStyle = 'rgb(0, 0, 0)';
+                    ctx.fillStyle = 'black';
                     ctx.font = "10px monospace";
                     ctx.fillText("PRESS SPACE TO ATTACK BOI", 10 , h-20);
                  }
