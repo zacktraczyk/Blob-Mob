@@ -28,6 +28,7 @@ var c = document.getElementById('canvas');
             var cool = 0;
             var health = 100;
             var dead = false;
+            var rememberplay = false;
             var score = 0;
             var highscore = localStorage.getItem("highscore");
             var recent = 'right';
@@ -150,6 +151,14 @@ var c = document.getElementById('canvas');
                 }
             }
             
+            function reminderplay() {
+                 if (reminderplay == false && Otime >= 100) {
+                    ctx.fillStyle = randomColor;
+                    ctx.fillStyle = rgb(0, 0, 0);
+                    ctx.font = "10px monospace";
+                    ctx.fillText(PRESS SPACE TO ATTACK BOI, 10 , h-20);
+                 }
+            }
             
             function reset(){
                 enemy1.state = 'none';
@@ -187,6 +196,7 @@ var c = document.getElementById('canvas');
         //--------------ATTACKS--------------//
             function attack() {
                 time = 0;
+                rememberplay = true;
                 var sessionA = setInterval(function() {
                     randomColor = '#adedff';
                     time++;
@@ -1091,6 +1101,8 @@ var c = document.getElementById('canvas');
                     enemySpawn();
                     
                     enemeySpeed();
+                            
+                    reminderplay();
                     
                     if (cool > 0 && regeneration == false) {
                         cool--;
