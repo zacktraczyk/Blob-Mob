@@ -150,6 +150,7 @@ var c = document.getElementById('canvas');
                 }
             }
             
+            
             function reset(){
                 enemy1.state = 'none';
                 enemy2.state = 'none';
@@ -186,7 +187,6 @@ var c = document.getElementById('canvas');
         //--------------ATTACKS--------------//
             function attack() {
                 time = 0;
-                rememberplay = true;
                 var sessionA = setInterval(function() {
                     randomColor = '#adedff';
                     time++;
@@ -1194,4 +1194,4 @@ var c = document.getElementById('canvas');
                         location.reload();
                     }
                 }, 50);
-        }
+            }
