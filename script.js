@@ -1191,8 +1191,8 @@ var c = document.getElementById('canvas');
                     ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10)
                     canvas.addEventListener("mousedown", getPosition, false);
                     if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
-                        location.reload(true);
-                        return;
+                        clearInterval(sessionE);
+                        location.reload();
                     }
                 }, 50);
             }
