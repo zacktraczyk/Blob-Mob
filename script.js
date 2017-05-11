@@ -1,3 +1,5 @@
+//DEVELOPED BY ZACK TRACZYK
+
 var c = document.getElementById('canvas');
             var ctx = c.getContext('2d');
             var w = c.width;
@@ -1196,3 +1198,4 @@ var c = document.getElementById('canvas');
                     }
                 }, 50);
             }
+//Developed By ZACK TRACZYK
