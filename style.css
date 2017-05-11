@@ -6,7 +6,8 @@
 }
 
 a {
-    color: white;
+    color: #ffd6cc;
+    text-decoration: none;
 }
 
 a:hover {
