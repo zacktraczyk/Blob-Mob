@@ -422,7 +422,7 @@ var c = document.getElementById('canvas');
 
             function regenerate(){
                 if(cool == 50){
-                    if(Otime % 3 == 0) power-=1;
+                    if(Otime % 3 == 0 && power > 0) power-=1;
                     if(health < 100) health++;
                     if(Otime % 2 == 0){
                         wx+=5;
@@ -1050,7 +1050,7 @@ var c = document.getElementById('canvas');
 
                     drawChar();
                     
-                    if(regeneration && damaging == false && power >=1) regenerate();
+                    if(regeneration && damaging == false) regenerate();
 
                     stateDef(enemy1);
 
