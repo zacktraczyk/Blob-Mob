@@ -2,5 +2,15 @@
     display: block;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 5em;
+    margin-top: 2em;
+}
+
+a {
+    color: #fffbf9;
+    font-family: Arial Bold
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffd6cc;    
 }

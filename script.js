@@ -1,3 +1,5 @@
+//DEVELOPED BY ZACK TRACZYK
+
 var c = document.getElementById('canvas');
             var ctx = c.getContext('2d');
             var w = c.width;
@@ -420,7 +422,11 @@ var c = document.getElementById('canvas');
 
             function regenerate(){
                 if(cool == 50){
-                    if(Otime % 3 == 0) power-=1;
+                    if(power <= 0){
+                        regneration = false;
+                        attackx = false;
+                    }
+                    if(Otime % 3 == 0 && power > 0) power-=1;
                     if(health < 100) health++;
                     if(Otime % 2 == 0){
                         wx+=5;
@@ -1191,7 +1197,9 @@ var c = document.getElementById('canvas');
                     ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10)
                     canvas.addEventListener("mousedown", getPosition, false);
                     if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
+                        clearInterval(sessionE);
                         location.reload();
                     }
                 }, 50);
-        }
+            }
+//Developed By ZACK TRACZYK
