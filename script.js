@@ -421,7 +421,7 @@ var c = document.getElementById('canvas');
             }
 
             function regenerate(){
-                if(cool == 50){
+                if(cool == 50 && power>1){
                     if(Otime % 3 == 0) power-=1;
                     if(health < 100) health++;
                     if(Otime % 2 == 0){
