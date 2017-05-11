@@ -422,7 +422,10 @@ var c = document.getElementById('canvas');
 
             function regenerate(){
                 if(cool == 50){
-                    if(power <= 0) regneration = false;
+                    if(power <= 0){
+                        regneration = false;
+                        attackx = false;
+                    }
                     if(Otime % 3 == 0 && power > 0) power-=1;
                     if(health < 100) health++;
                     if(Otime % 2 == 0){
