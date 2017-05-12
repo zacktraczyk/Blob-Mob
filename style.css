@@ -7,6 +7,8 @@
 
 a {
     color: #fffbf9;
+    size: 3em;
+    margin-right: 1em;
     font-family: Arial Bold
     text-decoration: none;
 }
