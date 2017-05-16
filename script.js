@@ -998,6 +998,8 @@ function transition() {
         ctx.font = '15px sans-serif';
         var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk";
         ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
+        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         if (time < 20) {
             if (time % 2 == 0) {
                 wx -= 4;
