@@ -542,12 +542,13 @@ function drawChar() {
 }
 
 
-function enemy(state, type) {
+function enemy(state, type, enemspeed) {
 
     this.state = state,
 
     this.type = type,
 
+    this.speed = enemspeed * speed;
     this.bossIsAlive = false,
 
     this.spawn = function() {
@@ -639,11 +640,11 @@ function enemy(state, type) {
 
     this.move = function() {
 
-        if (this.esx > sx + wx / 10) this.esx -= speed;
-        if (this.esx < sx + wx / 10) this.esx += speed;
+        if (this.esx > sx + wx / 10) this.esx -= this.speed;
+        if (this.esx < sx + wx / 10) this.esx += this.speed;
 
-        if (this.esy > sy + wy / 10) this.esy -= speed;
-        if (this.esy < sy + wy / 10) this.esy += speed;
+        if (this.esy > sy + wy / 10) this.esy -= this.speed;
+        if (this.esy < sy + wy / 10) this.esy += this.speed;
 
         this.esx = random(this.esx);
         this.esy = random(this.esy);
@@ -1031,21 +1032,21 @@ function transition() {
 }
 
 
-var enemy1 = new enemy('none', 'regular');
-var enemy2 = new enemy('none', 'regular');
-var enemy3 = new enemy('none', 'regular');
-var enemy4 = new enemy('none', 'regular');
-var enemy5 = new enemy('none', 'regular');
-var enemy6 = new enemy('none', 'regular');
-var enemy7 = new enemy('none', 'regular');
-var enemy8 = new enemy('none', 'regular');
-var enemy9 = new enemy('none', 'regular');
-var enemy10 = new enemy('none', 'regular');
-var enemy11 = new enemy('none', 'regular');
-var enemy12 = new enemy('none', 'regular');
-var enemy13 = new enemy('none', 'regular');
-var enemy14 = new enemy('none', 'regular');
-var enemy15 = new enemy('none', 'regular');
+var enemy1 = new enemy('none', 'regular', .6);
+var enemy2 = new enemy('none', 'regular', 1);
+var enemy3 = new enemy('none', 'regular', 1.2);
+var enemy4 = new enemy('none', 'regular', .9);
+var enemy5 = new enemy('none', 'regular', 1.4);
+var enemy6 = new enemy('none', 'regular', 1.1);
+var enemy7 = new enemy('none', 'regular', 1.2);
+var enemy8 = new enemy('none', 'regular', 1.3);
+var enemy9 = new enemy('none', 'regular', 1.4);
+var enemy10 = new enemy('none', 'regular', 1.5);
+var enemy11 = new enemy('none', 'regular', 1.5);
+var enemy12 = new enemy('none', 'regular', 1.5);
+var enemy13 = new enemy('none', 'regular', 1.8);
+var enemy14 = new enemy('none', 'regular', 1.8);
+var enemy15 = new enemy('none', 'regular', 2);
 //var enemy1 = new enemy('none', 'boss');
 
 function main() {
@@ -1178,8 +1179,8 @@ function end() {
     gx = -w;
     gx2 = -0.5*w;
     var sessionE = setInterval(function() {
-        if (gx != 0) gx += 2;
-        if (gx2 != 0 + 200) gx2 += 4;
+        if (gx != 0) gx += 4;
+        if (gx2 != 0 + 200) gx2 += 14;
         setHighScore();
         randomColor = '#ffd6cc';
         ctx.clearRect(0, 0, w, 0);
