@@ -1,4 +1,4 @@
-//DEVELOPED BY ZACK TRACZYK
+//DEVELOPED BY ZACK TRACZYK ;]
 
 var c = document.getElementById('canvas');
 var ctx = c.getContext('2d');
