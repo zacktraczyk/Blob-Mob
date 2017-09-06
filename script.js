@@ -1111,7 +1111,7 @@ function main() {
         enemeySpeed();
 
         if (cool > 0 && regeneration == false) {
-            cool--;
+            cool = cool - 1 - score/100;
             randomColor = '#adedff';
         }
 
