@@ -1,4 +1,10 @@
+#container {
+    display: table;
+}
+
 #canvas {
+    display: table-cell;
+    vertical-align: middle;
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
@@ -10,7 +16,7 @@ a {
     color: #fffbf9;
     size: 3em;
     margin-right: 1em;
-    font-family: Arial Bold
+    font-family: Arial Bold;
     text-decoration: none;
 }
 
