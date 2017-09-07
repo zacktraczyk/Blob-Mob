@@ -72,7 +72,7 @@ function srandom(a) {
 
 
 function mxrandom(a) {
-    var rand = Math.random() * 10
+    var rand = Math.random() * 10;
     if (rand > 5 && a < w - wx - 10) {
         return a + 1;
 
@@ -87,10 +87,10 @@ function mxrandom(a) {
 function myrandom(a) {
     var rand = Math.random() * 10
     if (rand > 5 && a > 10) {
-        return a + 1;
+        return a - 1;
 
     } else if (rand <= 5 && a < h - wy - 10) {
-        return a - 1;
+        return a + 1;
     } else {
         return a;
     }
