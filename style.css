@@ -1,10 +1,4 @@
-#container {
-    display: table;
-}
-
 #canvas {
-    display: table-cell;
-    vertical-align: middle;
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
