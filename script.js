@@ -195,35 +195,7 @@ function attack() {
 
         drawChar();
 
-        stateDef(enemy1);
-
-        stateDef(enemy2);
-
-        stateDef(enemy3);
-
-        stateDef(enemy4);
-
-        stateDef(enemy5);
-
-        stateDef(enemy6);
-
-        stateDef(enemy7);
-
-        stateDef(enemy8);
-
-        stateDef(enemy9);
-
-        stateDef(enemy10);
-
-        stateDef(enemy11);
-
-        stateDef(enemy12);
-
-        stateDef(enemy13);
-
-        stateDef(enemy14);
-
-        stateDef(enemy15);
+        stateDefinition();
 
         drawHealth();
 
@@ -313,21 +285,7 @@ function attackZ() {
 
         drawChar();
 
-        stateDef(enemy1);
-        stateDef(enemy2);
-        stateDef(enemy3);
-        stateDef(enemy4);
-        stateDef(enemy5);
-        stateDef(enemy6);
-        stateDef(enemy7);
-        stateDef(enemy8);
-        stateDef(enemy9);
-        stateDef(enemy10);
-        stateDef(enemy11);
-        stateDef(enemy12);
-        stateDef(enemy13);
-        stateDef(enemy14);
-        stateDef(enemy15);
+        stateDefinition();
 
         ctx.beginPath();
         ctx.strokeStyle = randomColor;
@@ -719,6 +677,24 @@ function stateDef(a) {
     }
 }
 
+function stateDefinition(){
+    stateDef(enemy1);
+    stateDef(enemy2);
+    stateDef(enemy3);
+    stateDef(enemy4);
+    stateDef(enemy5);
+    stateDef(enemy6);
+    stateDef(enemy7);
+    stateDef(enemy8);
+    stateDef(enemy9);
+    stateDef(enemy10);
+    stateDef(enemy11);
+    stateDef(enemy12);
+    stateDef(enemy13);
+    stateDef(enemy14);
+    stateDef(enemy15);
+}
+
 function enemySpawn(){
     if (Otime == 20)enemy1.state = 'spawn';
 
@@ -1068,35 +1044,7 @@ function main() {
 
         if(regeneration && damaging == false) regenerate();
 
-        stateDef(enemy1);
-
-        stateDef(enemy2);
-
-        stateDef(enemy3);
-
-        stateDef(enemy4);
-
-        stateDef(enemy5);
-
-        stateDef(enemy6);
-
-        stateDef(enemy7);
-
-        stateDef(enemy8);
-
-        stateDef(enemy9);
-
-        stateDef(enemy10);
-
-        stateDef(enemy11);
-
-        stateDef(enemy12);
-
-        stateDef(enemy13);
-
-        stateDef(enemy14);
-
-        stateDef(enemy15);
+        stateDefinition();
 
         drawHealth();
 
@@ -1148,21 +1096,7 @@ function shrink() {
         shrinkwy -= 8;
         ctx.fillStyle = randomColor;
         ctx.fillRect(shrinksx, shrinksy, shrinkwx, shrinkwy);
-        stateDef(enemy1);
-        stateDef(enemy2);
-        stateDef(enemy3);
-        stateDef(enemy4);
-        stateDef(enemy5);
-        stateDef(enemy6);
-        stateDef(enemy7);
-        stateDef(enemy8);
-        stateDef(enemy9);
-        stateDef(enemy10);
-        stateDef(enemy11);
-        stateDef(enemy12);
-        stateDef(enemy13);
-        stateDef(enemy14);
-        stateDef(enemy15);
+        stateDefinition();
         drawHealth();
         drawPower();
         drawCool();
