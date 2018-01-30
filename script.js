@@ -1008,7 +1008,7 @@ function transition() {
 }
 
 
-var enemy1 = new enemy('none', 'regular', .6);
+var enemy1 = new enemy('none', 'regular', .3);
 var enemy2 = new enemy('none', 'regular', 1);
 var enemy3 = new enemy('none', 'regular', 1.2);
 var enemy4 = new enemy('none', 'regular', .9);
@@ -1022,7 +1022,7 @@ var enemy11 = new enemy('none', 'regular', 1.5);
 var enemy12 = new enemy('none', 'regular', 1.5);
 var enemy13 = new enemy('none', 'regular', 1.8);
 var enemy14 = new enemy('none', 'regular', 1.8);
-var enemy15 = new enemy('none', 'regular', 2);
+var enemy15 = new enemy('none', 'regular', 2.1);
 //var enemy1 = new enemy('none', 'boss');
 
 function main() {
