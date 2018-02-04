@@ -442,35 +442,47 @@ function enemy(state, type, enemspeed) {
         this.ewx = wx / 2 - 10;
         this.ewy = wy - 10;
         ctx.beginPath();
+        
+        //Draws Body
+        ctx.moveTo(this.esx - this.ewx / 8, this.esy);
+        ctx.bezierCurveTo(this.esx - this.ewx / 8, this.esy - this.ewy / 4,
+                          this.esx + this.ewx + this.ewx / 8, this.esy - this.ewy / 4,
+                          this.esx + this.ewx + this.ewx / 8, this.esy);
 
-        ctx.moveTo(this.esx - this.esx / 20, this.esy);
-        ctx.bezierCurveTo(this.esx - this.esx / 20, this.esy - this.esy / 20, this.esx + this.ewx + this.esx / 20, this.esy - this.esy / 20, this.esx + this.ewx + this.esx / 20, this.esy);
+        ctx.bezierCurveTo(this.esx + this.ewx * 2, this.esy,
+                          this.esx + this.ewx * 2, this.esy + this.ewy,
+                          this.esx + this.ewx - this.ewx / 8, this.esy + this.ewy);
 
-        ctx.bezierCurveTo(this.esx + this.ewx + this.esx / 10, this.esy, this.esx + this.ewx + this.esx / 10, this.esy + this.ewy, this.esx + this.ewx, this.esy + this.ewy);
+        ctx.bezierCurveTo(this.esx + this.ewx - this.ewx / 8, this.esy + this.ewy * 1.75,
+                          this.esx - this.ewx * 2, this.esy + this.ewy / 4,
+                          this.esx, this.esy + this.ewy / 2);
 
-        ctx.bezierCurveTo(this.esx + this.ewx / 10, this.esy + this.esy / 4, this.esx - this.ewx * 2, this.esy + this.ewy / 4, this.esx - this.esx / 20, this.esy + this.ewy / 2);
-
-        ctx.bezierCurveTo(this.esx - this.esx / 20, this.esy + this.ewy / 2, this.esx - this.ewx * 2, this.esy + this.ewy / 4, this.esx - this.esx / 20, this.esy);
+        ctx.bezierCurveTo(this.esx - this.ewx, this.esy + this.ewy / 2,
+                          this.esx - this.ewx / 2, this.esy,
+                          this.esx - this.ewx / 8, this.esy)
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
 
         ctx.lineWidth = 1;
 
+        //Draws Left Eye
         ctx.beginPath();
         ctx.fillStyle = 'black';
         ctx.arc(this.esx + this.ewx / 6, this.esy + this.ewy / 6, (this.ewx / 4 + this.ewy / 4) / 4, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 
+        //Draws Right Eye
         ctx.beginPath();
         ctx.arc(this.esx + this.ewx - this.ewx / 8, this.esy + this.ewy / 6, (this.ewx / 4 + this.ewy / 4) / 6, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 
+        //Draws Mouth
         ctx.beginPath();
-        ctx.moveTo(this.esx + this.ewx / 8, this.esy + this.ewy - this.ewy / 3);
-        ctx.bezierCurveTo(this.esx + this.ewy / 8, this.esy + this.ewy, this.esx + this.ewx - this.ewy / 8, this.esy + this.ewy, this.esx + this.ewx - this.ewy / 8, this.esy + this.ewy - this.ewy / 3);
+        ctx.moveTo(this.esx + this.ewx / 8, this.esy + this.ewy);
+        ctx.bezierCurveTo(this.esx + this.ewy / 8, this.esy + this.ewy - this.ewy /3, this.esx + this.ewx - this.ewy / 8, this.esy + this.ewy - this.ewy /3, this.esx + this.ewx - this.ewy / 8, this.esy + this.ewy);
         ctx.stroke();
         ctx.closePath();
     },
