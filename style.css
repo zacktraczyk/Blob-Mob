@@ -1,13 +1,17 @@
 #canvas {
-    display: block;
-    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
     margin-left: auto;
+    margin-right: auto;
     margin-top: 2em;
+    display: block;
 }
 
 a {
     color: #fffbf9;
-    font-family: Arial Bold
+    size: 3em;
+    margin-right: 1em;
+    font-family: Arial Bold;
     text-decoration: none;
 }
 
