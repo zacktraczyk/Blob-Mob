@@ -26,6 +26,7 @@ var dDown = false;
 var attackb = false;
 var attackz = false;
 var attackx = false;
+var enemies;
 var power = 50;
 var cool = 0;
 var health = 100;
@@ -150,21 +151,10 @@ function setHighScore() {
 
 
 function reset(){
-    enemy1.state = 'none';
-    enemy2.state = 'none';
-    enemy3.state = 'none';
-    enemy4.state = 'none';
-    enemy5.state = 'none';
-    enemy6.state = 'none';
-    enemy7.state = 'none';
-    enemy8.state = 'none';
-    enemy9.state = 'none';
-    enemy10.state = 'none';
-    enemy11.state = 'none';
-    enemy12.state = 'none';
-    enemy13.state = 'none';
-    enemy14.state = 'none';
-    enemy15.state = 'none';
+    enemies.forEach(function(item, index, arr){
+        arr[index].state = 'none';
+    });
+    
     rDown = false;
     lDown = false;
     uDown = false;
@@ -215,21 +205,9 @@ function attack() {
         else if (time > 5 && recent == 'up') sy += 10;
         else if (time > 5 && recent == 'down') sy -= 10;
 
-        if (time == 5 && touch(enemy1) && enemy1.state != 'dead') enemy1.state = 'dying';
-        if (time == 5 && touch(enemy2) && enemy2.state != 'dead') enemy2.state = 'dying';
-        if (time == 5 && touch(enemy3) && enemy3.state != 'dead') enemy3.state = 'dying';
-        if (time == 5 && touch(enemy4) && enemy4.state != 'dead') enemy4.state = 'dying';
-        if (time == 5 && touch(enemy5) && enemy5.state != 'dead') enemy5.state = 'dying';
-        if (time == 5 && touch(enemy6) && enemy6.state != 'dead') enemy6.state = 'dying';
-        if (time == 5 && touch(enemy7) && enemy7.state != 'dead') enemy7.state = 'dying';
-        if (time == 5 && touch(enemy8) && enemy8.state != 'dead') enemy8.state = 'dying';
-        if (time == 5 && touch(enemy9) && enemy8.state != 'dead') enemy9.state = 'dying';
-        if (time == 5 && touch(enemy10) && enemy8.state != 'dead') enemy10.state = 'dying';
-        if (time == 5 && touch(enemy11) && enemy8.state != 'dead') enemy11.state = 'dying';
-        if (time == 5 && touch(enemy12) && enemy8.state != 'dead') enemy12.state = 'dying';
-        if (time == 5 && touch(enemy13) && enemy8.state != 'dead') enemy13.state = 'dying';
-        if (time == 5 && touch(enemy14) && enemy8.state != 'dead') enemy14.state = 'dying';
-        if (time == 5 && touch(enemy15) && enemy8.state != 'dead') enemy15.state = 'dying';
+        enemies.forEach(function(item, index, arr){
+            if (time == 5 && touch(item) && item.state != 'dead') arr[index].state = 'dying';
+        });
 
         if (time >= 10) {
             clearInterval(sessionA);
@@ -261,21 +239,10 @@ function attackZ() {
             r += 3;
             cool += 3;
         } else if (20 <= time && time < 30) {
-            enemy1.state = 'push';
-            enemy2.state = 'push';
-            enemy3.state = 'push';
-            enemy4.state = 'push';
-            enemy5.state = 'push';
-            enemy6.state = 'push';
-            enemy7.state = 'push';
-            enemy8.state = 'push';
-            enemy9.state = 'push';
-            enemy10.state = 'push';
-            enemy11.state = 'push';
-            enemy12.state = 'push';
-            enemy13.state = 'push';
-            enemy14.state = 'push';
-            enemy15.state = 'push';
+            enemies.forEach(function(item, index, arr){
+                arr[index].state = 'push';
+            });
+            
             power--;
             r += 10;
             cool += .5;
@@ -305,36 +272,10 @@ function attackZ() {
             clearInterval(sessionAZ);
             attackz = false;
             main();
-
-            enemy1.state = 'alive';
-
-            enemy2.state = 'alive';
-
-            enemy3.state = 'alive';
-
-            enemy4.state = 'alive';
-
-            enemy5.state = 'alive';
-
-            enemy6.state = 'alive';
-
-            enemy7.state = 'alive';
-
-            enemy8.state = 'alive';
-
-            enemy9.state = 'alive';
-
-            enemy10.state = 'alive';
-
-            enemy11.state = 'alive';
-
-            enemy12.state = 'alive';
-
-            enemy13.state = 'alive';
-
-            enemy14.state = 'alive';
-
-            enemy15.state = 'alive';
+            
+            enemies.forEach(function(item, index, arr){
+                arr[index].state = 'alive';
+            });
 
             cool += 1;
         } else if (collide()) {
@@ -342,33 +283,9 @@ function attackZ() {
             attackz = false;
             shrink();
 
-            enemy2.state = 'alive';
-
-            enemy3.state = 'alive';
-
-            enemy4.state = 'alive';
-
-            enemy5.state = 'alive';
-
-            enemy6.state = 'alive';
-
-            enemy7.state = 'alive';
-
-            enemy8.state = 'alive';
-
-            enemy9.state = 'alive';
-
-            enemy10.state = 'alive';
-
-            enemy11.state = 'alive';
-
-            enemy12.state = 'alive';
-
-            enemy13.state = 'alive';
-
-            enemy14.state = 'alive';
-
-            enemy15.state = 'alive';
+            enemies.forEach(function(item, index, arr){
+                arr[index].state = 'alive';
+            });
         }
     }, 50);
 
@@ -1024,6 +941,22 @@ var enemy13 = new enemy('none', 'regular', 1.8);
 var enemy14 = new enemy('none', 'regular', 1.8);
 var enemy15 = new enemy('none', 'regular', 2.1);
 //var enemy1 = new enemy('none', 'boss');
+
+enemies = [enemy1,
+           enemy2,
+           enemy3,
+           enemy4,
+           enemy5,
+           enemy6,
+           enemy7,
+           enemy8,
+           enemy9,
+           enemy10,
+           enemy11,
+           enemy12,
+           enemy13,
+           enemy14,
+           enemy15]
 
 function main() {
     var sx = 100;
