@@ -42,6 +42,12 @@ var randomColor = '#ffd6cc'; //Set so player doesnt strobe
 var background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
+var theme = new Howl({
+    urls: ['Sound/Good-portion-of-distortion.mp3'],
+    autoplay: true,
+    loop: true
+});
+
 //--------------FUNCTIONS--------------//
 //Mouse Tracker
 function getPosition(event) {
@@ -173,7 +179,7 @@ function reset(){
     damaging = false;
     cool = 0;
 }
-
+    
 //-----------------------------------//
 //--------------ATTACKS--------------//
 function attack() {
