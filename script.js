@@ -4,45 +4,46 @@ var c = document.getElementById('canvas');
 var ctx = c.getContext('2d');
 var w = c.width;
 var h = c.height;
-var x;
-var y;
+var x; //Mouse track x
+var y; //Mouse track Y
 var HowTo = false;
-var sx = 100;
-var sy = 100;
-var wx = 50;
-var wy = 50;
-var esx = 0;
-var esy = 0;
-var ewx = 50;
-var ewy = 50;
+var sx = 100; //Player x cordinate
+var sy = 100; //Player y cordinate
+var wx = 50; //Player width;
+var wy = 50; //Player height;
+var esx = 0; //Enemy object x cordinate
+var esy = 0; //Enemy object y cordinate
+var ewx = 50; //Enemy object width
+var ewy = 50; //Enemy object height;
 var randNum = 0;
-var colors = ['#ffd6cc', '#ffc2b3', '#ffad99', '#ff9980', '#ff9980'];
-var ecolors = ['#81ea25', '#6bba27', '#96e84e', '#abf966', '#b9f981'];
-var ebcolors = ['#f45642', '#e06757', '#f9543e', '#dd351f', '#ed452f'];
-var rDown = false;
-var lDown = false;
-var uDown = false;
-var dDown = false;
-var attackb = false;
-var attackz = false;
-var attackx = false;
-var enemies;
+var colors = ['#ffd6cc', '#ffc2b3', '#ffad99', '#ff9980', '#ff9980']; //Player color strobe
+var ecolors = ['#81ea25', '#6bba27', '#96e84e', '#abf966', '#b9f981']; //Enemy color strobe
+var ebcolors = ['#f45642', '#e06757', '#f9543e', '#dd351f', '#ed452f']; //Enemy Boss color strobe
+var rDown = false; //Keypress right arrow tracker
+var lDown = false; // -- left
+var uDown = false; // -- up
+var dDown = false; // -- down
+var attackb = false; // -- attack normal
+var attackz = false; // -- attack bubble
+var attackx = false; // -- regeneration
+var enemies; //Enemies array
 var power = 50;
 var cool = 0;
 var health = 100;
 var dead = false;
 var score = 0;
-var highscore = localStorage.getItem("highscore");
+var highscore = localStorage.getItem("highscore"); //Cookie storage
 var recent = 'right';
 var damaging;
 var speed = 1;
 var regeneration = false;
 var Otime = 0;
-var randomColor = '#ffd6cc';
+var randomColor = '#ffd6cc'; //Set so player doesnt strobe
 var background = new Image();
-background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg';
+background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
 //--------------FUNCTIONS--------------//
+//Mouse Tracker
 function getPosition(event) {
     x = event.x;
     y = event.y;
@@ -118,6 +119,7 @@ function randomLocation(a) {
 
 }
 
+//Player and Enemy trackers
 function collide() {
     if (sx < 0 || sy < 0 || sx + wx > w || sy + wy > h) {
         return true;
@@ -137,7 +139,7 @@ function inarea(enemy) {
     }
 }
 
-
+//Cookies Storage
 function setHighScore() {
     if (highscore !== null) {
         if (score > highscore) {
@@ -149,7 +151,7 @@ function setHighScore() {
     }
 }
 
-
+//Resets variables
 function reset(){
     enemies.forEach(function(item, index, arr){
         arr[index].state = 'none';
@@ -171,6 +173,7 @@ function reset(){
     damaging = false;
     cool = 0;
 }
+
 //-----------------------------------//
 //--------------ATTACKS--------------//
 function attack() {
