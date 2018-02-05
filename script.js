@@ -56,7 +56,7 @@ var mainTheme = new Howl({
     
 });
 
-//Length of segment ~= 2181.82
+//Length of segment ~= 2100
 var hlSound = true;
 
 var effects = new Howl({
@@ -64,11 +64,15 @@ var effects = new Howl({
     sprite: {
         attack: [0, 2021],
         healthLoss: [2031, 2350, true],
-        btn: [4980, 500]
-        
+        btn: [4980, 500],
+        death: [6450, 1000]
         
     }
 });
+
+var ah; //HealthLoss id
+var de; //Death id
+
 
 
 //--------------FUNCTIONS--------------//
@@ -585,6 +589,7 @@ function enemy(state, type, enemspeed) {
         ctx.closePath();
 
         if (this.ewx <= 0 || this.ewy <= 0) {
+            de = effects.play('death');
             score++;
             if (power < 50) power += 1;
             this.state = 'dead';
@@ -966,7 +971,7 @@ function transition() {
             wy -= 4;
         }
         if (wx <= 50 || wy <= 10) {
-            mainTheme.play();
+            //mainTheme.play();
             background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg';
             ctx.drawImage(background, 0, 0, w, h);
             clearInterval(sessionT);
@@ -1013,7 +1018,9 @@ function main() {
     var sx = 100;
     var sy = 100;
     var wx = 50;
-    var wy = 50; 
+    var wy = 50;    
+    ah = effects.play('healthLoss');
+    effects.stop(ah);
     sessionM = setInterval(function() {
         Otime++;
         ctx.clearRect(0, 0, w, h);
@@ -1054,7 +1061,7 @@ function main() {
             regeneration = false;
             if(hlSound){
                 mainTheme.mute(true);
-                var ah = effects.play('healthLoss');
+                ah = effects.play('healthLoss');
                 hlSound = false;
             }
         } else {
