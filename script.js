@@ -42,11 +42,17 @@ var randomColor = '#ffd6cc'; //Set so player doesnt strobe
 var background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
-var theme = new Howl({
-    urls: ['Sound/Good-portion-of-distortion.mp3'],
-    autoplay: true,
+//Howler Sound
+var titleTheme = new Howl({
+    src: ['Sound/Good-portion-of-distortion.mp3'],
     loop: true
 });
+
+var mainTheme = new Howl({
+    src: ['8-lit.mp3'],
+    loop: true
+});
+
 
 //--------------FUNCTIONS--------------//
 //Mouse Tracker
@@ -730,6 +736,7 @@ function menu() {
     wy = 200;
     score = 0;
     highscore = localStorage.getItem("highscore");
+    titleTheme.play();
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         grd = ctx.createLinearGradient(0, 0, w, 0);
@@ -890,6 +897,7 @@ function HowToPlay(){
 function transition() {
     gw = 0;
     time = 0;
+    titleTheme.fade(1.0, 0.0, 5000);
     var sessionT = setInterval(function() {
         time++;
         ctx.clearRect(0, 0, w, h);
