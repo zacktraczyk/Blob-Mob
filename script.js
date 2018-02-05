@@ -45,12 +45,29 @@ background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02
 //Howler Sound
 var titleTheme = new Howl({
     src: ['Sound/Good-portion-of-distortion.mp3'],
+    volume: 0.7,
     loop: true
 });
 
 var mainTheme = new Howl({
-    src: ['8-lit.mp3'],
-    loop: true
+    src: ['Sound/8-lit.mp3'],
+    volume: 0.7,
+    loop: true,
+    
+});
+
+//Length of segment ~= 2181.82
+var hlSound = true;
+
+var effects = new Howl({
+    src: ['Sound/Sound-effects.mp3'],
+    sprite: {
+        attack: [0, 2021],
+        healthLoss: [2031, 2350, true],
+        btn: [4980, 500]
+        
+        
+    }
 });
 
 
@@ -262,7 +279,7 @@ function attackZ() {
             r += 10;
             cool += .5;
         }
-
+        
         drawStage();
 
         drawChar();
@@ -686,7 +703,7 @@ function enemeySpeed(){
 function drawStage() {
     ctx.fillStyle = '#fffbf9';
     ctx.fillRect(0, 0, w, h);
-    //ctx.drawImage(background, 0, 0, w, h);
+    ctx.drawImage(background, 0, 0, w, h);
     ctx.lineWidth = 10;
     ctx.strokeRect(0, 0, w, h);
 }
@@ -736,7 +753,7 @@ function menu() {
     wy = 200;
     score = 0;
     highscore = localStorage.getItem("highscore");
-    titleTheme.play();
+    var id1 = titleTheme.play();
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         grd = ctx.createLinearGradient(0, 0, w, 0);
@@ -783,10 +800,12 @@ function menu() {
             transition();
             canvas.removeEventListener("mousedown", getPosition, false);
         } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo == false){
+            effects.play('btn');
             HowTo = true;
             x = 0;
             y = 0;
         } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60)){
+            effects.play('btn');
             HowTo = false;
             x = 0;
             y = 0;
@@ -897,7 +916,7 @@ function HowToPlay(){
 function transition() {
     gw = 0;
     time = 0;
-    titleTheme.fade(1.0, 0.0, 5000);
+    titleTheme.fade(1.0, 0.0, 7000);
     var sessionT = setInterval(function() {
         time++;
         ctx.clearRect(0, 0, w, h);
@@ -923,7 +942,8 @@ function transition() {
         ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
         ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
-        if (time < 20) {
+        if (time < 40) {
+            titleTheme.rate(2);
             if (time % 2 == 0) {
                 wx -= 4;
                 wy -= 4;
@@ -935,16 +955,18 @@ function transition() {
                 sx -= 2;
                 sy -= 2;
             }
-        } else if (time >= 20) {
+        } else if (time >= 40) {
+            titleTheme.rate(0.5);
             if (gw <= w - 50) gw += 25;
-            sx += 4;
-            sy += 4;
+            sx += 2;
+            sy += 2;
             sx = srandom(sx);
             sy = srandom(sy);
-            wx -= 8;
-            wy -= 8;
+            wx -= 4;
+            wy -= 4;
         }
         if (wx <= 50 || wy <= 10) {
+            mainTheme.play();
             background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg';
             ctx.drawImage(background, 0, 0, w, h);
             clearInterval(sessionT);
@@ -985,13 +1007,13 @@ enemies = [enemy1,
            enemy12,
            enemy13,
            enemy14,
-           enemy15]
+           enemy15 ];
 
 function main() {
     var sx = 100;
     var sy = 100;
     var wx = 50;
-    var wy = 50;
+    var wy = 50; 
     sessionM = setInterval(function() {
         Otime++;
         ctx.clearRect(0, 0, w, h);
@@ -1024,19 +1046,29 @@ function main() {
             cool--;
             randomColor = '#adedff';
         }
-
+        
         if ((touch(enemy1) && enemy1.state != 'dead') || (touch(enemy2) && enemy2.state != 'dead') || (touch(enemy3) && enemy3.state != 'dead') || (touch(enemy4) && enemy4.state != 'dead') || (touch(enemy5) && enemy5.state != 'dead') || (touch(enemy6) && enemy6.state != 'dead') || (touch(enemy7) && enemy7.state != 'dead') || (touch(enemy8) && enemy8.state != 'dead') || (touch(enemy9) && enemy9.state != 'dead') || (touch(enemy10) && enemy10.state != 'dead') || (touch(enemy11) && enemy11.state != 'dead') || (touch(enemy12) && enemy12.state != 'dead') || (touch(enemy13) && enemy13.state != 'dead') || (touch(enemy14) && enemy14.state != 'dead') || (touch(enemy15) && enemy15.state != 'dead')) {
             health--;
             randomColor = '#ff6d6d';
             damaging = true;
             regeneration = false;
+            if(hlSound){
+                mainTheme.mute(true);
+                var ah = effects.play('healthLoss');
+                hlSound = false;
+            }
         } else {
+            mainTheme.mute(false);
+            hlSound = true;
+            effects.stop(ah);
             damaging = false;
         }
 
         if (cool == 0 && damaging == false) randomColor = '#ffd6cc';
 
         if (collide() || health <= 0) {
+            hlSound = true;
+            effects.stop(ah);
             clearInterval(sessionM);
             shrink();
         }
