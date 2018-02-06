@@ -37,10 +37,81 @@ var recent = 'right';
 var damaging;
 var speed = 1;
 var regeneration = false;
+var justRegen = false;
 var Otime = 0;
 var randomColor = '#ffd6cc'; //Set so player doesnt strobe
 var background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
+
+//Howler Sound
+var titleTheme = new Howl({
+    src: ['Sound/Good-portion-of-distortion.mp3'],
+    volume: 0.7,
+    loop: true
+});
+
+var mainTheme = new Howl({
+    src: ['Sound/8-lit.mp3'],
+    volume: 0.5,
+    loop: true
+    
+});
+
+//Length of segment ~= 2100
+var hlSound = true;
+
+var effects = new Howl({
+    src: ['Sound/Sound-effects.mp3'],
+    sprite: {
+        attack: [0, 400],
+        healthLoss: [2031, 2350, true],
+        btn: [4980, 500],
+        death: [6450, 1000],
+        push: [8500, 5000],
+        heal: [14000, 10000]
+    }
+});
+
+var muted = false;
+var once = true;
+var mMute = true;
+var eMute = true;
+var at; //Attack id
+var ah; //HealthLoss id
+var de; //Death id
+var pu; //Push id
+var he; //heal id
+
+/*function muteSwitch(){
+    if(mMute || eMute){
+        mMute = false;
+        eMute = false;
+    } else {
+        mMute = true;
+        eMute = true;
+    }
+}
+
+function muteSound(){
+    if(muted){
+        once = false;
+        muteSwitch();
+    }
+    if(mMute){
+        mainTheme.mute(true);
+        titleTheme.mute(true);
+    } else {
+        mainTheme.mute(false);
+        titleTheme.mute(false);
+    }
+    
+    if(eMute){
+        effects.mute(true);
+    } else {
+        effects.mute(false);
+    }
+}*/
+
 
 //--------------FUNCTIONS--------------//
 //Mouse Tracker
@@ -173,11 +244,12 @@ function reset(){
     damaging = false;
     cool = 0;
 }
-
+    
 //-----------------------------------//
 //--------------ATTACKS--------------//
 function attack() {
     time = 0;
+    at = effects.play('attack');
     var sessionA = setInterval(function() {
         randomColor = '#adedff';
         time++;
@@ -213,10 +285,12 @@ function attack() {
         });
 
         if (time >= 10) {
+            effects.stop(ah);
             clearInterval(sessionA);
             attackb = false;
             main();
         } else if (collide()) {
+            effects.stop(ah);
             clearInterval(sessionA);
             shrink();
         }
@@ -227,6 +301,9 @@ function attack() {
 function attackZ() {
     time = 0;
     r = 3;
+    mainTheme.mute(true);
+    effects.stop(ah);
+    pu = effects.play('push');
     var sessionAZ = setInterval(function() {
         randomColor = '#adedff';
         time++;
@@ -250,7 +327,7 @@ function attackZ() {
             r += 10;
             cool += .5;
         }
-
+        
         drawStage();
 
         drawChar();
@@ -275,7 +352,7 @@ function attackZ() {
             clearInterval(sessionAZ);
             attackz = false;
             main();
-            
+               
             enemies.forEach(function(item, index, arr){
                 arr[index].state = 'alive';
             });
@@ -296,6 +373,11 @@ function attackZ() {
 
 function regenerate(){
     if(cool == 50){
+        justRegen = true;
+        mainTheme.mute(true);
+        if(effects.playing(he) != true) he = effects.play('heal');
+        effects.volume(1.0, he);
+        
         if(power <= 0){
             regneration = false;
             attackx = false;
@@ -343,6 +425,7 @@ function moveChar() {
         sy = random(sy);
         recent = 'left';
     }
+    
     if (attackb && regeneration == false) {
         clearInterval(sessionM);
         attack();
@@ -355,6 +438,11 @@ function moveChar() {
         regeneration = true;
     } else if (attackx == false){
         regeneration = false;
+        if(justRegen){
+            mainTheme.mute(false);
+            justRegen = false;
+            effects.stop(he);
+        }
     }
 
     sx = srandom(sx);
@@ -375,6 +463,7 @@ function listen() {
         if (e.keyCode == 39) rDown = true;
         if (e.keyCode == 38) uDown = true;
         if (e.keyCode == 37) lDown = true;
+        //if (e.keyCode == 77) muted = true;
         if (e.keyCode == 32 && cool == 0) attackb = true;
         else if (e.keyCode == 90 && cool == 0 && power >= 10) attackz = true;
         else if (e.keyCode == 88 && cool == 0 && power > 0) attackx = true;
@@ -385,6 +474,10 @@ function listen() {
         if (e.keyCode == 39) rDown = false;
         if (e.keyCode == 38) uDown = false;
         if (e.keyCode == 37) lDown = false;
+        if (e.keyCode == 77){
+            muted = false;
+            once = true;   
+        }
         if (e.keyCode == 88) attackx = false;
     }
 
@@ -556,6 +649,8 @@ function enemy(state, type, enemspeed) {
         ctx.closePath();
 
         if (this.ewx <= 0 || this.ewy <= 0) {
+            effects.stop(ah);
+            de = effects.play('death');
             score++;
             if (power < 50) power += 1;
             this.state = 'dead';
@@ -724,6 +819,7 @@ function menu() {
     wy = 200;
     score = 0;
     highscore = localStorage.getItem("highscore");
+    var id1 = titleTheme.play();
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         grd = ctx.createLinearGradient(0, 0, w, 0);
@@ -770,10 +866,12 @@ function menu() {
             transition();
             canvas.removeEventListener("mousedown", getPosition, false);
         } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo == false){
+            effects.play('btn');
             HowTo = true;
             x = 0;
             y = 0;
         } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60)){
+            effects.play('btn');
             HowTo = false;
             x = 0;
             y = 0;
@@ -884,6 +982,10 @@ function HowToPlay(){
 function transition() {
     gw = 0;
     time = 0;
+    titleTheme.fade(1.0, 0.0, 7000);
+    titleTheme.on('fade', function(){
+        titleTheme.stop();
+    });
     var sessionT = setInterval(function() {
         time++;
         ctx.clearRect(0, 0, w, h);
@@ -909,7 +1011,8 @@ function transition() {
         ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
         ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
-        if (time < 20) {
+        if (time < 40) {
+            titleTheme.rate(2);
             if (time % 2 == 0) {
                 wx -= 4;
                 wy -= 4;
@@ -921,16 +1024,18 @@ function transition() {
                 sx -= 2;
                 sy -= 2;
             }
-        } else if (time >= 20) {
+        } else if (time >= 40) {
+            titleTheme.rate(0.5);
             if (gw <= w - 50) gw += 25;
-            sx += 4;
-            sy += 4;
+            sx += 2;
+            sy += 2;
             sx = srandom(sx);
             sy = srandom(sy);
-            wx -= 8;
-            wy -= 8;
+            wx -= 4;
+            wy -= 4;
         }
         if (wx <= 50 || wy <= 10) {
+            mainTheme.play();
             background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg';
             ctx.drawImage(background, 0, 0, w, h);
             clearInterval(sessionT);
@@ -971,16 +1076,27 @@ enemies = [enemy1,
            enemy12,
            enemy13,
            enemy14,
-           enemy15]
+           enemy15 ];
 
 function main() {
     var sx = 100;
     var sy = 100;
     var wx = 50;
     var wy = 50;
+    
+    if(effects.playing(ah) != true && mainTheme.playing() != true)
+            effects.on('end', function(){
+                mainTheme.mute(false);
+            }, pu);
+    
+    ah = effects.play('healthLoss');
+    effects.volume(0.6, ah);
+    effects.stop(ah);
     sessionM = setInterval(function() {
         Otime++;
         ctx.clearRect(0, 0, w, h);
+        
+        //muteSound();
 
         drawStage();
 
@@ -1010,19 +1126,32 @@ function main() {
             cool--;
             randomColor = '#adedff';
         }
-
+        
         if ((touch(enemy1) && enemy1.state != 'dead') || (touch(enemy2) && enemy2.state != 'dead') || (touch(enemy3) && enemy3.state != 'dead') || (touch(enemy4) && enemy4.state != 'dead') || (touch(enemy5) && enemy5.state != 'dead') || (touch(enemy6) && enemy6.state != 'dead') || (touch(enemy7) && enemy7.state != 'dead') || (touch(enemy8) && enemy8.state != 'dead') || (touch(enemy9) && enemy9.state != 'dead') || (touch(enemy10) && enemy10.state != 'dead') || (touch(enemy11) && enemy11.state != 'dead') || (touch(enemy12) && enemy12.state != 'dead') || (touch(enemy13) && enemy13.state != 'dead') || (touch(enemy14) && enemy14.state != 'dead') || (touch(enemy15) && enemy15.state != 'dead')) {
             health--;
             randomColor = '#ff6d6d';
             damaging = true;
             regeneration = false;
+            if(hlSound){
+                mainTheme.mute(true);
+                ah = effects.play('healthLoss');
+                hlSound = false;
+            }
         } else {
+            hlSound = true;
+            effects.stop(ah);
             damaging = false;
         }
 
-        if (cool == 0 && damaging == false) randomColor = '#ffd6cc';
+        if (cool == 0 && damaging == false) {
+            if(attackb == false && attackx == false && attackz == false) mainTheme.mute(false);
+            effects.stop(ah);
+            randomColor = '#ffd6cc';
+        }
 
         if (collide() || health <= 0) {
+            hlSound = true;
+            effects.stop(ah);
             clearInterval(sessionM);
             shrink();
         }
