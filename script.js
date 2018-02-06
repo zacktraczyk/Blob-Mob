@@ -674,7 +674,7 @@ function enemeySpeed(){
 function drawStage() {
     ctx.fillStyle = '#fffbf9';
     ctx.fillRect(0, 0, w, h);
-    //ctx.drawImage(background, 0, 0, w, h);
+    ctx.drawImage(background, 0, 0, w, h);
     ctx.lineWidth = 10;
     ctx.strokeRect(0, 0, w, h);
 }
