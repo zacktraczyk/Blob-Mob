@@ -1,4 +1,4 @@
-# yeet
+# Blob-Mob
 Javascript Canvas Game
 
 **Version 10.5**
