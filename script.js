@@ -52,7 +52,7 @@ var titleTheme = new Howl({
 var mainTheme = new Howl({
     src: ['Sound/8-lit.mp3'],
     volume: 0.7,
-    loop: true,
+    loop: true
     
 });
 
