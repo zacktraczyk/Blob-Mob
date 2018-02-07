@@ -26,6 +26,7 @@ var dDown = false; // -- down
 var attackb = false; // -- attack normal
 var attackz = false; // -- attack bubble
 var attackx = false; // -- regeneration
+var pause = false;
 var enemies; //Enemies array
 var power = 50;
 var cool = 0;
@@ -464,6 +465,7 @@ function listen() {
         if (e.keyCode == 38) uDown = true;
         if (e.keyCode == 37) lDown = true;
         //if (e.keyCode == 77) muted = true;
+        if (e.keyCode == 80) pause = true;
         if (e.keyCode == 32 && cool == 0) attackb = true;
         else if (e.keyCode == 90 && cool == 0 && power >= 10) attackz = true;
         else if (e.keyCode == 88 && cool == 0 && power > 0) attackx = true;
@@ -478,6 +480,7 @@ function listen() {
             muted = false;
             once = true;   
         }
+        if (e.keyCode == 80) pause = false;
         if (e.keyCode == 88) attackx = false;
     }
 
@@ -808,6 +811,15 @@ function drawScore() {
     ctx.fillText("High-Score: " + highscore, 18, 58, w / 2);
 }
 
+function pause() {
+    if(pause){
+        ctx.fillStyle = "rgba(225, 200, 200, 0.1)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "black";
+        ctx.fillText("PAUSE", (w - measureText("PAUSE")) / 2, h/2-10);
+    }
+}
+
 //-----------------------------------//
 //--------------SESSION--------------//
 
@@ -819,9 +831,10 @@ function menu() {
     wy = 200;
     score = 0;
     highscore = localStorage.getItem("highscore");
-    var id1 = titleTheme.play();
+    //var id1 = titleTheme.play();
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
+        
         grd = ctx.createLinearGradient(0, 0, w, 0);
         grd.addColorStop(0, '#ffd6cc');
         grd.addColorStop(0.8, 'grey');
@@ -847,6 +860,8 @@ function menu() {
         sy = myrandom(sy);
         wx = srandom(wx);
         wy = srandom(wy);
+        
+        pause();
 
         if(HowTo) HowToPlay();
 
@@ -1117,6 +1132,8 @@ function main() {
         drawPower();
 
         drawCool();
+        
+        pause();
 
         enemySpawn();
 
@@ -1225,4 +1242,5 @@ function end() {
         }
     }, 50);
 }
+
 //Developed By ZACK TRACZYK
