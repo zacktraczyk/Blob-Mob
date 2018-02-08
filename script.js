@@ -27,6 +27,7 @@ var attackb = false; // -- attack normal
 var attackz = false; // -- attack bubble
 var attackx = false; // -- regeneration
 var pause = true;
+var ponce = true;
 var enemies; //Enemies array
 var power = 50;
 var cool = 0;
@@ -36,6 +37,7 @@ var score = 0;
 var highscore = localStorage.getItem("highscore"); //Cookie storage
 var recent = 'right';
 var damaging;
+var playerDead = false;
 var speed = 1;
 var regeneration = false;
 var justRegen = false;
@@ -80,7 +82,7 @@ var effects = new Howl({
 });
 
 var muted = false;
-var once = true;
+var monce = true;
 var mMute = true;
 var eMute = true;
 var at; //Attack id
@@ -89,18 +91,12 @@ var de; //Death id
 var pu; //Push id
 var he; //heal id
 
-/*function muteSwitch(){
-    if(mMute || eMute){
-        mMute = false;
-        eMute = false;
-    } else {
-        mMute = true;
-        eMute = true;
-    }
-}
-
-function muteSound(){
+/*function muteSound(){
     if(muted){
+        mainTheme.mute(true);
+        titleTheme.mute(true);
+        effects.mute(true);
+        endTheme.mute(true);
         once = false;
         muteSwitch();
     }
@@ -470,8 +466,8 @@ function listen() {
         if (e.keyCode == 39) rDown = true;
         if (e.keyCode == 38) uDown = true;
         if (e.keyCode == 37) lDown = true;
-        //if (e.keyCode == 77) muted = true;
-        if (e.keyCode == 80) pause = true;
+        if (e.keyCode == 77 && monce) muteSound();
+        if (e.keyCode == 80 && ponce && playerDead == false) pauseMenu();
         if (e.keyCode == 32 && cool == 0) attackb = true;
         else if (e.keyCode == 90 && cool == 0 && power >= 10) attackz = true;
         else if (e.keyCode == 88 && cool == 0 && power > 0) attackx = true;
@@ -484,9 +480,9 @@ function listen() {
         if (e.keyCode == 37) lDown = false;
         if (e.keyCode == 77){
             muted = false;
-            once = true;   
+            monce = true;   
         }
-        if (e.keyCode == 80) pause = false;
+        if (e.keyCode == 80) ponce = true;
         if (e.keyCode == 88) attackx = false;
     }
 
@@ -690,7 +686,7 @@ function stateDef(a) {
         if (a.state == 'spawn' || a.state == 'dead') {
             a.spawn();
         } else if (a.state == 'alive') {
-            a.move();
+            if(pause == false) a.move();
             a.draw();
         } else if (a.state == 'dying') {
             a.kill();
@@ -702,7 +698,7 @@ function stateDef(a) {
         if (a.state == 'spawn') {
             a.spawn();
         } else if (a.state == 'alive') {
-            a.move();
+            if(pause == false) a.move();
             a.drawBoss();
         } else if (a.state == 'dying') {
             a.kill();
@@ -818,13 +814,21 @@ function drawScore() {
 }
 
 function pauseMenu() {
+    if(ponce){
+        if (pause) pause = false;
+        else pause = true;
+        
+        ponce = false;
+    }
+    
     if(pause){
+        muted = true;
         ctx.fillStyle = "rgba(225, 220, 212, 0.4)";
         ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "grey";
         ctx.font = "50px monospace";
-        //ctx.fillText("PAUSE", (w - measureText("PAUSE")) / 2, h/2-10);
         ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10);
-    }
+    } 
 }
 
 //-----------------------------------//
@@ -838,7 +842,7 @@ function menu() {
     wy = 200;
     score = 0;
     highscore = localStorage.getItem("highscore");
-    //var id1 = titleTheme.play();
+    //titleTheme.play();
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         
@@ -863,12 +867,17 @@ function menu() {
         ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
         ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
-        sx = mxrandom(sx);
-        sy = myrandom(sy);
-        wx = srandom(wx);
-        wy = srandom(wy);
+        
+        if(pause == false){
+            sx = mxrandom(sx);
+            sy = myrandom(sy);
+            wx = srandom(wx);
+            wy = srandom(wy);
+        }
         
         pauseMenu();
+        
+        listen();
 
         if(HowTo) HowToPlay();
 
@@ -877,22 +886,22 @@ function menu() {
         //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30);
         //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30);
         
-        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h){
+        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause == false){
             clearInterval(sessionME);
             canvas.removeEventListener("mousedown", getPosition, false);
             window.location.href = '/about.html'
         }
         
-        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420) {
+        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause == false) {
             clearInterval(sessionME);
             transition();
             canvas.removeEventListener("mousedown", getPosition, false);
-        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo == false){
+        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo == false && pause == false){
             effects.play('btn');
             HowTo = true;
             x = 0;
             y = 0;
-        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60)){
+        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause == false){
             effects.play('btn');
             HowTo = false;
             x = 0;
@@ -1105,7 +1114,7 @@ function main() {
     var sy = 100;
     var wx = 50;
     var wy = 50;
-    
+    document.body.style.backgroundColor = 'black';
     if(effects.playing(ah) != true && mainTheme.playing() != true)
             effects.on('end', function(){
                 mainTheme.mute(false);
@@ -1115,22 +1124,18 @@ function main() {
     effects.volume(0.6, ah);
     effects.stop(ah);
     sessionM = setInterval(function() {
-        Otime++;
+        if(pause == false) Otime++;
         ctx.clearRect(0, 0, w, h);
         
         //muteSound();
 
         drawStage();
-
+        
         listen();
-
-        moveChar();
-
-        drawChar();
-
-        if(regeneration && damaging == false) regenerate();
-
+        
         stateDefinition();
+        
+        drawChar();
 
         drawHealth();
 
@@ -1140,44 +1145,52 @@ function main() {
 
         drawCool();
         
-        pause();
-
-        enemySpawn();
-
-        enemeySpeed();
-
-        if (cool > 0 && regeneration == false) {
-            cool--;
-            randomColor = '#adedff';
-        }
+        pauseMenu();
         
-        if ((touch(enemy1) && enemy1.state != 'dead') || (touch(enemy2) && enemy2.state != 'dead') || (touch(enemy3) && enemy3.state != 'dead') || (touch(enemy4) && enemy4.state != 'dead') || (touch(enemy5) && enemy5.state != 'dead') || (touch(enemy6) && enemy6.state != 'dead') || (touch(enemy7) && enemy7.state != 'dead') || (touch(enemy8) && enemy8.state != 'dead') || (touch(enemy9) && enemy9.state != 'dead') || (touch(enemy10) && enemy10.state != 'dead') || (touch(enemy11) && enemy11.state != 'dead') || (touch(enemy12) && enemy12.state != 'dead') || (touch(enemy13) && enemy13.state != 'dead') || (touch(enemy14) && enemy14.state != 'dead') || (touch(enemy15) && enemy15.state != 'dead')) {
-            health--;
-            randomColor = '#ff6d6d';
-            damaging = true;
-            regeneration = false;
-            if(hlSound){
-                mainTheme.mute(true);
-                ah = effects.play('healthLoss');
-                hlSound = false;
+        if(pause == false){
+            
+            if(regeneration && damaging == false) regenerate();
+            
+            moveChar();
+            
+            enemySpawn();
+
+            enemeySpeed();
+            
+            if (cool > 0 && regeneration == false) {
+                cool--;
+                randomColor = '#adedff';
             }
-        } else {
-            hlSound = true;
-            effects.stop(ah);
-            damaging = false;
-        }
+            
+            if ((touch(enemy1) && enemy1.state != 'dead') || (touch(enemy2) && enemy2.state != 'dead') || (touch(enemy3) && enemy3.state != 'dead') || (touch(enemy4) && enemy4.state != 'dead') || (touch(enemy5) && enemy5.state != 'dead') || (touch(enemy6) && enemy6.state != 'dead') || (touch(enemy7) && enemy7.state != 'dead') || (touch(enemy8) && enemy8.state != 'dead') || (touch(enemy9) && enemy9.state != 'dead') || (touch(enemy10) && enemy10.state != 'dead') || (touch(enemy11) && enemy11.state != 'dead') || (touch(enemy12) && enemy12.state != 'dead') || (touch(enemy13) && enemy13.state != 'dead') || (touch(enemy14) && enemy14.state != 'dead') || (touch(enemy15) && enemy15.state != 'dead')) {
+                health--;
+                randomColor = '#ff6d6d';
+                damaging = true;
+                regeneration = false;
+                if(hlSound){
+                    mainTheme.mute(true);
+                    ah = effects.play('healthLoss');
+                    hlSound = false;
+                }
+            } else {
+                hlSound = true;
+                effects.stop(ah);
+                damaging = false;
+            }
 
-        if (cool == 0 && damaging == false) {
-            if(attackb == false && attackx == false && attackz == false) mainTheme.mute(false);
-            effects.stop(ah);
-            randomColor = '#ffd6cc';
-        }
-
-        if (collide() || health <= 0) {
-            hlSound = true;
-            effects.stop(ah);
-            clearInterval(sessionM);
-            shrink();
+            if (cool == 0 && damaging == false) {
+                if(attackb == false && attackx == false && attackz == false) mainTheme.mute(false);
+                effects.stop(ah);
+                randomColor = '#ffd6cc';
+            }
+            
+            if (collide() || health <= 0) {
+                hlSound = true;
+                effects.stop(ah);
+                playerDead = true;
+                clearInterval(sessionM);
+                shrink();
+            }
         }
         document.body.style.backgroundColor = 'black';
     }, 50);
