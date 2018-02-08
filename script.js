@@ -26,7 +26,7 @@ var dDown = false; // -- down
 var attackb = false; // -- attack normal
 var attackz = false; // -- attack bubble
 var attackx = false; // -- regeneration
-var pause = false;
+var pause = true;
 var enemies; //Enemies array
 var power = 50;
 var cool = 0;
@@ -811,12 +811,13 @@ function drawScore() {
     ctx.fillText("High-Score: " + highscore, 18, 58, w / 2);
 }
 
-function pause() {
+function pauseMenu() {
     if(pause){
-        ctx.fillStyle = "rgba(225, 200, 200, 0.1)";
+        ctx.fillStyle = "rgba(225, 220, 212, 0.4)";
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = "black";
-        ctx.fillText("PAUSE", (w - measureText("PAUSE")) / 2, h/2-10);
+        ctx.font = "50px monospace";
+        //ctx.fillText("PAUSE", (w - measureText("PAUSE")) / 2, h/2-10);
+        ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10);
     }
 }
 
@@ -861,7 +862,7 @@ function menu() {
         wx = srandom(wx);
         wy = srandom(wy);
         
-        pause();
+        pauseMenu();
 
         if(HowTo) HowToPlay();
 
