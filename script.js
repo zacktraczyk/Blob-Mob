@@ -58,6 +58,12 @@ var mainTheme = new Howl({
     
 });
 
+var endTheme = new Howl({
+    src: ['Sound/Game-Over.mp3'],
+    volume: 1,
+    loop: true
+});
+
 //Length of segment ~= 2100
 var hlSound = true;
 
@@ -1028,7 +1034,7 @@ function transition() {
         ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         if (time < 40) {
-            titleTheme.rate(2);
+            titleTheme.rate(1.5);
             if (time % 2 == 0) {
                 wx -= 4;
                 wy -= 4;
@@ -1041,7 +1047,7 @@ function transition() {
                 sy -= 2;
             }
         } else if (time >= 40) {
-            titleTheme.rate(0.5);
+            titleTheme.rate(0.75);
             if (gw <= w - 50) gw += 25;
             sx += 2;
             sy += 2;
@@ -1183,6 +1189,7 @@ function shrink() {
     var shrinkwx = wx;
     var shrinkwy = wy;
     var sessionS = setInterval(function() {
+        de = effects.play('death');
         ctx.clearRect(0, 0, w, h);
         drawStage();
         shrinksx += 4;
@@ -1207,6 +1214,9 @@ function shrink() {
 function end() {
     gx = -w;
     gx2 = -0.5*w;
+    effects.stop(ah);
+    mainTheme.stop();
+    endTheme.play();
     var sessionE = setInterval(function() {
         if (gx != 0) gx += 4;
         if (gx2 != 0 + 200) gx2 += 14;
