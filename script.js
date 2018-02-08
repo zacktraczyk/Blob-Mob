@@ -1171,6 +1171,7 @@ function shrink() {
     var shrinkwx = wx;
     var shrinkwy = wy;
     var sessionS = setInterval(function() {
+        de = effects.play('death');
         ctx.clearRect(0, 0, w, h);
         drawStage();
         shrinksx += 4;
