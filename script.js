@@ -1018,7 +1018,7 @@ function transition() {
         ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         if (time < 40) {
-            titleTheme.rate(2);
+            titleTheme.rate(1.5);
             if (time % 2 == 0) {
                 wx -= 4;
                 wy -= 4;
@@ -1031,7 +1031,7 @@ function transition() {
                 sy -= 2;
             }
         } else if (time >= 40) {
-            titleTheme.rate(0.5);
+            titleTheme.rate(0.75);
             if (gw <= w - 50) gw += 25;
             sx += 2;
             sy += 2;
