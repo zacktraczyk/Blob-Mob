@@ -57,6 +57,12 @@ var mainTheme = new Howl({
     
 });
 
+var endTheme = new Howl({
+    src: ['Sound/Game-Over.mp3'],
+    volume: 1,
+    loop: true
+});
+
 //Length of segment ~= 2100
 var hlSound = true;
 
@@ -1189,6 +1195,9 @@ function shrink() {
 function end() {
     gx = -w;
     gx2 = -0.5*w;
+    effects.stop(ah);
+    mainTheme.stop();
+    endTheme.play();
     var sessionE = setInterval(function() {
         if (gx != 0) gx += 4;
         if (gx2 != 0 + 200) gx2 += 14;
@@ -1225,4 +1234,5 @@ function end() {
         }
     }, 50);
 }
+
 //Developed By ZACK TRACZYK
