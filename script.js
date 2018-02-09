@@ -842,7 +842,7 @@ function menu() {
     wy = 200;
     score = 0;
     highscore = localStorage.getItem("highscore");
-    //titleTheme.play();
+    titleTheme.play();
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         
