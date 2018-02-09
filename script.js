@@ -91,16 +91,27 @@ var de; //Death id
 var pu; //Push id
 var he; //heal id
 
-/*function muteSound(){
+function muteSound(){
+    if(monce){
+        if (muted) muted = false;
+        else muted = true;
+        
+        monce = false;
+    }
+    
     if(muted){
         mainTheme.mute(true);
         titleTheme.mute(true);
         effects.mute(true);
         endTheme.mute(true);
-        once = false;
-        muteSwitch();
+    } else {
+        mainTheme.mute(false);
+        titleTheme.mute(false);
+        effects.mute(false);
+        endTheme.mute(false);
     }
-    if(mMute){
+    
+    /*if(mMute){
         mainTheme.mute(true);
         titleTheme.mute(true);
     } else {
@@ -112,8 +123,8 @@ var he; //heal id
         effects.mute(true);
     } else {
         effects.mute(false);
-    }
-}*/
+    }*/
+}
 
 
 //--------------FUNCTIONS--------------//
@@ -442,7 +453,7 @@ function moveChar() {
     } else if (attackx == false){
         regeneration = false;
         if(justRegen){
-            mainTheme.mute(false);
+            if(muted != true) mainTheme.mute(false);
             justRegen = false;
             effects.stop(he);
         }
@@ -478,10 +489,7 @@ function listen() {
         if (e.keyCode == 39) rDown = false;
         if (e.keyCode == 38) uDown = false;
         if (e.keyCode == 37) lDown = false;
-        if (e.keyCode == 77){
-            muted = false;
-            monce = true;   
-        }
+        if (e.keyCode == 77) monce = true;
         if (e.keyCode == 80) ponce = true;
         if (e.keyCode == 88) attackx = false;
     }
@@ -1115,7 +1123,7 @@ function main() {
     var wx = 50;
     var wy = 50;
     document.body.style.backgroundColor = 'black';
-    if(effects.playing(ah) != true && mainTheme.playing() != true)
+    if(effects.playing(ah) != true && mainTheme.playing() != true && muted != true)
             effects.on('end', function(){
                 mainTheme.mute(false);
             }, pu);
@@ -1167,7 +1175,7 @@ function main() {
                 randomColor = '#ff6d6d';
                 damaging = true;
                 regeneration = false;
-                if(hlSound){
+                if(hlSound && muted == false){
                     mainTheme.mute(true);
                     ah = effects.play('healthLoss');
                     hlSound = false;
@@ -1179,7 +1187,7 @@ function main() {
             }
 
             if (cool == 0 && damaging == false) {
-                if(attackb == false && attackx == false && attackz == false) mainTheme.mute(false);
+                if(attackb == false && attackx == false && attackz == false && muted == false) mainTheme.mute(false);
                 effects.stop(ah);
                 randomColor = '#ffd6cc';
             }
