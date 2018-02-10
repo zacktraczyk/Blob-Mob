@@ -83,8 +83,8 @@ var effects = new Howl({
 
 var muted = false;
 var monce = true;
-var mMute = true;
-var eMute = true;
+var mSound = 0.5;
+var eSound = 1;
 var at; //Attack id
 var ah; //HealthLoss id
 var de; //Death id
@@ -111,19 +111,8 @@ function muteSound(){
         endTheme.mute(false);
     }
     
-    /*if(mMute){
-        mainTheme.mute(true);
-        titleTheme.mute(true);
-    } else {
-        mainTheme.mute(false);
-        titleTheme.mute(false);
-    }
-    
-    if(eMute){
-        effects.mute(true);
-    } else {
-        effects.mute(false);
-    }*/
+    mainTheme.volume(mSound);
+    effects.volume(eSound);
 }
 
 
@@ -265,6 +254,7 @@ function attack() {
     time = 0;
     at = effects.play('attack');
     var sessionA = setInterval(function() {
+        
         randomColor = '#adedff';
         time++;
         cool++;
@@ -830,7 +820,6 @@ function pauseMenu() {
     }
     
     if(pause){
-        muted = true;
         ctx.fillStyle = "rgba(225, 220, 212, 0.4)";
         ctx.fillRect(0, 0, w, h);
         ctx.fillStyle = "grey";
