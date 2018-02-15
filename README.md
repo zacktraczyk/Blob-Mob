@@ -11,4 +11,4 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
 
 ## Contributers
 
-* Zack Traczyk <zstraczyk324@gmail.com>
+* Zack Traczyk <ztraczyk.coding@gmail.com>
