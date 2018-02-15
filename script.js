@@ -930,6 +930,7 @@ function HowToPlay(){
     var instruction5 = "But use Z, your powerup, if you are swarmed.";
     var instruction6 = "You can also hold X to regenerate health.";
     var instruction7 = "Just remember, powerups and regeneration use power!";
+    var instruction8 = "Press M to mute and P to pause";
     ctx.fillText(instruction1, w / 2 - (ctx.measureText(instruction1).width/2), 122);
     ctx.fillText(instruction2, w / 2 - (ctx.measureText(instruction2).width/2), 154);
     ctx.fillText(instruction3, w / 2 - (ctx.measureText(instruction3).width/2), 186);
@@ -937,6 +938,8 @@ function HowToPlay(){
     ctx.fillText(instruction5, w / 2 - (ctx.measureText(instruction5).width/2), 250);
     ctx.fillText(instruction6, w / 2 - (ctx.measureText(instruction6).width/2), 282);
     ctx.fillText(instruction7, w / 2 - (ctx.measureText(instruction7).width/2), 314);
+    ctx.fillStyle = 'red';
+    ctx.fillText(instruction8, w / 2 -40, 463);
 
     var esx = 380;
     var esy = 390;
