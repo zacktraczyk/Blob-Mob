@@ -213,7 +213,7 @@ function inarea(enemy) {
     }
 }
 
-//Cookies Storage
+//Cookie Storage
 function setHighScore() {
     if (highscore !== null) {
         if (score > highscore) {
@@ -352,6 +352,7 @@ function attackZ() {
         drawCool();
 
         drawScore();
+        
         if (time >= 50) {
             clearInterval(sessionAZ);
             attackz = false;
@@ -398,10 +399,8 @@ function regenerate(){
             wy-=4;
             sx+=2;
             sy+=2;
-
         }
     } else {
-        //if(Otime % 2 == 0) cool+=1;
         cool++;
     }
 }
@@ -429,6 +428,7 @@ function moveChar() {
         sy = random(sy);
         recent = 'left';
     }
+    
     
     if (attackb && regeneration == false) {
         clearInterval(sessionM);
@@ -463,15 +463,15 @@ function listen() {
 
     function keyDownHandler(e) {
         e.preventDefault();
-        if (e.keyCode == 40) dDown = true;
-        if (e.keyCode == 39) rDown = true;
-        if (e.keyCode == 38) uDown = true;
-        if (e.keyCode == 37) lDown = true;
-        if (e.keyCode == 77 && monce) muteSound();
-        if (e.keyCode == 80 && ponce && playerDead == false) pauseMenu();
-        if (e.keyCode == 32 && cool == 0) attackb = true;
-        else if (e.keyCode == 90 && cool == 0 && power >= 10) attackz = true;
-        else if (e.keyCode == 88 && cool == 0 && power > 0) attackx = true;
+        if (e.keyCode == 40) dDown = true; //Down arrow
+        if (e.keyCode == 39) rDown = true; //Right arrow
+        if (e.keyCode == 38) uDown = true; //Up arrow
+        if (e.keyCode == 37) lDown = true; //Left arrow
+        if (e.keyCode == 77 && monce) muteSound(); //Mute
+        if (e.keyCode == 80 && ponce && playerDead == false) pauseMenu(); //Pause
+        if (e.keyCode == 32 && cool == 0) attackb = true; //Attack
+        else if (e.keyCode == 90 && cool == 0 && power >= 10) attackz = true; //Special Attack Push
+        else if (e.keyCode == 88 && cool == 0 && power > 0) attackx = true; //Special Regenerate
     }
 
     function keyUpHandler(e) {
@@ -488,26 +488,30 @@ function listen() {
 
 
 function drawChar() {
-    randNum = Math.round(Math.random() * 2);
+//Pink Color Strobe 
+    //randNum = Math.round(Math.random() * 2);
     //randomColor = colors[randNum];
 
-
-    ctx.fillStyle = randomColor;
+    //Draws body
+    ctx.fillStyle = randomColor; //Set to #ffd6cc
     ctx.fillRect(sx, sy, wx, wy);
 
     ctx.lineWidth = 1;
 
+    //Draws Left Eye
     ctx.beginPath();
     ctx.fillStyle = 'black';
     ctx.arc(sx + wx / 6, sy + wy / 6, (wx / 4 + wy / 4) / 4, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.closePath();
 
+    //Draws Right Eye
     ctx.beginPath();
     ctx.arc(sx + wx - wx / 8, sy + wy / 6, (wx / 4 + wy / 4) / 6, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.closePath();
 
+    //Draws Mouth
     ctx.beginPath();
     ctx.moveTo(sx + wx / 8, sy + wy - wy / 3);
     ctx.bezierCurveTo(sx + wy / 8, sy + wy, sx + wx - wy / 8, sy + wy, sx + wx - wy / 8, sy + wy - wy / 3);
@@ -518,12 +522,13 @@ function drawChar() {
 
 function enemy(state, type, enemspeed) {
 
-    this.state = state,
+    this.state = state, //Spawn, alive, push, dying, or dead
 
-    this.type = type,
+    this.type = type, //Regular or boss
 
-    this.speed = enemspeed * speed;
-    this.bossIsAlive = false,
+    this.speed = enemspeed * speed,
+    
+    this.bossIsAlive = false, //Boss not functional
 
     this.spawn = function() {
         randomLocation(this);
@@ -640,13 +645,23 @@ function enemy(state, type, enemspeed) {
         this.ewx -= 2;
         this.ewy -= 2;
 
-        ctx.moveTo(this.esx - this.esx / 20, this.esy);
-        ctx.bezierCurveTo(this.esx - this.esx / 20, this.esy - this.esy / 20, this.esx + this.ewx + this.esx / 20, this.esy - this.esy / 20, this.esx + this.ewx + this.esx / 20, this.esy);
+        //Draws Body
+        ctx.moveTo(this.esx - this.ewx / 8, this.esy);
+        ctx.bezierCurveTo(this.esx - this.ewx / 8, this.esy - this.ewy / 4,
+                          this.esx + this.ewx + this.ewx / 8, this.esy - this.ewy / 4,
+                          this.esx + this.ewx + this.ewx / 8, this.esy);
 
-        ctx.bezierCurveTo(this.esx + this.ewx + this.esx / 10, this.esy, this.esx + this.ewx + this.esx / 10, this.esy + this.ewy, this.esx + this.ewx, this.esy + this.ewy);
+        ctx.bezierCurveTo(this.esx + this.ewx * 2, this.esy,
+                          this.esx + this.ewx * 2, this.esy + this.ewy,
+                          this.esx + this.ewx - this.ewx / 8, this.esy + this.ewy);
 
-        ctx.bezierCurveTo(this.esx + this.ewx / 10, this.esy + this.esy / 4, this.esx - this.ewx * 2, this.esy + this.ewy / 4, this.esx - this.esx / 20, this.esy);
+        ctx.bezierCurveTo(this.esx + this.ewx - this.ewx / 8, this.esy + this.ewy * 1.75,
+                          this.esx - this.ewx * 2, this.esy + this.ewy / 4,
+                          this.esx, this.esy + this.ewy / 2);
 
+        ctx.bezierCurveTo(this.esx - this.ewx, this.esy + this.ewy / 2,
+                          this.esx - this.ewx / 2, this.esy,
+                          this.esx - this.ewx / 8, this.esy)
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
@@ -657,7 +672,7 @@ function enemy(state, type, enemspeed) {
             score++;
             if (power < 50) power += 1;
             this.state = 'dead';
-            if(this.type == 'boss')this.bossIsAlive = false;
+            if(this.type == 'boss') this.bossIsAlive = false;
         }
     },
 
@@ -691,7 +706,6 @@ function stateDef(a) {
         } else if (a.state == 'push') {
             a.push();
         }
-
     } else if (a.type == 'boss') {
         if (a.state == 'spawn') {
             a.spawn();
@@ -703,7 +717,6 @@ function stateDef(a) {
         } else if (a.state == 'push') {
             a.push();
         }
-
     }
 }
 
@@ -795,14 +808,12 @@ function drawPower() {
     ctx.fillRect(w - w * (1 / 4) + 1, 41, (power / 50) * 113, 18);
 }
 
-
 function drawCool() {
     ctx.fillStyle = 'black';
     ctx.fillRect(w / 2, 40, 115, 20);
     ctx.fillStyle = 'blue';
     ctx.fillRect(w / 2 + 1, 41, 113 - (cool / 50) * 113, 18);
 }
-
 
 function drawScore() {
     ctx.fillStyle = 'black';
