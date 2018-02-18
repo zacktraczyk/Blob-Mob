@@ -91,15 +91,15 @@ var de; //Death id
 var pu; //Push id
 var he; //heal id
 
-function muteSound(){
-    if(monce){
+function muteSound() {
+    if(monce) {
         if (muted) muted = false;
         else muted = true;
         
         monce = false;
     }
     
-    if(muted){
+    if(muted) {
         mainTheme.mute(true);
         titleTheme.mute(true);
         effects.mute(true);
@@ -137,7 +137,7 @@ function random(a) {
 }
 
 function srandom(a) {
-    var rand = Math.random() * 10
+    var rand = Math.random() * 10;
     if (rand > 5) {
         return a + 1;
 
@@ -161,7 +161,7 @@ function mxrandom(a) {
 
 
 function myrandom(a) {
-    var rand = Math.random() * 10
+    var rand = Math.random() * 10;
     if (rand > 5 && a > 10) {
         return a - 1;
 
@@ -316,7 +316,7 @@ function attackZ() {
         if (7 >= time) {
             r--;
             cool += 2;
-        } else if (time >= 8 && time < 20 && time % 2 == 0) {
+        } else if (time >= 8 && time < 20 && time % 2 === 0) {
             r -= 3;
             cool += 2;
         } else if (time >= 8 && time < 20 && Math.abs(time % 2) == 1) {
@@ -329,7 +329,7 @@ function attackZ() {
             
             power--;
             r += 10;
-            cool += .5;
+            cool += 0.5;
         }
         
         drawStage();
@@ -380,19 +380,19 @@ function regenerate(){
     if(cool == 50){
         justRegen = true;
         mainTheme.mute(true);
-        if(effects.playing(he) != true) he = effects.play('heal');
+        if(effects.playing(he) !== true) he = effects.play('heal');
         effects.volume(1.0, he);
         
         if(power <= 0){
             regneration = false;
             attackx = false;
         }
-        if(Otime % 3 == 0 && power > 0) power-=1;
+        if(Otime % 3 === 0 && power > 0) power-=1;
         if(health < 100) health++;
-        if(Otime % 2 == 0){
+        if(Otime % 2 === 0){
             wx+=5;
-            wy+=5
-            sx-=2
+            wy+=5;
+            sx-=2;
             sy-=2;
         } else {
             wx-=4;
@@ -408,42 +408,42 @@ function regenerate(){
 //--------------------------------------//
 //--------------CHARACTERS--------------//
 function moveChar() {
-    if (dDown && regeneration == false) {
+    if (dDown && regeneration === false) {
         sy += 4;
         sx = random(sx);
         recent = 'down';
     }
-    if (rDown && regeneration == false) {
+    if (rDown && regeneration === false) {
         sx += 4;
-        sy = random(sy)
+        sy = random(sy);
         recent = 'right';
     }
-    if (uDown && regeneration == false) {
+    if (uDown && regeneration === false) {
         sy -= 4;
         sx = random(sx);
         recent = 'up';
     }
-    if (lDown && regeneration == false) {
+    if (lDown && regeneration === false) {
         sx -= 4;
         sy = random(sy);
         recent = 'left';
     }
     
     
-    if (attackb && regeneration == false) {
+    if (attackb && regeneration === false) {
         clearInterval(sessionM);
         attack();
-    } else if (attackz && regeneration == false) {
+    } else if (attackz && regeneration === false) {
         clearInterval(sessionM);
         attackZ();
     } else if (attackx) {
         //clearInterval(sessionM);
         //attackX();
         regeneration = true;
-    } else if (attackx == false){
+    } else if (attackx === false){
         regeneration = false;
         if(justRegen){
-            if(muted != true) mainTheme.mute(false);
+            if(muted !== true) mainTheme.mute(false);
             justRegen = false;
             effects.stop(he);
         }
@@ -468,10 +468,10 @@ function listen() {
         if (e.keyCode == 38) uDown = true; //Up arrow
         if (e.keyCode == 37) lDown = true; //Left arrow
         if (e.keyCode == 77 && monce) muteSound(); //Mute
-        if (e.keyCode == 80 && ponce && playerDead == false) pauseMenu(); //Pause
-        if (e.keyCode == 32 && cool == 0) attackb = true; //Attack
-        else if (e.keyCode == 90 && cool == 0 && power >= 10) attackz = true; //Special Attack Push
-        else if (e.keyCode == 88 && cool == 0 && power > 0) attackx = true; //Special Regenerate
+        if (e.keyCode == 80 && ponce && playerDead === false) pauseMenu(); //Pause
+        if (e.keyCode == 32 && cool === 0) attackb = true; //Attack
+        else if (e.keyCode == 90 && cool === 0 && power >= 10) attackz = true; //Special Attack Push
+        else if (e.keyCode == 88 && cool === 0 && power > 0) attackx = true; //Special Regenerate
     }
 
     function keyUpHandler(e) {
@@ -560,7 +560,7 @@ function enemy(state, type, enemspeed) {
 
         ctx.bezierCurveTo(this.esx - this.ewx, this.esy + this.ewy / 2,
                           this.esx - this.ewx / 2, this.esy,
-                          this.esx - this.ewx / 8, this.esy)
+                          this.esx - this.ewx / 8, this.esy);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
@@ -661,7 +661,7 @@ function enemy(state, type, enemspeed) {
 
         ctx.bezierCurveTo(this.esx - this.ewx, this.esy + this.ewy / 2,
                           this.esx - this.ewx / 2, this.esy,
-                          this.esx - this.ewx / 8, this.esy)
+                          this.esx - this.ewx / 8, this.esy);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
@@ -689,17 +689,17 @@ function enemy(state, type, enemspeed) {
             this.esx = srandom(this.esx);
             this.esy = srandom(this.esy);
         }
-    }
+    };
 
 
-};
+}
 
 function stateDef(a) {
     if (a.type == 'regular') {
         if (a.state == 'spawn' || a.state == 'dead') {
             a.spawn();
         } else if (a.state == 'alive') {
-            if(pause == false) a.move();
+            if(pause === false) a.move();
             a.draw();
         } else if (a.state == 'dying') {
             a.kill();
@@ -710,7 +710,7 @@ function stateDef(a) {
         if (a.state == 'spawn') {
             a.spawn();
         } else if (a.state == 'alive') {
-            if(pause == false) a.move();
+            if(pause === false) a.move();
             a.drawBoss();
         } else if (a.state == 'dying') {
             a.kill();
@@ -876,7 +876,7 @@ function menu() {
         ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         
-        if(pause == false){
+        if(pause === false){
             sx = mxrandom(sx);
             sy = myrandom(sy);
             wx = srandom(wx);
@@ -894,22 +894,22 @@ function menu() {
         //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30);
         //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30);
         
-        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause == false){
+        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
             clearInterval(sessionME);
             canvas.removeEventListener("mousedown", getPosition, false);
-            window.location.href = '/about.html'
+            window.location.href = '/about.html';
         }
         
-        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause == false) {
+        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
             clearInterval(sessionME);
             transition();
             canvas.removeEventListener("mousedown", getPosition, false);
-        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo == false && pause == false){
+        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo === false && pause === false){
             effects.play('btn');
             HowTo = true;
             x = 0;
             y = 0;
-        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause == false){
+        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause === false){
             effects.play('btn');
             HowTo = false;
             x = 0;
@@ -1055,7 +1055,7 @@ function transition() {
         ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
         if (time < 40) {
             titleTheme.rate(1.5);
-            if (time % 2 == 0) {
+            if (time % 2 === 0) {
                 wx -= 4;
                 wy -= 4;
                 sx += 2;
@@ -1087,10 +1087,10 @@ function transition() {
 }
 
 
-var enemy1 = new enemy('none', 'regular', .3);
+var enemy1 = new enemy('none', 'regular', 0.3);
 var enemy2 = new enemy('none', 'regular', 1);
 var enemy3 = new enemy('none', 'regular', 1.2);
-var enemy4 = new enemy('none', 'regular', .9);
+var enemy4 = new enemy('none', 'regular', 0.9);
 var enemy5 = new enemy('none', 'regular', 1.4);
 var enemy6 = new enemy('none', 'regular', 1.1);
 var enemy7 = new enemy('none', 'regular', 1.2);
@@ -1126,7 +1126,7 @@ function main() {
     var wx = 50;
     var wy = 50;
     document.body.style.backgroundColor = 'black';
-    if(effects.playing(ah) != true && mainTheme.playing() != true && muted != true)
+    if(effects.playing(ah) !== true && mainTheme.playing() !== true && muted !== true)
             effects.on('end', function(){
                 mainTheme.mute(false);
             }, pu);
@@ -1135,7 +1135,7 @@ function main() {
     effects.volume(0.6, ah);
     effects.stop(ah);
     sessionM = setInterval(function() {
-        if(pause == false) Otime++;
+        if(pause === false) Otime++;
         ctx.clearRect(0, 0, w, h);
         
         //muteSound();
@@ -1158,9 +1158,9 @@ function main() {
         
         pauseMenu();
         
-        if(pause == false){
+        if(pause === false){
             
-            if(regeneration && damaging == false) regenerate();
+            if(regeneration && damaging === false) regenerate();
             
             moveChar();
             
@@ -1168,7 +1168,7 @@ function main() {
 
             enemeySpeed();
             
-            if (cool > 0 && regeneration == false) {
+            if (cool > 0 && regeneration === false) {
                 cool--;
                 randomColor = '#adedff';
             }
@@ -1178,7 +1178,7 @@ function main() {
                 randomColor = '#ff6d6d';
                 damaging = true;
                 regeneration = false;
-                if(hlSound && muted == false){
+                if(hlSound && muted === false){
                     mainTheme.mute(true);
                     ah = effects.play('healthLoss');
                     hlSound = false;
@@ -1189,8 +1189,8 @@ function main() {
                 damaging = false;
             }
 
-            if (cool == 0 && damaging == false) {
-                if(attackb == false && attackx == false && attackz == false && muted == false) mainTheme.mute(false);
+            if (cool === 0 && damaging === false) {
+                if(attackb === false && attackx === false && attackz === false && muted === false) mainTheme.mute(false);
                 effects.stop(ah);
                 randomColor = '#ffd6cc';
             }
@@ -1236,14 +1236,14 @@ function shrink() {
 }
 
 function end() {
-    gx = -w;
-    gx2 = -0.5*w;
+    var gx = -w;
+    var gx2 = -0.5*w;
     effects.stop(ah);
     mainTheme.stop();
     endTheme.play();
     var sessionE = setInterval(function() {
-        if (gx != 0) gx += 4;
-        if (gx2 != 0 + 200) gx2 += 14;
+        if (gx !== 0) gx += 4;
+        if (gx2 !== 0 + 200) gx2 += 14;
         setHighScore();
         randomColor = '#ffd6cc';
         ctx.clearRect(0, 0, w, 0);
@@ -1269,7 +1269,7 @@ function end() {
         grd2.addColorStop(0, randomColor);
         grd2.addColorStop(1, 'black');
         ctx.fillStyle = grd2;
-        ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10)
+        ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10);
         canvas.addEventListener("mousedown", getPosition, false);
         if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
             clearInterval(sessionE);
