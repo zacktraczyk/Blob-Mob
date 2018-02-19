@@ -25,7 +25,6 @@ var uDown = false; // -- up
 var dDown = false; // -- down
 var attackb = false; // -- attack normal
 var attackz = false; // -- attack bubble
-var r = 3; //Radius of push
 var attackx = false; // -- regeneration
 var pause = true;
 var ponce = true;
@@ -46,8 +45,6 @@ var Otime = 0;
 var randomColor = '#ffd6cc'; //Set so player doesnt strobe
 var background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
-
-var sessionM;
 
 //Howler Sound
 var titleTheme = new Howl({
@@ -122,7 +119,6 @@ function muteSound() {
 //--------------FUNCTIONS--------------//
 //Mouse Tracker
 function getPosition(event) {
-    "use strict";
     x = event.x;
     y = event.y;
     x -= c.offsetLeft;
@@ -130,7 +126,6 @@ function getPosition(event) {
 }
 
 function random(a) {
-    "use strict";
     var rand = Math.random() * 10;
     if (rand - 5 > 0 && a < 60) {
         return a + 1;
@@ -142,7 +137,6 @@ function random(a) {
 }
 
 function srandom(a) {
-    "use strict";
     var rand = Math.random() * 10;
     if (rand > 5) {
         return a + 1;
@@ -154,7 +148,6 @@ function srandom(a) {
 
 
 function mxrandom(a) {
-    "use strict";
     var rand = Math.random() * 10;
     if (rand > 5 && a < w - wx - 10) {
         return a + 1;
@@ -168,7 +161,6 @@ function mxrandom(a) {
 
 
 function myrandom(a) {
-    "use strict";
     var rand = Math.random() * 10;
     if (rand > 5 && a > 10) {
         return a - 1;
@@ -181,7 +173,6 @@ function myrandom(a) {
 }
 
 function randomLocation(a) {
-    "use strict";
     if (Math.random() * 10 >= 5) {
         if (Math.random() * 10 >= 5) {
             a.esx = Math.random() * w;
@@ -260,7 +251,7 @@ function reset(){
 //-----------------------------------//
 //--------------ATTACKS--------------//
 function attack() {
-    var time = 0;
+    time = 0;
     at = effects.play('attack');
     var sessionA = setInterval(function() {
         
@@ -312,7 +303,7 @@ function attack() {
 
 
 function attackZ() {
-    var time = 0;
+    time = 0;
     r = 3;
     mainTheme.mute(true);
     effects.stop(ah);
@@ -393,7 +384,7 @@ function regenerate(){
         effects.volume(1.0, he);
         
         if(power <= 0){
-            regeneration = false;
+            regneration = false;
             attackx = false;
         }
         if(Otime % 3 === 0 && power > 0) power-=1;
@@ -547,7 +538,7 @@ function enemy(state, type, enemspeed) {
     this.draw = function() {
         ctx.lineWidth = 1;
         randNum = Math.round(Math.random() * 2);
-        var erandomColor = ecolors[randNum];
+        erandomColor = ecolors[randNum];
         ctx.fillStyle = erandomColor;
         this.ewx = wx / 2 - 10;
         this.ewy = wy - 10;
@@ -600,7 +591,7 @@ function enemy(state, type, enemspeed) {
     this.drawBoss = function() {
         ctx.lineWidth = 1;
         randNum = Math.round(Math.random() * 2);
-        var ebrandomColor = ebcolors[randNum];
+        ebrandomColor = ebcolors[randNum];
         ctx.fillStyle = ebrandomColor;
         this.ewx = wx - 10;
         this.ewy = wy * 2 - 10;
@@ -863,7 +854,7 @@ function menu() {
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         
-        var grd = ctx.createLinearGradient(0, 0, w, 0);
+        grd = ctx.createLinearGradient(0, 0, w, 0);
         grd.addColorStop(0, '#ffd6cc');
         grd.addColorStop(0.8, 'grey');
         grd.addColorStop(1, '#fffbf9');
@@ -875,7 +866,7 @@ function menu() {
         ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100);
         ctx.font = '30px Arial Bold';
         ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
-        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0);
+        grd1 = ctx.createLinearGradient(0, 0, w*3, 0);
         grd1.addColorStop(0, 'grey');
         grd1.addColorStop(1, 'white');
         ctx.fillStyle = grd1;
@@ -898,21 +889,21 @@ function menu() {
 
         if(HowTo) HowToPlay();
 
-        c.addEventListener("mousedown", getPosition, false);
+        canvas.addEventListener("mousedown", getPosition, false);
         //Start Click Area --> ctx.strokeRect(w / 2 - 40, 380, 80, 40);
         //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30);
         //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30);
         
         if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
             clearInterval(sessionME);
-            c.removeEventListener("mousedown", getPosition, false);
+            canvas.removeEventListener("mousedown", getPosition, false);
             window.location.href = '/about.html';
         }
         
         if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
             clearInterval(sessionME);
             transition();
-            c.removeEventListener("mousedown", getPosition, false);
+            canvas.removeEventListener("mousedown", getPosition, false);
         } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo === false && pause === false){
             effects.play('btn');
             HowTo = true;
@@ -934,7 +925,7 @@ function HowToPlay(){
     ctx.fillStyle = 'black';
     ctx.font = '20px monospace';
     ctx.fillText("X",w - 35 - ctx.measureText("X").width, 50);
-    var grd = ctx.createLinearGradient(0, 0, w, 0);
+    grd = ctx.createLinearGradient(0, 0, w, 0);
     grd.addColorStop(0, '#ffd6cc');
     grd.addColorStop(0.5, 'grey');
     grd.addColorStop(1, '#fffbf9');
@@ -969,7 +960,7 @@ function HowToPlay(){
     ctx.lineWidth = 1;
 
     randNum = Math.round(Math.random() * 2);
-    var erandomColor = ecolors[randNum];
+    erandomColor = ecolors[randNum];
     ctx.fillStyle = erandomColor;
 
     ctx.beginPath();
@@ -1031,8 +1022,8 @@ function HowToPlay(){
 }
 
 function transition() {
-    var gw = 0;
-    var time = 0;
+    gw = 0;
+    time = 0;
     titleTheme.fade(1.0, 0.0, 7000);
     titleTheme.on('fade', function(){
         titleTheme.stop();
@@ -1040,7 +1031,7 @@ function transition() {
     var sessionT = setInterval(function() {
         time++;
         ctx.clearRect(0, 0, w, h);
-        var grd = ctx.createLinearGradient(0, 0, w - gw, 0);
+        grd = ctx.createLinearGradient(0, 0, w - gw, 0);
         grd.addColorStop(0, '#ffd6cc');
         grd.addColorStop(0.8, 'grey');
         grd.addColorStop(1, '#fffbf9');
@@ -1053,7 +1044,7 @@ function transition() {
         ctx.font = '30px Arial Bold';
         ctx.fillStyle = grd;
         ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
-        var grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0);
+        grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0);
         grd1.addColorStop(0, 'grey');
         grd1.addColorStop(1, 'white');
         ctx.fillStyle = grd1;
@@ -1130,10 +1121,10 @@ enemies = [enemy1,
            enemy15 ];
 
 function main() {
-    sx = 100;
-    sy = 100;
-    wx = 50;
-    wy = 50;
+    var sx = 100;
+    var sy = 100;
+    var wx = 50;
+    var wy = 50;
     document.body.style.backgroundColor = 'black';
     if(effects.playing(ah) !== true && mainTheme.playing() !== true && muted !== true)
             effects.on('end', function(){
@@ -1258,7 +1249,7 @@ function end() {
         ctx.clearRect(0, 0, w, 0);
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, h, w);
-        var grd = ctx.createLinearGradient(0, 0, w + gx, 0);
+        grd = ctx.createLinearGradient(0, 0, w + gx, 0);
         grd.addColorStop(0, randomColor);
         grd.addColorStop(1, 'black');
         ctx.font = '70px Comic Sans MS';
@@ -1274,12 +1265,12 @@ function end() {
             ctx.fillText("Your score was " + score, w / 2 - (ctx.measureText("Your score was " + score).width/2), h * 9 / 16);
         }
         ctx.font = '20px monospace';
-        var grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0);
+        grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0);
         grd2.addColorStop(0, randomColor);
         grd2.addColorStop(1, 'black');
         ctx.fillStyle = grd2;
         ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10);
-        c.addEventListener("mousedown", getPosition, false);
+        canvas.addEventListener("mousedown", getPosition, false);
         if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
             clearInterval(sessionE);
             location.reload();
