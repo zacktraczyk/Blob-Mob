@@ -828,6 +828,7 @@ function pauseMenu() {
         else pause = true;
         
         ponce = false;
+        effects.play('btn');
     }
     
     if(pause){
