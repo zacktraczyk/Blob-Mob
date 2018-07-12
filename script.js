@@ -1,3 +1,7 @@
+/* jshint browser: true */
+/* jshint esversion: 6  */
+/*globals $:false */
+
 //DEVELOPED BY ZACK TRACZYK ;]
 
 var c = document.getElementById('canvas');
@@ -25,6 +29,7 @@ var uDown = false; // -- up
 var dDown = false; // -- down
 var attackb = false; // -- attack normal
 var attackz = false; // -- attack bubble
+var r = 3;
 var attackx = false; // -- regeneration
 var pause = true;
 var ponce = true;
@@ -45,6 +50,8 @@ var Otime = 0;
 var randomColor = '#ffd6cc'; //Set so player doesnt strobe
 var background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
+
+var sessionM;
 
 //Howler Sound
 var titleTheme = new Howl({
@@ -251,7 +258,7 @@ function reset(){
 //-----------------------------------//
 //--------------ATTACKS--------------//
 function attack() {
-    time = 0;
+    var time = 0;
     at = effects.play('attack');
     var sessionA = setInterval(function() {
         
@@ -303,7 +310,7 @@ function attack() {
 
 
 function attackZ() {
-    time = 0;
+    var time = 0;
     r = 3;
     mainTheme.mute(true);
     effects.stop(ah);
@@ -384,7 +391,7 @@ function regenerate(){
         effects.volume(1.0, he);
         
         if(power <= 0){
-            regneration = false;
+            regeneration = false;
             attackx = false;
         }
         if(Otime % 3 === 0 && power > 0) power-=1;
@@ -538,7 +545,7 @@ function enemy(state, type, enemspeed) {
     this.draw = function() {
         ctx.lineWidth = 1;
         randNum = Math.round(Math.random() * 2);
-        erandomColor = ecolors[randNum];
+        var erandomColor = ecolors[randNum];
         ctx.fillStyle = erandomColor;
         this.ewx = wx / 2 - 10;
         this.ewy = wy - 10;
@@ -591,7 +598,7 @@ function enemy(state, type, enemspeed) {
     this.drawBoss = function() {
         ctx.lineWidth = 1;
         randNum = Math.round(Math.random() * 2);
-        ebrandomColor = ebcolors[randNum];
+        var ebrandomColor = ebcolors[randNum];
         ctx.fillStyle = ebrandomColor;
         this.ewx = wx - 10;
         this.ewy = wy * 2 - 10;
@@ -855,7 +862,7 @@ function menu() {
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         
-        grd = ctx.createLinearGradient(0, 0, w, 0);
+        var grd = ctx.createLinearGradient(0, 0, w, 0);
         grd.addColorStop(0, '#ffd6cc');
         grd.addColorStop(0.8, 'grey');
         grd.addColorStop(1, '#fffbf9');
@@ -867,7 +874,7 @@ function menu() {
         ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100);
         ctx.font = '30px Arial Bold';
         ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
-        grd1 = ctx.createLinearGradient(0, 0, w*3, 0);
+        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0);
         grd1.addColorStop(0, 'grey');
         grd1.addColorStop(1, 'white');
         ctx.fillStyle = grd1;
@@ -926,7 +933,7 @@ function HowToPlay(){
     ctx.fillStyle = 'black';
     ctx.font = '20px monospace';
     ctx.fillText("X",w - 35 - ctx.measureText("X").width, 50);
-    grd = ctx.createLinearGradient(0, 0, w, 0);
+    var grd = ctx.createLinearGradient(0, 0, w, 0);
     grd.addColorStop(0, '#ffd6cc');
     grd.addColorStop(0.5, 'grey');
     grd.addColorStop(1, '#fffbf9');
@@ -961,7 +968,7 @@ function HowToPlay(){
     ctx.lineWidth = 1;
 
     randNum = Math.round(Math.random() * 2);
-    erandomColor = ecolors[randNum];
+    var erandomColor = ecolors[randNum];
     ctx.fillStyle = erandomColor;
 
     ctx.beginPath();
@@ -1023,8 +1030,8 @@ function HowToPlay(){
 }
 
 function transition() {
-    gw = 0;
-    time = 0;
+    var gw = 0;
+    var time = 0;
     titleTheme.fade(1.0, 0.0, 7000);
     titleTheme.on('fade', function(){
         titleTheme.stop();
@@ -1032,7 +1039,7 @@ function transition() {
     var sessionT = setInterval(function() {
         time++;
         ctx.clearRect(0, 0, w, h);
-        grd = ctx.createLinearGradient(0, 0, w - gw, 0);
+        var grd = ctx.createLinearGradient(0, 0, w - gw, 0);
         grd.addColorStop(0, '#ffd6cc');
         grd.addColorStop(0.8, 'grey');
         grd.addColorStop(1, '#fffbf9');
@@ -1045,7 +1052,7 @@ function transition() {
         ctx.font = '30px Arial Bold';
         ctx.fillStyle = grd;
         ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
-        grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0);
+        var grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0);
         grd1.addColorStop(0, 'grey');
         grd1.addColorStop(1, 'white');
         ctx.fillStyle = grd1;
@@ -1250,7 +1257,7 @@ function end() {
         ctx.clearRect(0, 0, w, 0);
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, h, w);
-        grd = ctx.createLinearGradient(0, 0, w + gx, 0);
+        var grd = ctx.createLinearGradient(0, 0, w + gx, 0);
         grd.addColorStop(0, randomColor);
         grd.addColorStop(1, 'black');
         ctx.font = '70px Comic Sans MS';
@@ -1266,7 +1273,7 @@ function end() {
             ctx.fillText("Your score was " + score, w / 2 - (ctx.measureText("Your score was " + score).width/2), h * 9 / 16);
         }
         ctx.font = '20px monospace';
-        grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0);
+        var grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0);
         grd2.addColorStop(0, randomColor);
         grd2.addColorStop(1, 'black');
         ctx.fillStyle = grd2;
