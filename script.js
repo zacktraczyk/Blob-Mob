@@ -905,7 +905,7 @@ function menu() {
         if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
             clearInterval(sessionME);
             canvas.removeEventListener("mousedown", getPosition, false);
-            window.location.href = '/about.html';
+            window.location.href = 'https://github.com/xxzbuckxx/Blob-Mob';
         }
         
         if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
