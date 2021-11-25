@@ -1,8 +1,6 @@
 # Blob-Mob
 Javascript Canvas Game
 
-**Version 10.5**
-
 Blobmob is an html5 Canvas game that was created during 2016 for coding practice.
 
 Blobmob was originally designed on a chromebook webstie HTML compilier but was moved to a github repository in its final stages. All previous saves are owned and available in google drive if needed; music and sound effects made on garageband; sound utilizing howler.js.
@@ -11,4 +9,17 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
 
 ## Contributers
 
-* Zack Traczyk <ztraczyk.coding@gmail.com>
+* Zack Traczyk <zstraczyk324@gmail.com>
+ 
+# TODO
+
+* [ ] Break up files
+* [ ] Implement OOP:
+	* [ ] Character
+	* [ ] Enemy
+	* [ ] hud
+	* [ ] io
+	* [ ] game
+	* [ ] main
+		* [ ] Make single game loop
+
