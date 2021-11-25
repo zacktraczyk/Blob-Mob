@@ -1,271 +1,276 @@
-let sx = 100; //Player x cordinate
-let sy = 100; //Player y cordinate
-let wx = 50; //Player width;
-let wy = 50; //Player height;
+var attackb = false // -- attack normal (1)
+var attackz = false // -- attack bubble (2)
+let attackx = false // -- regeneration (3)
 
-var pcolor = '#ffd6cc'; //Set so player doesnt strobe
+var at //Attack id
+var ah //HealthLoss id
+var de //Death id
+var pu //Push id
+var he //heal id
 
-var rDown = false; //Keypress right arrow tracker
-var lDown = false; // -- left
-var uDown = false; // -- up
-var dDown = false; // -- down
-var attackb = false; // -- attack normal
-var attackz = false; // -- attack bubble
-let attackx = false; // -- regeneration
+class Player {
+    constructor(x, y, w, h) {
+        this.x = x
+        this.y = y
+        this.w = w
+        this.h = h
+        this.color = '#ffd6cc'
 
-var power = 50;
-var cool = 0;
-var health = 100;
-var dead = false;
+        this.dir = en.dir.right
+        this.speed = 4
 
-var recent = 'right';
-var damaging;
-var playerDead = false;
+        this.cool = 0
+        this.power = 50
+        this.health = 100
 
-var regeneration = false;
-var justRegen = false;
+        this.action = en.act.norm
+        this.state = en.state.norm
+    }
 
-var at; //Attack id
-var ah; //HealthLoss id
-var de; //Death id
-var pu; //Push id
-var he; //heal id
+    draw() {
+        //Draws body
+        ctx.fillStyle = this.color //Set to #ffd6cc
+        ctx.fillRect(this.x, this.y, this.w, this.h)
+
+        ctx.lineWidth = 1
+
+        //Draws Left Eye
+        ctx.beginPath()
+        ctx.fillStyle = 'black'
+        ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI)
+        ctx.stroke()
+        ctx.closePath()
+
+        //Draws Right Eye
+        ctx.beginPath()
+        ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI)
+        ctx.stroke()
+        ctx.closePath()
+
+        //Draws Mouth
+        ctx.beginPath()
+        ctx.moveTo(this.x + this.w / 8, this.y + this.h - this.h / 3)
+        ctx.bezierCurveTo(this.x + this.h / 8, this.y + this.h, this.x + this.w - this.h / 8, this.y + this.h, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3)
+        ctx.stroke()
+        ctx.closePath()
+    }
+
+    move(dir) {
+        if (this.action != en.act.norm) { // break if performing another action
+            return 0
+        }
+
+        if (dir.right) {
+            this.x += this.speed
+            this.dir = en.dir.right
+        }
+        if (dir.up) {
+            this.y -= this.speed
+            this.dir = en.dir.up
+        }
+        if (dir.left) {
+            this.x -= this.speed
+            this.dir = en.dir.left
+        }
+        if (dir.down) {
+            this.y += this.speed
+            this.dir = en.dir.down
+        }
+
+        // this.x = srandom(this.x)
+        // this.y = srandom(this.y)
+        // this.w = random(this.w)
+        // this.h = random(this.h)
+
+        return 1
+
+        /*
+        if (attackb) {
+            clearInterval(sessionM)
+            attack()
+        } else if (attackz) {
+            clearInterval(sessionM)
+            attackZ()
+        } else if (attackx) {
+            //clearInterval(sessionM)
+            //attackX()
+            regeneration = true
+        } else if (attackx === false){
+            regeneration = false
+            if(justRegen){
+                if(muted !== true) mainTheme.mute(false)
+                justRegen = false
+                effects.stop(he)
+            }
+        }
+        */
+    }
+}
 
 function attack() {
-    var time = 0;
-    at = effects.play('attack');
+    var time = 0
+    at = effects.play('attack')
     var sessionA = setInterval(function() {
         
-        pcolor = '#adedff';
-        time++;
-        cool++;
-        ctx.clearRect(0, 0, w, h);
+        pcolor = '#adedff'
+        time++
+        cool++
+        ctx.clearRect(0, 0, w, h)
 
-        drawStage();
+        drawStage()
 
-        drawChar();
+        drawChar()
 
-        stateDefinition();
+        stateDefinition()
 
-        drawHealth();
+        drawHealth()
 
-        drawPower();
+        drawPower()
 
-        drawCool();
+        drawCool()
 
-        drawScore();
+        drawScore()
 
-        if (time < 5 && recent == 'right') sx += 10;
-        else if (time < 5 && recent == 'left') sx -= 10;
-        else if (time > 5 && recent == 'left') sx += 10;
-        else if (time > 5 && recent == 'right') sx -= 10;
+        if (time < 5 && recent == 'right') this.x += 10
+        else if (time < 5 && recent == 'left') this.x -= 10
+        else if (time > 5 && recent == 'left') this.x += 10
+        else if (time > 5 && recent == 'right') this.x -= 10
 
-        if (time < 5 && recent == 'down') sy += 10;
-        else if (time < 5 && recent == 'up') sy -= 10;
-        else if (time > 5 && recent == 'up') sy += 10;
-        else if (time > 5 && recent == 'down') sy -= 10;
+        if (time < 5 && recent == 'down') this.y += 10
+        else if (time < 5 && recent == 'up') this.y -= 10
+        else if (time > 5 && recent == 'up') this.y += 10
+        else if (time > 5 && recent == 'down') this.y -= 10
 
         enemies.forEach(function(item, index, arr){
-            if (time == 5 && touch(item) && item.state != 'dead') arr[index].state = 'dying';
-        });
+            if (time == 5 && touch(item) && item.state != 'dead') arr[index].state = 'dying'
+        })
 
         if (time >= 10) {
-            effects.stop(ah);
-            clearInterval(sessionA);
-            attackb = false;
-            main();
+            effects.stop(ah)
+            clearInterval(sessionA)
+            attackb = false
+            main()
         } else if (collide()) {
-            effects.stop(ah);
-            clearInterval(sessionA);
-            shrink();
+            effects.stop(ah)
+            clearInterval(sessionA)
+            shrink()
         }
-    }, 50);
+    }, 50)
 }
 
 
 function attackZ() {
-    var time = 0;
-    r = 3;
-    mainTheme.mute(true);
-    effects.stop(ah);
-    pu = effects.play('push');
+    var time = 0
+    r = 3
+    mainTheme.mute(true)
+    effects.stop(ah)
+    pu = effects.play('push')
     var sessionAZ = setInterval(function() {
-        pcolor = '#adedff';
-        time++;
-        ctx.clearRect(0, 0, w, h);
+        pcolor = '#adedff'
+        time++
+        ctx.clearRect(0, 0, w, h)
 
         if (7 >= time) {
-            r--;
-            cool += 2;
+            r--
+            cool += 2
         } else if (time >= 8 && time < 20 && time % 2 === 0) {
-            r -= 3;
-            cool += 2;
+            r -= 3
+            cool += 2
         } else if (time >= 8 && time < 20 && Math.abs(time % 2) == 1) {
-            r += 3;
-            cool += 3;
+            r += 3
+            cool += 3
         } else if (20 <= time && time < 30) {
             enemies.forEach(function(item, index, arr){
-                arr[index].state = 'push';
-            });
+                arr[index].state = 'push'
+            })
             
-            power--;
-            r += 10;
-            cool += 0.5;
+            power--
+            r += 10
+            cool += 0.5
         }
         
-        drawStage();
+        drawStage()
 
-        drawChar();
+        drawChar()
 
-        stateDefinition();
+        stateDefinition()
 
-        ctx.beginPath();
-        ctx.strokeStyle = pcolor;
-        ctx.arc(sx + wx / 2, sy + wy / 2, wx + r, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.strokeStyle = 'black';
+        ctx.beginPath()
+        ctx.strokeStyle = pcolor
+        ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.w + r, 0, 2 * Math.PI)
+        ctx.stroke()
+        ctx.closePath()
+        ctx.strokeStyle = 'black'
 
-        drawHealth();
+        drawHealth()
 
-        drawPower();
+        drawPower()
 
-        drawCool();
+        drawCool()
 
-        drawScore();
+        drawScore()
         
         if (time >= 50) {
-            clearInterval(sessionAZ);
-            attackz = false;
-            main();
+            clearInterval(sessionAZ)
+            attackz = false
+            main()
                
             enemies.forEach(function(item, index, arr){
-                arr[index].state = 'alive';
-            });
+                arr[index].state = 'alive'
+            })
 
-            cool += 1;
+            cool += 1
         } else if (collide()) {
-            clearInterval(sessionAZ);
-            attackz = false;
-            shrink();
+            clearInterval(sessionAZ)
+            attackz = false
+            shrink()
 
             enemies.forEach(function(item, index, arr){
-                arr[index].state = 'alive';
-            });
+                arr[index].state = 'alive'
+            })
         }
-    }, 50);
+    }, 50)
 
 }
 
 function regenerate(){
     if(cool == 50){
-        justRegen = true;
-        mainTheme.mute(true);
-        if(effects.playing(he) !== true) he = effects.play('heal');
-        effects.volume(1.0, he);
+        justRegen = true
+        mainTheme.mute(true)
+        if(effects.playing(he) !== true) he = effects.play('heal')
+        effects.volume(1.0, he)
         
         if(power <= 0){
-            regeneration = false;
-            attackx = false;
+            regeneration = false
+            attackx = false
         }
-        if(Otime % 3 === 0 && power > 0) power-=1;
-        if(health < 100) health++;
+        if(Otime % 3 === 0 && power > 0) power-=1
+        if(health < 100) health++
         if(Otime % 2 === 0){
-            wx+=5;
-            wy+=5;
-            sx-=2;
-            sy-=2;
+            this.w+=5
+            this.h+=5
+            this.x-=2
+            this.y-=2
         } else {
-            wx-=4;
-            wy-=4;
-            sx+=2;
-            sy+=2;
+            this.w-=4
+            this.h-=4
+            this.x+=2
+            this.y+=2
         }
     } else {
-        cool++;
+        cool++
     }
 }
 
 //--------------------------------------//
 //--------------CHARACTERS--------------//
 function moveChar() {
-    if (dDown && regeneration === false) {
-        sy += 4;
-        sx = random(sx);
-        recent = 'down';
-    }
-    if (rDown && regeneration === false) {
-        sx += 4;
-        sy = random(sy);
-        recent = 'right';
-    }
-    if (uDown && regeneration === false) {
-        sy -= 4;
-        sx = random(sx);
-        recent = 'up';
-    }
-    if (lDown && regeneration === false) {
-        sx -= 4;
-        sy = random(sy);
-        recent = 'left';
-    }
-    
-    
-    if (attackb && regeneration === false) {
-        clearInterval(sessionM);
-        attack();
-    } else if (attackz && regeneration === false) {
-        clearInterval(sessionM);
-        attackZ();
-    } else if (attackx) {
-        //clearInterval(sessionM);
-        //attackX();
-        regeneration = true;
-    } else if (attackx === false){
-        regeneration = false;
-        if(justRegen){
-            if(muted !== true) mainTheme.mute(false);
-            justRegen = false;
-            effects.stop(he);
-        }
-    }
-
-    sx = srandom(sx);
-    sy = srandom(sy);
-    wx = random(wx);
-    wy = random(wy);
-
 }
 
 function drawChar() {
 //Pink Color Strobe 
-    //randNum = Math.round(Math.random() * 2);
-    //pcolor = colors[randNum];
+    //randNum = Math.round(Math.random() * 2)
+    //pcolor = colors[randNum]
 
-    //Draws body
-    ctx.fillStyle = pcolor; //Set to #ffd6cc
-    ctx.fillRect(sx, sy, wx, wy);
-
-    ctx.lineWidth = 1;
-
-    //Draws Left Eye
-    ctx.beginPath();
-    ctx.fillStyle = 'black';
-    ctx.arc(sx + wx / 6, sy + wy / 6, (wx / 4 + wy / 4) / 4, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-
-    //Draws Right Eye
-    ctx.beginPath();
-    ctx.arc(sx + wx - wx / 8, sy + wy / 6, (wx / 4 + wy / 4) / 6, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-
-    //Draws Mouth
-    ctx.beginPath();
-    ctx.moveTo(sx + wx / 8, sy + wy - wy / 3);
-    ctx.bezierCurveTo(sx + wy / 8, sy + wy, sx + wx - wy / 8, sy + wy, sx + wx - wy / 8, sy + wy - wy / 3);
-    ctx.stroke();
-    ctx.closePath();
 }
 
