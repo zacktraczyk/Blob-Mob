@@ -3,6 +3,7 @@ let sy = 100; //Player y cordinate
 let wx = 50; //Player width;
 let wy = 50; //Player height;
 
+var pcolor = '#ffd6cc'; //Set so player doesnt strobe
 
 var rDown = false; //Keypress right arrow tracker
 var lDown = false; // -- left
@@ -12,12 +13,30 @@ var attackb = false; // -- attack normal
 var attackz = false; // -- attack bubble
 let attackx = false; // -- regeneration
 
+var power = 50;
+var cool = 0;
+var health = 100;
+var dead = false;
+
+var recent = 'right';
+var damaging;
+var playerDead = false;
+
+var regeneration = false;
+var justRegen = false;
+
+var at; //Attack id
+var ah; //HealthLoss id
+var de; //Death id
+var pu; //Push id
+var he; //heal id
+
 function attack() {
     var time = 0;
     at = effects.play('attack');
     var sessionA = setInterval(function() {
         
-        randomColor = '#adedff';
+        pcolor = '#adedff';
         time++;
         cool++;
         ctx.clearRect(0, 0, w, h);
@@ -71,7 +90,7 @@ function attackZ() {
     effects.stop(ah);
     pu = effects.play('push');
     var sessionAZ = setInterval(function() {
-        randomColor = '#adedff';
+        pcolor = '#adedff';
         time++;
         ctx.clearRect(0, 0, w, h);
 
@@ -101,7 +120,7 @@ function attackZ() {
         stateDefinition();
 
         ctx.beginPath();
-        ctx.strokeStyle = randomColor;
+        ctx.strokeStyle = pcolor;
         ctx.arc(sx + wx / 2, sy + wy / 2, wx + r, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
@@ -221,10 +240,10 @@ function moveChar() {
 function drawChar() {
 //Pink Color Strobe 
     //randNum = Math.round(Math.random() * 2);
-    //randomColor = colors[randNum];
+    //pcolor = colors[randNum];
 
     //Draws body
-    ctx.fillStyle = randomColor; //Set to #ffd6cc
+    ctx.fillStyle = pcolor; //Set to #ffd6cc
     ctx.fillRect(sx, sy, wx, wy);
 
     ctx.lineWidth = 1;

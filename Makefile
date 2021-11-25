@@ -1,6 +1,6 @@
 # Combine .js into a single file
 COMPILED=script.js
-ORDER=sound.js io.js hud.js player.js enemy.js game.js main.js
+ORDER=sound.js io.js player.js enemy.js game.js main.js
 
 all: compile-order
 

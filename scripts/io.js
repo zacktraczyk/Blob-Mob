@@ -38,4 +38,15 @@ function listen() {
 
 }
 
+//Cookie Storage
+function setHighScore() {
+    if (highscore !== null) {
+        if (score > highscore) {
+            localStorage.setItem("highscore", score);
+        }
+    } else {
+        highscore = 0;
+        localStorage.setItem("highscore", score);
+    }
+}
 

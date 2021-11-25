@@ -1,4 +1,314 @@
+var background = new Image();
+background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
+let HowTo = false;
+var score = 0;
+var highscore = localStorage.getItem("highscore"); //Cookie storage
+
+
+function pauseMenu() {
+    if(ponce){
+        if (pause) pause = false;
+        else pause = true;
+        
+        ponce = false;
+        effects.play('btn');
+    }
+    
+    if(pause){
+        ctx.fillStyle = "rgba(225, 220, 212, 0.4)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "grey";
+        ctx.font = "50px monospace";
+        ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10);
+    } 
+}
+
+//-----------------------------------//
+//--------------SESSION--------------//
+
+function drawStage() {
+    ctx.fillStyle = '#fffbf9';
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(background, 0, 0, w, h);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(0, 0, w, h);
+}
+
+function drawHealth() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(w / 2, 10, 240, 20);
+    ctx.fillStyle = pcolor;
+    ctx.font = "10px monospace";
+    ctx.fillText(health + "/100", w / 2 + 100, 23);
+    ctx.fillRect(w / 2 + 1, 11, (health / 100) * 238, 18);
+}
+
+function drawPower() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(w - w * (1 / 4), 40, 115, 20);
+    ctx.fillStyle = '#33cc33';
+    ctx.font = "10px monospace";
+    ctx.fillText(power + "/50", w - w * (1 / 4) + 52, 53);
+    ctx.fillRect(w - w * (1 / 4) + 1, 41, (power / 50) * 113, 18);
+}
+
+function drawCool() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(w / 2, 40, 115, 20);
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(w / 2 + 1, 41, 113 - (cool / 50) * 113, 18);
+}
+
+function drawScore() {
+    ctx.fillStyle = 'black';
+    ctx.font = "20px monospace";
+    ctx.fillText("Score: " + score, 18, 28, w / 2);
+    ctx.fillText("High-Score: " + highscore, 18, 58, w / 2);
+}
+function menu() {
+    setHighScore();
+    sx = 150;
+    sy = 150;
+    wx = 200;
+    wy = 200;
+    score = 0;
+    highscore = localStorage.getItem("highscore");
+    titleTheme.play();
+    var sessionME = setInterval(function() {
+        ctx.clearRect(0, 0, w, h);
+        
+        var grd = ctx.createLinearGradient(0, 0, w, 0);
+        grd.addColorStop(0, '#ffd6cc');
+        grd.addColorStop(0.8, 'grey');
+        grd.addColorStop(1, '#fffbf9');
+        ctx.fillStyle = '#fffbf9';
+        ctx.fillRect(0, 0, w, h);
+        drawChar();
+        ctx.fillStyle = grd;
+        ctx.font = '80px Arial Bold';
+        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100);
+        ctx.font = '30px Arial Bold';
+        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
+        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0);
+        grd1.addColorStop(0, 'grey');
+        grd1.addColorStop(1, 'white');
+        ctx.fillStyle = grd1;
+        ctx.font = '15px sans-serif';
+        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk";
+        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
+        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+        
+        if(pause === false){
+            sx = mxrandom(sx);
+            sy = myrandom(sy);
+            wx = srandom(wx);
+            wy = srandom(wy);
+        }
+        
+        pauseMenu();
+        
+        listen();
+
+        if(HowTo) HowToPlay();
+
+        canvas.addEventListener("mousedown", getPosition, false);
+        //Start Click Area --> ctx.strokeRect(w / 2 - 40, 380, 80, 40);
+        //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30);
+        //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30);
+        
+        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
+            clearInterval(sessionME);
+            canvas.removeEventListener("mousedown", getPosition, false);
+            window.location.href = '/about.html';
+        }
+        
+        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
+            clearInterval(sessionME);
+            transition();
+            canvas.removeEventListener("mousedown", getPosition, false);
+        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo === false && pause === false){
+            effects.play('btn');
+            HowTo = true;
+            x = 0;
+            y = 0;
+        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause === false){
+            effects.play('btn');
+            HowTo = false;
+            x = 0;
+            y = 0;
+        }
+        document.body.style.backgroundColor = '#fffbf9';
+    }, 50);
+}
+
+function HowToPlay(){
+    ctx.fillStyle = '#ffd6cc';
+    ctx.fillRect(30,30,w - 60, h - 60);
+    ctx.fillStyle = 'black';
+    ctx.font = '20px monospace';
+    ctx.fillText("X",w - 35 - ctx.measureText("X").width, 50);
+    var grd = ctx.createLinearGradient(0, 0, w, 0);
+    grd.addColorStop(0, '#ffd6cc');
+    grd.addColorStop(0.5, 'grey');
+    grd.addColorStop(1, '#fffbf9');
+    ctx.fillStyle = grd;
+    ctx.font = '50px Arial Bold';
+    ctx.fillText("HOW TO PLAY", w / 2 - (ctx.measureText("HOW TO PLAY").width/2), 80);
+    ctx.fillStyle = 'grey';
+    ctx.font = '15px monospace';
+    var instruction1 = "Use the Arrow keys to move,";
+    var instruction2 = "And press Space to attack.";
+    var instruction3 = "You can only attack if your blue bar is full!";
+    var instruction4 = "Try to attack the enemies";
+    var instruction5 = "But use Z, your powerup, if you are swarmed.";
+    var instruction6 = "You can also hold X to regenerate health.";
+    var instruction7 = "Just remember, powerups and regeneration use power!";
+    var instruction8 = "Press M to mute and P to pause";
+    ctx.fillText(instruction1, w / 2 - (ctx.measureText(instruction1).width/2), 122);
+    ctx.fillText(instruction2, w / 2 - (ctx.measureText(instruction2).width/2), 154);
+    ctx.fillText(instruction3, w / 2 - (ctx.measureText(instruction3).width/2), 186);
+    ctx.fillText(instruction4, w / 2 - (ctx.measureText(instruction4).width/2), 218);
+    ctx.fillText(instruction5, w / 2 - (ctx.measureText(instruction5).width/2), 250);
+    ctx.fillText(instruction6, w / 2 - (ctx.measureText(instruction6).width/2), 282);
+    ctx.fillText(instruction7, w / 2 - (ctx.measureText(instruction7).width/2), 314);
+    ctx.fillStyle = 'red';
+    ctx.fillText(instruction8, w / 2 -40, 463);
+
+    var esx = 380;
+    var esy = 390;
+    var ewx = 20;
+    var ewy = 40;
+
+    ctx.lineWidth = 1;
+
+    randNum = Math.round(Math.random() * 2);
+    var erandomColor = ecolors[randNum];
+    ctx.fillStyle = erandomColor;
+
+    ctx.beginPath();
+
+    ctx.moveTo(esx - esx / 20, esy);
+    ctx.bezierCurveTo(esx - esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy);
+
+    ctx.bezierCurveTo(esx + ewx + esx / 10, esy, esx + ewx + esx / 10, esy + ewy, esx + ewx, esy + ewy);
+
+    ctx.bezierCurveTo(esx + ewx / 10, esy + esy / 4, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy + ewy / 2);
+
+    ctx.bezierCurveTo(esx - esx / 20, esy + ewy / 2, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.lineWidth = 1;
+
+    ctx.beginPath();
+    ctx.fillStyle = 'black';
+    ctx.arc(esx + ewx / 6, esy + ewy / 6, (ewx / 4 + ewy / 4) / 4, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.arc(esx + ewx - ewx / 8, esy + ewy / 6, (ewx / 4 + ewy / 4) / 6, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.moveTo(esx + ewx / 8, esy + ewy - ewy / 3);
+    ctx.bezierCurveTo(esx + ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy - ewy / 3);
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.font = '15px monospace';
+
+    ctx.fillText("ENEMY", 390 - (ctx.measureText("ENEMY").width/2), 360);
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(w / 2 - 115 / 2 + 5, 395, 115, 20);
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(w / 2 + 0.5 - 115 / 2 + 5, 396, 113 - (0 / 50) * 113, 18);
+
+    ctx.fillStyle = 'black';
+    ctx.fillText("COOL-DOWN BAR", w/2 - (ctx.measureText("COOL-DOWN BAR").width/2)+ 5, 360);
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect((w-60) * (1 / 3)-90, 395, 115, 20);
+    ctx.fillStyle = '#33cc33';
+    ctx.font = "10px monospace";
+    ctx.fillText(20 + "/50", (w-60) * (1 / 3)-90 + 52, 409);
+    ctx.fillRect((w-60) * (1 / 3)-90 + 1, 396, (20 / 50) * 113, 18);
+
+    ctx.font = '15px monospace';
+    ctx.fillStyle = 'black';
+
+    ctx.fillText("POWER", 90, 360);
+}
+
+function transition() {
+    var gw = 0;
+    var time = 0;
+    titleTheme.fade(1.0, 0.0, 7000);
+    titleTheme.on('fade', function(){
+        titleTheme.stop();
+    });
+    var sessionT = setInterval(function() {
+        time++;
+        ctx.clearRect(0, 0, w, h);
+        var grd = ctx.createLinearGradient(0, 0, w - gw, 0);
+        grd.addColorStop(0, '#ffd6cc');
+        grd.addColorStop(0.8, 'grey');
+        grd.addColorStop(1, '#fffbf9');
+        ctx.fillStyle = '#fffbf9';
+        ctx.fillRect(0, 0, w, h);
+        drawChar();
+        ctx.fillStyle = grd;
+        ctx.font = '80px Arial Bold';
+        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100);
+        ctx.font = '30px Arial Bold';
+        ctx.fillStyle = grd;
+        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
+        var grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0);
+        grd1.addColorStop(0, 'grey');
+        grd1.addColorStop(1, 'white');
+        ctx.fillStyle = grd1;
+        ctx.font = '15px sans-serif';
+        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk";
+        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
+        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+        if (time < 40) {
+            titleTheme.rate(1.5);
+            if (time % 2 === 0) {
+                wx -= 4;
+                wy -= 4;
+                sx += 2;
+                sy += 2;
+            } else if (Math.abs(time % 2) == 1) {
+                wx += 4;
+                wy += 4;
+                sx -= 2;
+                sy -= 2;
+            }
+        } else if (time >= 40) {
+            titleTheme.rate(0.75);
+            if (gw <= w - 50) gw += 25;
+            sx += 2;
+            sy += 2;
+            sx = srandom(sx);
+            sy = srandom(sy);
+            wx -= 4;
+            wy -= 4;
+        }
+        if (wx <= 50 || wy <= 10) {
+            mainTheme.play();
+            background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg';
+            ctx.drawImage(background, 0, 0, w, h);
+            clearInterval(sessionT);
+            main();
+        }
+    }, 50);
+}
 function shrink() {
     var shrinksx = sx;
     var shrinksy = sy;
@@ -12,7 +322,7 @@ function shrink() {
         shrinksy += 4;
         shrinkwx -= 8;
         shrinkwy -= 8;
-        ctx.fillStyle = randomColor;
+        ctx.fillStyle = pcolor;
         ctx.fillRect(shrinksx, shrinksy, shrinkwx, shrinkwy);
         stateDefinition();
         drawHealth();
@@ -37,12 +347,12 @@ function end() {
         if (gx !== 0) gx += 4;
         if (gx2 !== 0 + 200) gx2 += 14;
         setHighScore();
-        randomColor = '#ffd6cc';
+        pcolor = '#ffd6cc';
         ctx.clearRect(0, 0, w, 0);
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, h, w);
         var grd = ctx.createLinearGradient(0, 0, w + gx, 0);
-        grd.addColorStop(0, randomColor);
+        grd.addColorStop(0, pcolor);
         grd.addColorStop(1, 'black');
         ctx.font = '70px Comic Sans MS';
         ctx.fillStyle = grd;
@@ -58,7 +368,7 @@ function end() {
         }
         ctx.font = '20px monospace';
         var grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0);
-        grd2.addColorStop(0, randomColor);
+        grd2.addColorStop(0, pcolor);
         grd2.addColorStop(1, 'black');
         ctx.fillStyle = grd2;
         ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10);

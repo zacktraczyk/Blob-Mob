@@ -13,7 +13,7 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
  
 # TODO
 
-* [ ] Break up files
+* [X] Break up files
 * [ ] Implement OOP:
 	* [ ] Character
 	* [ ] Enemy
