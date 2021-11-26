@@ -108,7 +108,12 @@ class Player {
 
         this.calculateDir()
 
-        if (this.cool > 0) --this.cool;
+        if (this.cool > 0) {
+            --this.cool;
+            this.color = '#adedff'
+        } else {
+            this.color = '#ffd6cc'
+        }
         this.wiggle()
 
         return 1
@@ -123,6 +128,7 @@ class Player {
     }
         
     attack(duration) {
+        this.color = '#adedff'
         ++this.timer
         this.cool += 50/duration
         // console.log(this.timer)
@@ -137,14 +143,15 @@ class Player {
             this.y -= this.ydir*5
         }
         if (this.timer >= duration) {
-            console.log("DONE ATTACKING")
+            this.xvel = 0
+            this.yvel = 0
             this.timer = 0
             this.action = en.act.norm
         }
     }
 
     wiggle() {
-        if (frameNumber % 20 == 0) {
+        // if (frameNumber % 20 == 0) {
             let rand = Math.random() > 0.5 ? 1 : -1;
             this.x = this.x + rand
 
@@ -156,7 +163,7 @@ class Player {
 
             rand = Math.random() > 0.5 ? 1 : -1;
             this.h = clamp(this.h + rand, 40, 60)
-        }
+        // }
     }
 }
 
@@ -313,17 +320,5 @@ function regenerate(){
     } else {
         // cool+= 10
     }
-}
-
-//--------------------------------------//
-//--------------CHARACTERS--------------//
-function moveChar() {
-}
-
-function drawChar() {
-//Pink Color Strobe 
-    //randNum = Math.round(Math.random() * 2)
-    //pcolor = colors[randNum]
-
 }
 
