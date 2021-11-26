@@ -1,10 +1,9 @@
-var background = new Image();
-background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
-
 let HowTo = false;
 var score = 0;
 var highscore = localStorage.getItem("highscore"); //Cookie storage
 
+const background = new Image()
+background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg';
 
 function pauseMenu() {
     if(ponce){
@@ -27,44 +26,72 @@ function pauseMenu() {
 //-----------------------------------//
 //--------------SESSION--------------//
 
-function drawStage() {
-    ctx.fillStyle = '#fffbf9';
-    ctx.fillRect(0, 0, w, h);
-    ctx.drawImage(background, 0, 0, w, h);
-    ctx.lineWidth = 10;
-    ctx.strokeRect(0, 0, w, h);
+let Menu = {
+
+    draw() {
+        let grd = ctx.createLinearGradient(0, 0, w, 0);
+        grd.addColorStop(0, '#ffd6cc');
+        grd.addColorStop(0.8, 'grey');
+        grd.addColorStop(1, '#fffbf9');
+        ctx.fillStyle = '#fffbf9';
+        ctx.fillRect(0, 0, w, h);
+        drawChar();
+        ctx.fillStyle = grd;
+        ctx.font = '80px Arial Bold';
+        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100);
+        ctx.font = '30px Arial Bold';
+        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400);
+        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0);
+        grd1.addColorStop(0, 'grey');
+        grd1.addColorStop(1, 'white');
+        ctx.fillStyle = grd1;
+        ctx.font = '15px sans-serif';
+        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk";
+        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10);
+        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1);
+    }
 }
 
-function drawHealth() {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(w / 2, 10, 240, 20);
-    ctx.fillStyle = pcolor;
-    ctx.font = "10px monospace";
-    ctx.fillText(health + "/100", w / 2 + 100, 23);
-    ctx.fillRect(w / 2 + 1, 11, (health / 100) * 238, 18);
-}
+let Scene = {
+    drawStage() {
+        document.body.style.backgroundColor = '#000000';
+        ctx.fillStyle = '#fffbf9';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(background, 0, 0, w, h);
+        ctx.lineWidth = 10;
+        ctx.strokeRect(0, 0, w, h);
+    },
 
-function drawPower() {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(w - w * (1 / 4), 40, 115, 20);
-    ctx.fillStyle = '#33cc33';
-    ctx.font = "10px monospace";
-    ctx.fillText(power + "/50", w - w * (1 / 4) + 52, 53);
-    ctx.fillRect(w - w * (1 / 4) + 1, 41, (power / 50) * 113, 18);
-}
+    drawHUD(player) {
+        // Health
+        ctx.fillStyle = 'black';
+        ctx.fillRect(w / 2, 10, 240, 20);
+        ctx.fillStyle = player.color;
+        ctx.font = "10px monospace";
+        ctx.fillText(player.health + "/100", w / 2 + 100, 23);
+        ctx.fillRect(w / 2 + 1, 11, (player.health / 100) * 238, 18);
 
-function drawCool() {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(w / 2, 40, 115, 20);
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(w / 2 + 1, 41, 113 - (cool / 50) * 113, 18);
-}
+        // Power
+        ctx.fillStyle = 'black';
+        ctx.fillRect(w - w * (1 / 4), 40, 115, 20);
+        ctx.fillStyle = '#33cc33';
+        ctx.font = "10px monospace";
+        ctx.fillText(player.power + "/50", w - w * (1 / 4) + 52, 53);
+        ctx.fillRect(w - w * (1 / 4) + 1, 41, (player.power / 50) * 113, 18);
 
-function drawScore() {
-    ctx.fillStyle = 'black';
-    ctx.font = "20px monospace";
-    ctx.fillText("Score: " + score, 18, 28, w / 2);
-    ctx.fillText("High-Score: " + highscore, 18, 58, w / 2);
+        // Cool
+        ctx.fillStyle = 'black';
+        ctx.fillRect(w / 2, 40, 115, 20);
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(w / 2 + 1, 41, 113 - (player.cool / 50) * 113, 18);
+
+        // Score
+        ctx.fillStyle = 'black';
+        ctx.font = "20px monospace";
+        ctx.fillText("Score: " + score, 18, 28, w / 2);
+        ctx.fillText("High-Score: " + highscore, 18, 58, w / 2);
+    },
 }
 function menu() {
     setHighScore();
@@ -78,7 +105,7 @@ function menu() {
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h);
         
-        var grd = ctx.createLinearGradient(0, 0, w, 0);
+        let grd = ctx.createLinearGradient(0, 0, w, 0);
         grd.addColorStop(0, '#ffd6cc');
         grd.addColorStop(0.8, 'grey');
         grd.addColorStop(1, '#fffbf9');

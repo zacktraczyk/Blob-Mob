@@ -7,14 +7,16 @@ let keyState = {
         up: false,
         left: false,
         down: false,
+        attack: false,
     }
 }
 
 const keyMap = {
-    39: 'right', // RIGHT
-    38: 'up', // UP
-    37: 'left', // LEFT
-    40: 'down'  // DOWN
+    39: 'right',
+    38: 'up',
+    37: 'left',
+    40: 'down',
+    32: 'attack'
 }
 
 function listen() {
@@ -28,7 +30,6 @@ function listen() {
         // if (e.keyCode == 37) lDown = true; //Left arrow
         // if (e.keyCode == 77 && monce) muteSound(); //Mute
         // if (e.keyCode == 80 && ponce && playerDead === false) pauseMenu(); //Pause
-        // if (e.keyCode == 32 && cool === 0) attackb = true; //Attack
         // else if (e.keyCode == 90 && cool === 0 && power >= 10) attackz = true; //Special Attack Push
         // else if (e.keyCode == 88 && cool === 0 && power > 0) attackx = true; //Special Regenerate
     }

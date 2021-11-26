@@ -1,12 +1,8 @@
-var attackb = false // -- attack normal (1)
-var attackz = false // -- attack bubble (2)
-let attackx = false // -- regeneration (3)
+// REQUIRES: enum.js
 
-var at //Attack id
-var ah //HealthLoss id
-var de //Death id
-var pu //Push id
-var he //heal id
+// Clamp number between two values with the following line:
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+// Normalize a vector
 
 class Player {
     constructor(x, y, w, h) {
@@ -14,16 +10,22 @@ class Player {
         this.y = y
         this.w = w
         this.h = h
+        this.xdir = 1
+        this.ydir = 0
         this.color = '#ffd6cc'
 
-        this.dir = en.dir.right
-        this.speed = 4
+        this.maxSpeed = 3
+        this.accel = 0.1
+        this.xvel = 0
+        this.yvel = 0
+
 
         this.cool = 0
         this.power = 50
         this.health = 100
 
         this.action = en.act.norm
+        this.timer = 0
         this.state = en.state.norm
     }
 
@@ -55,55 +57,106 @@ class Player {
         ctx.closePath()
     }
 
+    controller(keys) {
+        // Trigger Attack
+        if (this.cool <= 0) {
+            if (keys.pressed.attack) this.action = en.act.attack
+        }
+
+        // Action Controller
+        switch (this.action) {
+            case en.act.norm:
+                this.move(keys.pressed)
+                break;
+            case en.act.attack:
+                this.attack(20)
+                break
+            // case en.act.push:
+            //     break
+            // case en.act.regen:
+            //     break
+
+        }
+
+        // Update Position
+        this.x += this.xvel
+        this.y += this.yvel
+    }
+
     move(dir) {
-        if (this.action != en.act.norm) { // break if performing another action
-            return 0
+        // Increase speed if keydown
+        if (dir.right) this.xvel += this.accel
+        if (dir.left) this.xvel -= this.accel
+        if (dir.down) this.yvel += this.accel
+        if (dir.up) this.yvel -= this.accel
+
+        // Decrease speed if keyup
+
+        if (!dir.right && !dir.left){
+            if (Math.abs(this.xvel) <= this.accel) this.xvel = 0
+            else if (this.xvel > 0) this.xvel -= this.accel
+            else if (this.xvel < 0) this.xvel += this.accel
+        }
+        if (!dir.down && !dir.up){
+            if (Math.abs(this.yvel) <= this.accel) this.yvel = 0
+            else if (this.yvel > 0) this.yvel -= this.accel
+            else if (this.yvel < 0) this.yvel += this.accel
         }
 
-        if (dir.right) {
-            this.x += this.speed
-            this.dir = en.dir.right
-        }
-        if (dir.up) {
-            this.y -= this.speed
-            this.dir = en.dir.up
-        }
-        if (dir.left) {
-            this.x -= this.speed
-            this.dir = en.dir.left
-        }
-        if (dir.down) {
-            this.y += this.speed
-            this.dir = en.dir.down
-        }
+        this.xvel = clamp(this.xvel, -this.maxSpeed, this.maxSpeed)
+        this.yvel = clamp(this.yvel, -this.maxSpeed, this.maxSpeed)
 
-        // this.x = srandom(this.x)
-        // this.y = srandom(this.y)
-        // this.w = random(this.w)
-        // this.h = random(this.h)
+        this.calculateDir()
+
+        if (this.cool > 0) --this.cool;
+        this.wiggle()
 
         return 1
+    }
 
-        /*
-        if (attackb) {
-            clearInterval(sessionM)
-            attack()
-        } else if (attackz) {
-            clearInterval(sessionM)
-            attackZ()
-        } else if (attackx) {
-            //clearInterval(sessionM)
-            //attackX()
-            regeneration = true
-        } else if (attackx === false){
-            regeneration = false
-            if(justRegen){
-                if(muted !== true) mainTheme.mute(false)
-                justRegen = false
-                effects.stop(he)
-            }
+    calculateDir() {
+        let mag = Math.sqrt(this.xvel*this.xvel + this.yvel*this.yvel)
+        if (mag > 0) {
+            this.xdir = this.xvel/mag
+            this.ydir = this.yvel/mag
         }
-        */
+    }
+        
+    attack(duration) {
+        ++this.timer
+        this.cool += 50/duration
+        // console.log(this.timer)
+        // console.log(this.dirx + ", " + this.diry)
+
+        if (this.timer < duration/2) {
+            this.x += this.xdir*5
+            this.y += this.ydir*5
+        }
+        if (this.timer > duration/2) {
+            this.x -= this.xdir*5
+            this.y -= this.ydir*5
+        }
+        if (this.timer >= duration) {
+            console.log("DONE ATTACKING")
+            this.timer = 0
+            this.action = en.act.norm
+        }
+    }
+
+    wiggle() {
+        if (frameNumber % 20 == 0) {
+            let rand = Math.random() > 0.5 ? 1 : -1;
+            this.x = this.x + rand
+
+            rand = Math.random() > 0.5 ? 1 : -1;
+            this.y = this.y + rand
+
+            rand = Math.random() > 0.5 ? 1 : -1;
+            this.w = clamp(this.w + rand, 40, 60)
+
+            rand = Math.random() > 0.5 ? 1 : -1;
+            this.h = clamp(this.h + rand, 40, 60)
+        }
     }
 }
 
@@ -258,7 +311,7 @@ function regenerate(){
             this.y+=2
         }
     } else {
-        cool++
+        // cool+= 10
     }
 }
 
