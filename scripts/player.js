@@ -22,7 +22,8 @@ class Player {
 
         this.cool = 0
         this.power = 50
-        this.health = 100
+        this.maxHealth = 500
+        this.health = this.maxHealth
 
         this.action = en.act.norm
         this.timer = 0
@@ -57,7 +58,14 @@ class Player {
         ctx.closePath()
     }
 
-    controller(keys) {
+    controller(keys, enemies) {
+
+        // Dead?
+        if (this.state == en.state.dead) {
+            this.death()
+            return
+        }
+
         // Trigger Attack
         if (this.cool <= 0) {
             if (keys.pressed.attack) this.action = en.act.attack
@@ -65,22 +73,45 @@ class Player {
 
         // Action Controller
         switch (this.action) {
+            case en.act.attack:
+                this.color = '#adedff'
+                this.attack(20, enemies)
+                return
             case en.act.norm:
                 this.move(keys.pressed)
-                break;
-            case en.act.attack:
-                this.attack(20)
                 break
             // case en.act.push:
             //     break
             // case en.act.regen:
             //     break
-
         }
 
         // Update Position
         this.x += this.xvel
         this.y += this.yvel
+
+        // Cooldown
+        if (this.cool > 0) {
+            --this.cool;
+            this.color = '#adedff'
+        } else {
+            this.color = '#ffd6cc'
+        }
+
+        // Check for damage
+        let damage = false
+        enemies.forEach(enemy => {
+            if (this.collides(enemy)) damage = true
+        })
+        if (damage) {
+            this.color = '#ff6d6d'
+            this.health--
+        }
+
+        // Check for death
+        if (this.health <= 0) {
+            this.state = en.state.dead
+        }
     }
 
     move(dir) {
@@ -108,12 +139,6 @@ class Player {
 
         this.calculateDir()
 
-        if (this.cool > 0) {
-            --this.cool;
-            this.color = '#adedff'
-        } else {
-            this.color = '#ffd6cc'
-        }
         this.wiggle()
 
         return 1
@@ -127,12 +152,9 @@ class Player {
         }
     }
         
-    attack(duration) {
-        this.color = '#adedff'
+    attack(duration, enemies) {
         ++this.timer
         this.cool += 50/duration
-        // console.log(this.timer)
-        // console.log(this.dirx + ", " + this.diry)
 
         if (this.timer < duration/2) {
             this.x += this.xdir*5
@@ -142,12 +164,41 @@ class Player {
             this.x -= this.xdir*5
             this.y -= this.ydir*5
         }
+
+        // Check Collision
+        // if (this.timer > duration/4 && this.timer < duration*3/4) {
+            enemies.forEach(enemy => {
+                if (this.collides(enemy)) {
+                    if (enemy.state != en.state.dying
+                        && enemy.state != en.state.dead)
+                        enemy.state = en.state.dying
+                }
+            })
+        // }
+
         if (this.timer >= duration) {
             this.xvel = 0
             this.yvel = 0
             this.timer = 0
             this.action = en.act.norm
         }
+    }
+
+    death() {
+        console.log("MUERTE")
+    }
+
+    collides(target) {
+        if (target == null)
+            return false
+
+        if (this.x < target.x + target.w &&
+            this.x + this.w > target.x &&
+            this.y < target.y + target.h &&
+            this.h + this.y > target.y)
+            return true
+
+        return false
     }
 
     wiggle() {

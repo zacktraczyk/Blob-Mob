@@ -1,13 +1,41 @@
+// REQUIRED: enum.js game.js
 
-const basicEnemySpeed = 0.1;
+class EnemyController {
+
+    constructor(){
+        this.instances = new Array()
+    }
+
+    spawn(w, h, p, speed) {
+        let e = new Enemy(speed)
+        e.spawn(w, h, p)
+        this.instances.push(e)
+    }
+
+    draw() {
+        this.instances.forEach(e => e.draw())
+    }
+
+    controller(){
+        for (let i = 0; i < this.instances.length; i++) { 
+            if (this.instances[i].state == en.state.dead) {
+                this.instances.splice(i, 1)
+            }
+            else {
+                this.instances[i].controller()
+            }
+        }
+    }
+}
 
 class Enemy {
-    constructor(enemspeed) {
+
+    constructor(speed) {
         this.x = 0
         this.y = 0
         this.w = 50
         this.h = 50
-        this.speed = enemspeed * basicEnemySpeed
+        this.speed = speed
         this.target //target needs a width, height, x, and y position
 
         this.rcolors = ['#81ea25', '#6bba27', '#96e84e', '#abf966', '#b9f981']; //Enemy color strobe
@@ -20,17 +48,25 @@ class Enemy {
             w = 500
             h = 500
         }
-        let rand = Math.random() * w
-        this.x = rand
-        rand = Math.random() * h
-        this.y = rand
+
+        let rand = Math.random()
+        if (rand < 0.5) { // side
+            rand = Math.random()
+            this.x = rand < 0.5 ? -this.w - 5 : w + 5
+            this.y = rand*(h+10) - 5
+        } else { // top/bottom
+            rand = Math.random()
+            this.x = rand*(w+10) - 5
+            this.y = rand < 0.5 ? -this.h - 5 : h + 5
+        }
+
         this.target = target
         this.state = en.state.norm;
-        console.log("SPAWN")
     }
 
     draw() {
-        // Don't draw if not spawned
+        // Don't draw if not spawned or dead
+        // if (this.state == en.state.spawn || this.state == en.state.dying) return 0
         if (this.state == en.state.spawn) return 0
 
         ctx.lineWidth = 1;
@@ -42,24 +78,24 @@ class Enemy {
             this.h = this.target.h - 10;
         }
         ctx.beginPath();
-        
+
         //Draws Body
         ctx.moveTo(this.x - this.w / 8, this.y);
         ctx.bezierCurveTo(this.x - this.w / 8, this.y - this.h / 4,
-                          this.x + this.w + this.w / 8, this.y - this.h / 4,
-                          this.x + this.w + this.w / 8, this.y);
+            this.x + this.w + this.w / 8, this.y - this.h / 4,
+            this.x + this.w + this.w / 8, this.y);
 
         ctx.bezierCurveTo(this.x + this.w * 2, this.y,
-                          this.x + this.w * 2, this.y + this.h,
-                          this.x + this.w - this.w / 8, this.y + this.h);
+            this.x + this.w * 2, this.y + this.h,
+            this.x + this.w - this.w / 8, this.y + this.h);
 
         ctx.bezierCurveTo(this.x + this.w - this.w / 8, this.y + this.h * 1.75,
-                          this.x - this.w * 2, this.y + this.h / 4,
-                          this.x, this.y + this.h / 2);
+            this.x - this.w * 2, this.y + this.h / 4,
+            this.x, this.y + this.h / 2);
 
         ctx.bezierCurveTo(this.x - this.w, this.y + this.h / 2,
-                          this.x - this.w / 2, this.y,
-                          this.x - this.w / 8, this.y);
+            this.x - this.w / 2, this.y,
+            this.x - this.w / 8, this.y);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
@@ -87,8 +123,23 @@ class Enemy {
         ctx.closePath();
     }
 
+    controller() {
+        switch (this.state) {
+            case en.state.norm:
+                this.move()
+                break
+            case en.state.dying:
+                this.death(this.target)
+                break
+                // case en.act.push:
+                //     break
+                // case en.act.regen:
+                //     break
+        }
+    }
+
     move() {
-        if (this.target == null || this.state != en.state.norm) return 0
+        if (this.target == null) return 0
         // console.log(this.x, this.y)
 
         if (this.x > this.target.x + this.target.w/10) this.x -= this.speed;
@@ -108,39 +159,25 @@ class Enemy {
         this.y = this.y + rand
     }
 
-    kill() {
-        this.w -= 2;
-        this.h -= 2;
+    death(player) {
+        // console.log("DYING")
+        // this.w -= 0.01;
+        // this.h -= 0.01;
 
         //Draws Body
-        ctx.moveTo(this.x - this.w / 8, this.y);
-        ctx.bezierCurveTo(this.x - this.w / 8, this.y - this.h / 4,
-                          this.x + this.w + this.w / 8, this.y - this.h / 4,
-                          this.x + this.w + this.w / 8, this.y);
+        // let rand = Math.round(Math.random() * 2);
+        // this.color = this.rcolors[rand];
+        // ctx.stroke();
+        // ctx.closePath();
 
-        ctx.bezierCurveTo(this.x + this.w * 2, this.y,
-                          this.x + this.w * 2, this.y + this.h,
-                          this.x + this.w - this.w / 8, this.y + this.h);
+        // if (this.w <= 0 || this.h <= 0) {
+        //     // effects.stop(ah);
+        //     // de = effects.play('death');
+        G.score++;
+        if (player.power < 50) player.power += 1;
+        this.state = en.state.dead
 
-        ctx.bezierCurveTo(this.x + this.w - this.w / 8, this.y + this.h * 1.75,
-                          this.x - this.w * 2, this.y + this.h / 4,
-                          this.x, this.y + this.h / 2);
-
-        ctx.bezierCurveTo(this.x - this.w, this.y + this.h / 2,
-                          this.x - this.w / 2, this.y,
-                          this.x - this.w / 8, this.y);
-        ctx.fill();
-        ctx.stroke();
-        ctx.closePath();
-
-        if (this.w <= 0 || this.h <= 0) {
-            effects.stop(ah);
-            de = effects.play('death');
-            score++;
-            if (power < 50) power += 1;
-            this.state = 'dead';
-            if(this.type == 'boss') this.bossIsAlive = false;
-        }
+        // }
     }
 
     push() {
@@ -161,49 +198,6 @@ class Enemy {
 
 }
 
-function stateDef(a) {
-    if (a.type == 'regular') {
-        if (a.state == 'spawn' || a.state == 'dead') {
-            a.spawn();
-        } else if (a.state == 'alive') {
-            if(pause === false) a.move();
-            a.draw();
-        } else if (a.state == 'dying') {
-            a.kill();
-        } else if (a.state == 'push') {
-            a.push();
-        }
-    } else if (a.type == 'boss') {
-        if (a.state == 'spawn') {
-            a.spawn();
-        } else if (a.state == 'alive') {
-            if(pause === false) a.move();
-            a.drawBoss();
-        } else if (a.state == 'dying') {
-            a.kill();
-        } else if (a.state == 'push') {
-            a.push();
-        }
-    }
-}
-
-function stateDefinition(){
-    stateDef(enemy1);
-    stateDef(enemy2);
-    stateDef(enemy3);
-    stateDef(enemy4);
-    stateDef(enemy5);
-    stateDef(enemy6);
-    stateDef(enemy7);
-    stateDef(enemy8);
-    stateDef(enemy9);
-    stateDef(enemy10);
-    stateDef(enemy11);
-    stateDef(enemy12);
-    stateDef(enemy13);
-    stateDef(enemy14);
-    stateDef(enemy15);
-}
 
 function enemySpawn(){
     if (Otime == 20)enemy1.state = 'spawn';
@@ -247,44 +241,44 @@ function enemeySpeed(){
     if(score >= 300)speed=3;
 }
 
-    // this.drawBoss = function() {
-    //     ctx.lineWidth = 1;
-    //     randNum = Math.round(Math.random() * 2);
-    //     var ebrandomColor = ebcolors[randNum];
-    //     ctx.fillStyle = ebrandomColor;
-    //     this.w = wx - 10;
-    //     this.h = wy * 2 - 10;
-    //     ctx.beginPath();
+// this.drawBoss = function() {
+//     ctx.lineWidth = 1;
+//     randNum = Math.round(Math.random() * 2);
+//     var ebrandomColor = ebcolors[randNum];
+//     ctx.fillStyle = ebrandomColor;
+//     this.w = wx - 10;
+//     this.h = wy * 2 - 10;
+//     ctx.beginPath();
 
-    //     ctx.moveTo(this.x - this.x / 20, this.y);
-    //     ctx.bezierCurveTo(this.x - this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y);
+//     ctx.moveTo(this.x - this.x / 20, this.y);
+//     ctx.bezierCurveTo(this.x - this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y);
 
-    //     ctx.bezierCurveTo(this.x + this.w + this.x / 10, this.y, this.x + this.w + this.x / 10, this.y + this.h, this.x + this.w, this.y + this.h);
+//     ctx.bezierCurveTo(this.x + this.w + this.x / 10, this.y, this.x + this.w + this.x / 10, this.y + this.h, this.x + this.w, this.y + this.h);
 
-    //     ctx.bezierCurveTo(this.x + this.w / 10, this.y + this.y / 4, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y + this.h / 2);
+//     ctx.bezierCurveTo(this.x + this.w / 10, this.y + this.y / 4, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y + this.h / 2);
 
-    //     ctx.bezierCurveTo(this.x - this.w / 2, this.y + this.h / 2, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y);
-    //     ctx.fill();
-    //     ctx.stroke();
-    //     ctx.closePath();
+//     ctx.bezierCurveTo(this.x - this.w / 2, this.y + this.h / 2, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y);
+//     ctx.fill();
+//     ctx.stroke();
+//     ctx.closePath();
 
-    //     ctx.lineWidth = 1;
+//     ctx.lineWidth = 1;
 
-    //     ctx.beginPath();
-    //     ctx.fillStyle = 'black';
-    //     ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
-    //     ctx.stroke();
-    //     ctx.closePath();
+//     ctx.beginPath();
+//     ctx.fillStyle = 'black';
+//     ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
+//     ctx.stroke();
+//     ctx.closePath();
 
-    //     ctx.beginPath();
-    //     ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
-    //     ctx.stroke();
-    //     ctx.closePath();
+//     ctx.beginPath();
+//     ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
+//     ctx.stroke();
+//     ctx.closePath();
 
-    //     ctx.beginPath();
-    //     ctx.moveTo(this.x + this.h / 8, this.y + this.h);
-    //     ctx.bezierCurveTo(this.x + this.w / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h);
-    //     ctx.stroke();
-    //     ctx.closePath();
-    // },
+//     ctx.beginPath();
+//     ctx.moveTo(this.x + this.h / 8, this.y + this.h);
+//     ctx.bezierCurveTo(this.x + this.w / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h);
+//     ctx.stroke();
+//     ctx.closePath();
+// },
 

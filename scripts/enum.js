@@ -15,8 +15,10 @@ const en = {
     },
 
     state: {
+        spawn: -1,
         norm: 0,
         damage: 1,
-        dead: 2
+        dying: 2,
+        dead: 3
     }
 }

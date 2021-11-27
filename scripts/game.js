@@ -1,9 +1,112 @@
-let HowTo = false
-let score = 0
-let highscore = localStorage.getItem("highscore") //Cookie storage
-
 const background = new Image()
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
+
+//-----------------------------------//
+//--------------SESSION--------------//
+
+class Game {
+
+    constructor() {
+        this.w = window.innerWidth
+        this.h = window.innerHeight
+
+        this.score = 0
+        this.highscore = localStorage.getItem("highscore")
+
+        this.fps = 60
+        this.frame = 0
+    }
+
+    resizeWindow() {
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+        this.w = innerWidth
+        this.h = innerHeight
+    }
+
+    get time() {
+        return Math.floor(this.frame/this.fps * 100)/100
+    }
+
+    setHighScore() {
+        if (this.highscore !== null) {
+            if (this.score > this.highscore) {
+                localStorage.setItem("highscore", this.score);
+            }
+        } else {
+            this.highscore = 0;
+            localStorage.setItem("highscore", this.score);
+        }
+    }
+
+}
+
+let Menu = {
+    draw(w, h) {
+        let grd = ctx.createLinearGradient(0, 0, w, 0)
+        grd.addColorStop(0, '#ffd6cc')
+        grd.addColorStop(0.8, 'grey')
+        grd.addColorStop(1, '#fffbf9')
+        ctx.fillStyle = '#fffbf9'
+        ctx.fillRect(0, 0, w, h)
+        P.draw()
+        ctx.fillStyle = grd
+        ctx.font = '80px Arial Bold'
+        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
+        ctx.font = '30px Arial Bold'
+        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
+        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
+        grd1.addColorStop(0, 'grey')
+        grd1.addColorStop(1, 'white')
+        ctx.fillStyle = grd1
+        ctx.font = '15px sans-serif'
+        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
+        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
+        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
+    }
+}
+
+let Stage = {
+    draw(w, h) {
+        document.body.style.backgroundColor = '#000000'
+        ctx.fillStyle = '#fffbf9'
+        ctx.fillRect(0, 0, w, h)
+        ctx.drawImage(background, 0, 0, w, h)
+        ctx.lineWidth = 10
+        ctx.strokeRect(0, 0, w, h)
+    },
+
+    HUD(w, h, player) {
+        // Health
+        ctx.fillStyle = 'black'
+        ctx.fillRect(w / 2, 10, w/2 - 10, 20)
+        ctx.fillStyle = player.color
+        // ctx.font = "10px monospace"
+        // ctx.fillText(player.health + "/100", w / 2 + 100, 23)
+        ctx.fillRect(w / 2 + 1, 11, Math.max(0, (player.health / player.maxHealth) * (w/2 - 10) - 2), 18)
+
+        // Power
+        ctx.fillStyle = 'black'
+        ctx.fillRect(w*3/4 + 5, 40, w/4 - 15, 20)
+        ctx.fillStyle = '#33cc33'
+        // ctx.font = "10px monospace"
+        // ctx.fillText(player.power + "/50", w - w/4 + 52, 53)
+        ctx.fillRect(w*3/4 + 6, 41, (player.power / 50) * (w/4 - 15) - 2, 18)
+
+        // Cool
+        ctx.fillStyle = 'black'
+        ctx.fillRect(w/2, 40, w/4 - 5, 20)
+        ctx.fillStyle = 'blue'
+        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / 50)) * (w/4 - 5) - 2, 18)
+
+        // Score
+        ctx.fillStyle = 'black'
+        ctx.font = "20px monospace"
+        ctx.fillText("Score: " + G.score, 18, 28, w / 2)
+        ctx.fillText("High-Score: " + G.highscore, 18, 58, w / 2)
+    },
+}
 
 function pauseMenu() {
     if(ponce){
@@ -23,84 +126,9 @@ function pauseMenu() {
     } 
 }
 
-//-----------------------------------//
-//--------------SESSION--------------//
-
-let Menu = {
-
-    draw() {
-        let grd = ctx.createLinearGradient(0, 0, w, 0)
-        grd.addColorStop(0, '#ffd6cc')
-        grd.addColorStop(0.8, 'grey')
-        grd.addColorStop(1, '#fffbf9')
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        drawChar()
-        ctx.fillStyle = grd
-        ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
-        ctx.font = '30px Arial Bold'
-        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
-        grd1.addColorStop(0, 'grey')
-        grd1.addColorStop(1, 'white')
-        ctx.fillStyle = grd1
-        ctx.font = '15px sans-serif'
-        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-    }
-}
-
-let Scene = {
-    drawStage(w, h) {
-        document.body.style.backgroundColor = '#000000'
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        ctx.drawImage(background, 0, 0, w, h)
-        ctx.lineWidth = 10
-        ctx.strokeRect(0, 0, w, h)
-    },
-
-    drawHUD(w, h, player) {
-        // Health
-        ctx.fillStyle = 'black'
-        ctx.fillRect(w / 2, 10, w/2 - 10, 20)
-        ctx.fillStyle = player.color
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.health + "/100", w / 2 + 100, 23)
-        ctx.fillRect(w / 2 + 1, 11, (player.health / 100) * (w/2 - 10) - 2, 18)
-
-        // Power
-        ctx.fillStyle = 'black'
-        ctx.fillRect(w*3/4 + 5, 40, w/4 - 15, 20)
-        ctx.fillStyle = '#33cc33'
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.power + "/50", w - w/4 + 52, 53)
-        ctx.fillRect(w*3/4 + 6, 41, (player.power / 50) * (w/4 - 15) - 2, 18)
-
-        // Cool
-        ctx.fillStyle = 'black'
-        ctx.fillRect(w/2, 40, w/4 - 5, 20)
-        ctx.fillStyle = 'blue'
-        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / 50)) * (w/4 - 5) - 2, 18)
-
-        // Score
-        ctx.fillStyle = 'black'
-        ctx.font = "20px monospace"
-        ctx.fillText("Score: " + score, 18, 28, w / 2)
-        ctx.fillText("High-Score: " + highscore, 18, 58, w / 2)
-    },
-}
 function menu() {
-    setHighScore()
-    sx = 150
-    sy = 150
-    wx = 200
-    wy = 200
-    score = 0
-    highscore = localStorage.getItem("highscore")
+    G.setHighScore
+    G.highscore = localStorage.getItem("highscore")
     titleTheme.play()
     var sessionME = setInterval(function() {
         ctx.clearRect(0, 0, w, h)

@@ -1,68 +1,51 @@
 // REQUIRES: player.js io.js
-"use strict"
 
 const c = document.getElementById('canvas')
 const ctx = c.getContext('2d')
-const p = new Player(250, 250, 50, 50)
-const fps = 60
 
-let wgame, hgame
-let frameNumber = 0
-let gtime = 0
-let enemies = new Array()
-let e = new Enemy(5)
+const G = new Game()
+const P = new Player(250, 250, 50, 50)
+const Enemies = new EnemyController()
+
 let espawncool = 0
-
-function resizeWindow() {
-    ctx.canvas.width = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
-    wgame = window.innerWidth
-    hgame = window.innerHeight
-}
 
 function update() {
     listen()
-    p.controller(keyState)
+    P.controller(keyState, Enemies.instances)
+    Enemies.controller()
+    
 
     // TEMP SPAWNING --------------------
-    enemies.forEach(enemy => enemy.move())
     if (espawncool > 0) --espawncool
-    if (gtime % 5.00 && enemies.length < 15 && espawncool <= 0) {
-        e = new Enemy(4)
-        e.spawn(wgame, hgame, p)
-        enemies.push(e)
-        espawncool=500
-        // e = new Enemy(5)
-        // e.spawn()
-        // enemies.push(e)
+    if (G.time % 1.00 && Enemies.instances.length < 30 && espawncool <= 0) {
+        Enemies.spawn(G.w, G.h, P, 0.6)
+        espawncool=50
     }
     //----------------------------------- 
 }
 
 function draw() {
-    resizeWindow()
-    ctx.clearRect(0, 0, wgame, hgame)
-    Scene.drawStage(wgame, hgame)
-    p.draw()
-    Scene.drawHUD(wgame, hgame, p)
+    G.resizeWindow()
+    ctx.clearRect(0, 0, G.w, G.h)
 
-    // ENEMY
-    enemies.forEach(enemy => enemy.draw())
+    Stage.draw(G.w, G.h)
+
+    P.draw()
+    Enemies.draw()
+
+    Stage.HUD(G.w, G.h, P)
+
 }
 
 function main() {
-    if (frameNumber == 0) { 
-        Scene.init
-    }
-    ++frameNumber
+    if (G.frame == 0) Stage.init
+    ++G.frame
 
-    gtime = Math.floor(frameNumber/fps * 100)/100
-
-    update(frameNumber)
+    update()
     draw()
 
     setTimeout(() => {
         window.requestAnimationFrame(main);
-    }, 1000 / fps);
+    }, 1000 / G.fps);
 }
-window.requestAnimationFrame(main)
+// window.requestAnimationFrame(main)
