@@ -8,7 +8,10 @@ class IO {
             up: false,
             left: false,
             down: false,
+
             attack: false,
+
+            pause: false,
         }
 
         this.keyMap = {
@@ -16,15 +19,16 @@ class IO {
             38: 'up',
             37: 'left',
             40: 'down',
-            32: 'attack'
+
+            32: 'attack',
+
+            80: 'pause'
         }
 
-        console.log(this.keyMap)
     }
 
 
     addKeyListeners() {
-        console.log(this.keyMap)
         document.addEventListener("keydown", this.keyDownHandler, false);
         document.addEventListener("keyup", this.keyUpHandler, false);
     }

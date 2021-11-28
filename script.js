@@ -89,8 +89,34 @@ function randomLocation(a) {
     }
 
 }
+const difficultyTable = {
+    3: {
+        player: {
+            speed:      4,
+            accel:      0.4,
+            cool:       40,
+            health:     500,
+        },
+        enemy: {
+            speed:      1
+        }
+    },
+
+    5: {
+        player: {
+            speed:      3,
+            accel:      0.4,
+            cool:       60,
+            health:     300,
+        },
+        enemy: {
+            speed:      2
+        }
+    },
+}
+// REQUIRES: difficulty.js
 const background = new Image()
-background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
+// background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
 
 class Game {
 
@@ -98,11 +124,15 @@ class Game {
         this.w = window.innerWidth
         this.h = window.innerHeight
 
+        this.difficulty = 5 // 0 - 9
+
         this.score = 0
         this.highscore = localStorage.getItem("highscore")
 
         this.fps = 60
         this.frame = 0
+        this.paused = false
+        this.pauseKeyRelease = true
     }
 
     resizeWindow() {
@@ -110,6 +140,25 @@ class Game {
         ctx.canvas.height = window.innerHeight;
         this.w = innerWidth
         this.h = innerHeight
+    }
+
+    updateDifficulty(player, enemyController, d) {
+        if (d != null) this.difficulty = d
+
+        let pVals = difficultyTable[this.difficulty].player
+        let eVals = difficultyTable[this.difficulty].enemy
+
+        // Player
+        player.maxSpeed = pVals.speed
+        player.accel = pVals.accel
+        console.log(player.maxSpeed)
+
+        player.maxCool = pVals.cool
+        player.maxHealth = pVals.health
+        player.health = player.maxHealth
+
+        // Enemy
+        enemyController.speed = eVals.speed
     }
 
     get time() {
@@ -124,6 +173,16 @@ class Game {
         } else {
             this.highscore = 0;
             localStorage.setItem("highscore", this.score);
+        }
+    }
+
+    pause(p) {
+        // effects.play('btn')
+        if (p && this.pauseKeyRelease) {
+            this.pauseKeyRelease = false
+            G.paused = !G.paused
+        } else if (!p && !this.pauseKeyRelease) {
+            this.pauseKeyRelease = true
         }
     }
 
@@ -194,7 +253,7 @@ let Stage = {
         ctx.fillStyle = 'black'
         ctx.fillRect(w/2, 40, w/4 - 5, 20)
         ctx.fillStyle = 'blue'
-        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / 50)) * (w/4 - 5) - 2, 18)
+        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / player.maxCool)) * (w/4 - 5) - 2, 18)
 
         // Score
         ctx.fillStyle = 'black'
@@ -204,22 +263,14 @@ let Stage = {
     },
 }
 
-function pauseMenu() {
-    if(ponce){
-        if (pause) pause = false
-        else pause = true
-        
-        ponce = false
-        effects.play('btn')
-    }
-    
-    if(pause){
+let pauseMenu = {
+    draw(w, h) {
         ctx.fillStyle = "rgba(225, 220, 212, 0.4)"
         ctx.fillRect(0, 0, w, h)
         ctx.fillStyle = "grey"
         ctx.font = "50px monospace"
         ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10)
-    } 
+    }
 }
 
 function menu() {
@@ -540,7 +591,10 @@ class IO {
             up: false,
             left: false,
             down: false,
+
             attack: false,
+
+            pause: false,
         }
 
         this.keyMap = {
@@ -548,15 +602,16 @@ class IO {
             38: 'up',
             37: 'left',
             40: 'down',
-            32: 'attack'
+
+            32: 'attack',
+
+            80: 'pause'
         }
 
-        console.log(this.keyMap)
     }
 
 
     addKeyListeners() {
-        console.log(this.keyMap)
         document.addEventListener("keydown", this.keyDownHandler, false);
         document.addEventListener("keyup", this.keyUpHandler, false);
     }
@@ -599,6 +654,49 @@ class IO {
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 // Normalize a vector
 
+class DPController {
+    constructor() {
+        this.interval = 50
+        this.maxPoints = 15
+        this.instances = new Array()
+    }
+
+    spawn(player) {
+        let dp = new DamagePoint(player)
+        this.instances.push(dp)
+    }
+
+    controller(){
+        for (let i = 0; i < this.instances.length; i++) { 
+            if (this.instances[i].life <= 0) {
+                this.instances.splice(i, 1)
+            }
+            else {
+                this.instances[i].live()
+                this.instances[i].draw()
+            }
+        }
+    }
+}
+class DamagePoint {
+    constructor(player) {
+        // Spawn
+        this.x = player.x + player.w/2 + (Math.random() - 0.5)*player.w/2
+        this.y = player.y + player.h/2 + (Math.random() - 0.5)*player.h/2
+        this.life = 100
+    }
+
+    draw() {
+        console.log(this.x + ", " + this.y)
+        --this.life
+        ctx.font = '70px Comic Sans MS'
+        ctx.fillStyle = '#000000' //Set to #ffd6cc
+        ctx.fillRect(0, 0, 100, 100)
+        // ctx.fillText("GAME OVER", this.x, this.y)
+    }
+
+    live() { if (this.life > 0) --this.life }
+}
 class Player {
     constructor(x, y, w, h) {
         this.x = x
@@ -614,13 +712,14 @@ class Player {
         this.xvel = 0
         this.yvel = 0
 
-
+        this.maxCool = 50
         this.cool = 0
         this.power = 50
         this.maxHealth = 500
         this.health = this.maxHealth
 
         this.action = en.act.norm
+        this.pushRadius = 140
         this.timer = 0
         this.state = en.state.norm
     }
@@ -658,9 +757,16 @@ class Player {
         ctx.bezierCurveTo(this.x + this.h / 8, this.y + this.h, this.x + this.w - this.h / 8, this.y + this.h, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3)
         ctx.stroke()
         ctx.closePath()
+
+        if (this.act == en.act.push) {
+            ctx.beginPath()
+            ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
+            ctx.stroke()
+            ctx.closePath()
+        }
     }
 
-    controller(w, h, keys, enemies) {
+    controller(w, h, keys, enemies, damagePoints) {
 
         // Dead?
         if (this.state == en.state.dead) {
@@ -708,6 +814,7 @@ class Player {
         if (damage) {
             this.color = '#ff6d6d'
             this.health--
+            if (damagePoints != null) damagePoints.spawn(this)
         }
 
         // Check for death
@@ -738,11 +845,12 @@ class Player {
         this.xvel = clamp(this.xvel, -this.maxSpeed, this.maxSpeed)
         this.yvel = clamp(this.yvel, -this.maxSpeed, this.maxSpeed)
 
-        this.calculateDir()
+        this.calculateDir() // Needed for Attack
 
         this.wiggle(50, 69)
 
-        if (this.x > w && this.xvel > 0) this.x = -5
+        // Wrap Screen
+        if (this.x > w && this.xvel > 0) this.x = -this.w - 5
         else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
 
         if (this.y > h && this.yvel > 0) this.y = -5
@@ -761,7 +869,7 @@ class Player {
         
     attack(duration, enemies) {
         ++this.timer
-        this.cool += 50/duration
+        this.cool += this.maxCool/duration
 
         if (this.timer < duration/2) {
             this.x += this.xdir*5
@@ -792,7 +900,6 @@ class Player {
     }
 
     death() {
-        console.log("MUERTE")
     }
 
     collides(target) {
@@ -987,12 +1094,19 @@ class EnemyController {
     constructor(){
         this.instances = new Array()
         this.cool = 0
+        this.speed
     }
 
-    spawner(w, h, p, speed) {
+    spawner(w, h, p) {
+        // if (Enemies.instances.length < 1) {
+        //     let e = new Enemy(this.speed)
+        //     e.spawn(w, h, p)
+        //     this.instances.push(e)
+        //     this.cool = 50
+        // }
         if (this.cool > 0) --this.cool
         if (G.time % 1.00 && Enemies.instances.length < 30 && this.cool <= 0) {
-            let e = new Enemy(speed)
+            let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
             this.cool = 50
@@ -1060,7 +1174,7 @@ class Enemy {
         let rand = Math.round(Math.random() * 2);
         this.color = this.rcolors[rand];
         ctx.fillStyle = this.color
-        if (this.target != null) {
+        if (this.target != null && this.state == en.state.norm) {
             this.w = this.target.w / 2 - 10;
             this.h = this.target.h - 10;
         }
@@ -1140,42 +1254,38 @@ class Enemy {
 
     wiggle() {
         let rand = Math.random() > 0.5 ? 1 : -1;
-        this.x = this.x + rand
+        this.x = this.x + rand*2
 
         rand = Math.random() > 0.5 ? 1 : -1;
-        this.y = this.y + rand
+        this.y = this.y + rand*2
     }
 
     death(player) {
-        // console.log("DYING")
-        // this.w -= 0.01;
-        // this.h -= 0.01;
+        // Shrink
+        this.w = Math.max(0, this.w - 2)
+        this.h = Math.max(0, this.h - 3.9)
 
-        //Draws Body
-        // let rand = Math.round(Math.random() * 2);
-        // this.color = this.rcolors[rand];
-        // ctx.stroke();
-        // ctx.closePath();
-
-        // if (this.w <= 0 || this.h <= 0) {
-        //     // effects.stop(ah);
-        //     // de = effects.play('death');
-        G.score++;
-        if (player.power < 50) player.power += 1;
-        this.state = en.state.dead
-
-        // }
+        if (this.w == 0 || this.h == 0) { 
+            // effects.stop(ah);
+            // de = effects.play('death');
+            if (player.power < 50) player.power += 1;
+            G.score++;
+            this.state = en.state.dead
+        }
     }
 
-    push() {
-        if(this.type == 'regular')this.draw();
-        else if(this.type== 'boss')this.drawBoss();
-        if (inarea(this)) {
-            if (this.x > sx + wx / 10) this.x += 6;
-            if (this.x < sx + wx / 10) this.x -= 6;
+    push(player) {
+        let xdiff = this.x - player.x
+        let ydiff = this.y - player.y
+        let distance = Math.sqrt(xdiff*xdiff + ydiff*ydiff)
+        if (distance < player.pushRadius) {
+            // Normalize push vector
+            let xdir = xdiff/distance
+            let ydir = ydiff/distance
 
-            if (this.y > sy + wy / 10) this.y += 6;
-            if (this.y < sy + wy / 10) this.y -= 6;
+            this.x += 6*xdir
+            this.y += 6*ydir
+
         } else {
             this.x = srandom(this.x);
             this.y = srandom(this.y);
@@ -1277,26 +1387,8 @@ const ctx = c.getContext('2d')
 const G = new Game()
 const I = new IO()
 const P = new Player(250, 250, 250, 250)
+const DP = new DPController()
 const Enemies = new EnemyController()
-
-function update() {
-    Enemies.spawner(G.w, G.h, P, 2)
-    P.controller(G.w, G.h, I.keyState, Enemies.instances)
-    Enemies.controller()
-}
-
-function draw() {
-    G.resizeWindow()
-    ctx.clearRect(0, 0, G.w, G.h)
-
-    Stage.draw(G.w, G.h)
-
-    P.draw()
-    Enemies.draw()
-
-    Stage.HUD(G.w, G.h, P)
-
-}
 
 function menu() {
     ++G.frame
@@ -1309,25 +1401,21 @@ function menu() {
     // Center Player
     if (G.frame == 1) {
         I.addKeyListeners()
+        I.addMouseListener()
         P.x = x + menuSize/2 - P.w/2
         P.y = y + menuSize/2 - P.h/2
     }
 
-    I.addMouseListener()
-    ctx.fillText(I.xmouse + ", " + I.ymouse, 40, 40)
+    // Check Start Click
     if (I.xmouse > 500) {
         window.requestAnimationFrame(main);
+        G.updateDifficulty(P, Enemies, 3)
         return
     }
-    // } else if (G.frame == 10) {
-    //     G.fps = 60
-    //     window.requestAnimationFrame(main);
-    //     return
-    // }
+
+    P.title(x, y, menuSize, menuSize) // update
 
     Menu.draw(x, y, menuSize, menuSize)       
-
-    P.title(x, y, menuSize, menuSize)
     P.draw()
 
     setTimeout(() => {
@@ -1339,10 +1427,33 @@ function main() {
     if (G.frame == 0) Stage.init
     ++G.frame
 
-    update()
+    if (!G.paused) update()
     draw()
+
+    G.pause(I.keyState.pause)
 
     setTimeout(() => {
         window.requestAnimationFrame(main);
     }, 1000 / G.fps);
+}
+function update() {
+    Enemies.spawner(G.w, G.h, P)
+    P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
+    // DP.controller()    
+    Enemies.controller()
+}
+
+function draw() {
+    G.resizeWindow()
+    ctx.clearRect(0, 0, G.w, G.h)
+
+    Stage.draw(G.w, G.h)
+
+    P.draw()
+    Enemies.draw()
+
+    if (G.paused) pauseMenu.draw(G.w, G.h)
+
+    Stage.HUD(G.w, G.h, P)
+
 }

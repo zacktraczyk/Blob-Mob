@@ -6,26 +6,8 @@ const ctx = c.getContext('2d')
 const G = new Game()
 const I = new IO()
 const P = new Player(250, 250, 250, 250)
+const DP = new DPController()
 const Enemies = new EnemyController()
-
-function update() {
-    Enemies.spawner(G.w, G.h, P, 2)
-    P.controller(G.w, G.h, I.keyState, Enemies.instances)
-    Enemies.controller()
-}
-
-function draw() {
-    G.resizeWindow()
-    ctx.clearRect(0, 0, G.w, G.h)
-
-    Stage.draw(G.w, G.h)
-
-    P.draw()
-    Enemies.draw()
-
-    Stage.HUD(G.w, G.h, P)
-
-}
 
 function menu() {
     ++G.frame
@@ -38,25 +20,21 @@ function menu() {
     // Center Player
     if (G.frame == 1) {
         I.addKeyListeners()
+        I.addMouseListener()
         P.x = x + menuSize/2 - P.w/2
         P.y = y + menuSize/2 - P.h/2
     }
 
-    I.addMouseListener()
-    ctx.fillText(I.xmouse + ", " + I.ymouse, 40, 40)
+    // Check Start Click
     if (I.xmouse > 500) {
         window.requestAnimationFrame(main);
+        G.updateDifficulty(P, Enemies, 3)
         return
     }
-    // } else if (G.frame == 10) {
-    //     G.fps = 60
-    //     window.requestAnimationFrame(main);
-    //     return
-    // }
+
+    P.title(x, y, menuSize, menuSize) // update
 
     Menu.draw(x, y, menuSize, menuSize)       
-
-    P.title(x, y, menuSize, menuSize)
     P.draw()
 
     setTimeout(() => {
@@ -68,10 +46,33 @@ function main() {
     if (G.frame == 0) Stage.init
     ++G.frame
 
-    update()
+    if (!G.paused) update()
     draw()
+
+    G.pause(I.keyState.pause)
 
     setTimeout(() => {
         window.requestAnimationFrame(main);
     }, 1000 / G.fps);
+}
+function update() {
+    Enemies.spawner(G.w, G.h, P)
+    P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
+    // DP.controller()    
+    Enemies.controller()
+}
+
+function draw() {
+    G.resizeWindow()
+    ctx.clearRect(0, 0, G.w, G.h)
+
+    Stage.draw(G.w, G.h)
+
+    P.draw()
+    Enemies.draw()
+
+    if (G.paused) pauseMenu.draw(G.w, G.h)
+
+    Stage.HUD(G.w, G.h, P)
+
 }

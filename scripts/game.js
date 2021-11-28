@@ -1,5 +1,6 @@
+// REQUIRES: difficulty.js
 const background = new Image()
-background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
+// background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
 
 class Game {
 
@@ -7,11 +8,15 @@ class Game {
         this.w = window.innerWidth
         this.h = window.innerHeight
 
+        this.difficulty = 5 // 0 - 9
+
         this.score = 0
         this.highscore = localStorage.getItem("highscore")
 
         this.fps = 60
         this.frame = 0
+        this.paused = false
+        this.pauseKeyRelease = true
     }
 
     resizeWindow() {
@@ -19,6 +24,25 @@ class Game {
         ctx.canvas.height = window.innerHeight;
         this.w = innerWidth
         this.h = innerHeight
+    }
+
+    updateDifficulty(player, enemyController, d) {
+        if (d != null) this.difficulty = d
+
+        let pVals = difficultyTable[this.difficulty].player
+        let eVals = difficultyTable[this.difficulty].enemy
+
+        // Player
+        player.maxSpeed = pVals.speed
+        player.accel = pVals.accel
+        console.log(player.maxSpeed)
+
+        player.maxCool = pVals.cool
+        player.maxHealth = pVals.health
+        player.health = player.maxHealth
+
+        // Enemy
+        enemyController.speed = eVals.speed
     }
 
     get time() {
@@ -33,6 +57,16 @@ class Game {
         } else {
             this.highscore = 0;
             localStorage.setItem("highscore", this.score);
+        }
+    }
+
+    pause(p) {
+        // effects.play('btn')
+        if (p && this.pauseKeyRelease) {
+            this.pauseKeyRelease = false
+            G.paused = !G.paused
+        } else if (!p && !this.pauseKeyRelease) {
+            this.pauseKeyRelease = true
         }
     }
 
@@ -103,7 +137,7 @@ let Stage = {
         ctx.fillStyle = 'black'
         ctx.fillRect(w/2, 40, w/4 - 5, 20)
         ctx.fillStyle = 'blue'
-        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / 50)) * (w/4 - 5) - 2, 18)
+        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / player.maxCool)) * (w/4 - 5) - 2, 18)
 
         // Score
         ctx.fillStyle = 'black'
@@ -113,22 +147,14 @@ let Stage = {
     },
 }
 
-function pauseMenu() {
-    if(ponce){
-        if (pause) pause = false
-        else pause = true
-        
-        ponce = false
-        effects.play('btn')
-    }
-    
-    if(pause){
+let pauseMenu = {
+    draw(w, h) {
         ctx.fillStyle = "rgba(225, 220, 212, 0.4)"
         ctx.fillRect(0, 0, w, h)
         ctx.fillStyle = "grey"
         ctx.font = "50px monospace"
         ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10)
-    } 
+    }
 }
 
 function menu() {

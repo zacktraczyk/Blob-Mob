@@ -1,7 +1,7 @@
 # Combine .js into a single file
 COMPILED=script.js
 # ORDER=sound.js io.js player.js enemy.js game.js main.js
-ORDER=enum.js rand.js game.js io.js player.js Enemy.js main.js
+ORDER=enum.js rand.js difficulty.js game.js io.js player.js Enemy.js main.js
 
 all: compile-order
 

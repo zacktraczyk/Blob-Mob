@@ -25,8 +25,9 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
 		* [ ] Push
 	* [X] HUD
 	* [o] io
-		* [ ] Mouse
+		* [X] Mouse
 		* [X] Keyboard
+		* [ ] Buttons
 	* [X] Game
 	* [ ] main
 		* [ ] Make single game loop?

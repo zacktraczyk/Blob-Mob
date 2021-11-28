@@ -5,12 +5,19 @@ class EnemyController {
     constructor(){
         this.instances = new Array()
         this.cool = 0
+        this.speed
     }
 
-    spawner(w, h, p, speed) {
+    spawner(w, h, p) {
+        // if (Enemies.instances.length < 1) {
+        //     let e = new Enemy(this.speed)
+        //     e.spawn(w, h, p)
+        //     this.instances.push(e)
+        //     this.cool = 50
+        // }
         if (this.cool > 0) --this.cool
         if (G.time % 1.00 && Enemies.instances.length < 30 && this.cool <= 0) {
-            let e = new Enemy(speed)
+            let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
             this.cool = 50
@@ -78,7 +85,7 @@ class Enemy {
         let rand = Math.round(Math.random() * 2);
         this.color = this.rcolors[rand];
         ctx.fillStyle = this.color
-        if (this.target != null) {
+        if (this.target != null && this.state == en.state.norm) {
             this.w = this.target.w / 2 - 10;
             this.h = this.target.h - 10;
         }
@@ -158,42 +165,38 @@ class Enemy {
 
     wiggle() {
         let rand = Math.random() > 0.5 ? 1 : -1;
-        this.x = this.x + rand
+        this.x = this.x + rand*2
 
         rand = Math.random() > 0.5 ? 1 : -1;
-        this.y = this.y + rand
+        this.y = this.y + rand*2
     }
 
     death(player) {
-        // console.log("DYING")
-        // this.w -= 0.01;
-        // this.h -= 0.01;
+        // Shrink
+        this.w = Math.max(0, this.w - 2)
+        this.h = Math.max(0, this.h - 3.9)
 
-        //Draws Body
-        // let rand = Math.round(Math.random() * 2);
-        // this.color = this.rcolors[rand];
-        // ctx.stroke();
-        // ctx.closePath();
-
-        // if (this.w <= 0 || this.h <= 0) {
-        //     // effects.stop(ah);
-        //     // de = effects.play('death');
-        G.score++;
-        if (player.power < 50) player.power += 1;
-        this.state = en.state.dead
-
-        // }
+        if (this.w == 0 || this.h == 0) { 
+            // effects.stop(ah);
+            // de = effects.play('death');
+            if (player.power < 50) player.power += 1;
+            G.score++;
+            this.state = en.state.dead
+        }
     }
 
-    push() {
-        if(this.type == 'regular')this.draw();
-        else if(this.type== 'boss')this.drawBoss();
-        if (inarea(this)) {
-            if (this.x > sx + wx / 10) this.x += 6;
-            if (this.x < sx + wx / 10) this.x -= 6;
+    push(player) {
+        let xdiff = this.x - player.x
+        let ydiff = this.y - player.y
+        let distance = Math.sqrt(xdiff*xdiff + ydiff*ydiff)
+        if (distance < player.pushRadius) {
+            // Normalize push vector
+            let xdir = xdiff/distance
+            let ydir = ydiff/distance
 
-            if (this.y > sy + wy / 10) this.y += 6;
-            if (this.y < sy + wy / 10) this.y -= 6;
+            this.x += 6*xdir
+            this.y += 6*ydir
+
         } else {
             this.x = srandom(this.x);
             this.y = srandom(this.y);
