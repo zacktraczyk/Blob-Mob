@@ -4,12 +4,17 @@ class EnemyController {
 
     constructor(){
         this.instances = new Array()
+        this.cool = 0
     }
 
-    spawn(w, h, p, speed) {
-        let e = new Enemy(speed)
-        e.spawn(w, h, p)
-        this.instances.push(e)
+    spawner(w, h, p, speed) {
+        if (this.cool > 0) --this.cool
+        if (G.time % 1.00 && Enemies.instances.length < 30 && this.cool <= 0) {
+            let e = new Enemy(speed)
+            e.spawn(w, h, p)
+            this.instances.push(e)
+            this.cool = 50
+        }
     }
 
     draw() {

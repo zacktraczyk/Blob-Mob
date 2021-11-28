@@ -1,9 +1,6 @@
 const background = new Image()
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
 
-//-----------------------------------//
-//--------------SESSION--------------//
-
 class Game {
 
     constructor() {
@@ -42,29 +39,37 @@ class Game {
 }
 
 let Menu = {
-    draw(w, h) {
-        let grd = ctx.createLinearGradient(0, 0, w, 0)
-        grd.addColorStop(0, '#ffd6cc')
-        grd.addColorStop(0.8, 'grey')
-        grd.addColorStop(1, '#fffbf9')
+    draw(x, y, w, h) {
+        ctx.lineWidth = 10
+        ctx.strokeRect(x, y, w, h)
         ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        P.draw()
-        ctx.fillStyle = grd
+        ctx.fillRect(x, y, w, h)
+        ctx.fillStyle = '#ffd6cc'
         ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
+        ctx.fillText("BLOB MOB",
+            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
+            y + (h*1/8))
+
         ctx.font = '30px Arial Bold'
-        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
-        grd1.addColorStop(0, 'grey')
-        grd1.addColorStop(1, 'white')
-        ctx.fillStyle = grd1
-        ctx.font = '15px sans-serif'
-        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-    }
+        ctx.fillText("START",
+            x + w/2 - (ctx.measureText("START").width/2),
+            y + (h*7/8))
+        // ctx.fillStyle = '#ffd6cc'
+        // ctx.font = '15px sans-serif'
+        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+        // ctx.fillText(bottommenu,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2),
+        //     h - 10)
+        // ctx.fillRect(10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+    },
+
 }
 
 let Stage = {

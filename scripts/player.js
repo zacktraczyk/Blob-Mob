@@ -14,8 +14,8 @@ class Player {
         this.ydir = 0
         this.color = '#ffd6cc'
 
-        this.maxSpeed = 3
-        this.accel = 0.1
+        this.maxSpeed = 5
+        this.accel = 0.4
         this.xvel = 0
         this.yvel = 0
 
@@ -28,6 +28,13 @@ class Player {
         this.action = en.act.norm
         this.timer = 0
         this.state = en.state.norm
+    }
+
+    title(x, y, w, h) {
+        this.wiggle(230, 280)
+
+        this.x = clamp(this.x, x + 10, x + w - this.w - 10) 
+        this.y = clamp(this.y, y + 10, y + h - this.h - 10) 
     }
 
     draw() {
@@ -58,7 +65,7 @@ class Player {
         ctx.closePath()
     }
 
-    controller(keys, enemies) {
+    controller(w, h, keys, enemies) {
 
         // Dead?
         if (this.state == en.state.dead) {
@@ -68,7 +75,7 @@ class Player {
 
         // Trigger Attack
         if (this.cool <= 0) {
-            if (keys.pressed.attack) this.action = en.act.attack
+            if (keys.attack) this.action = en.act.attack
         }
 
         // Action Controller
@@ -78,7 +85,7 @@ class Player {
                 this.attack(20, enemies)
                 return
             case en.act.norm:
-                this.move(keys.pressed)
+                this.move(w, h, keys)
                 break
             // case en.act.push:
             //     break
@@ -114,7 +121,7 @@ class Player {
         }
     }
 
-    move(dir) {
+    move(w, h, dir) {
         // Increase speed if keydown
         if (dir.right) this.xvel += this.accel
         if (dir.left) this.xvel -= this.accel
@@ -122,7 +129,6 @@ class Player {
         if (dir.up) this.yvel -= this.accel
 
         // Decrease speed if keyup
-
         if (!dir.right && !dir.left){
             if (Math.abs(this.xvel) <= this.accel) this.xvel = 0
             else if (this.xvel > 0) this.xvel -= this.accel
@@ -139,7 +145,13 @@ class Player {
 
         this.calculateDir()
 
-        this.wiggle()
+        this.wiggle(50, 69)
+
+        if (this.x > w && this.xvel > 0) this.x = -5
+        else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
+
+        if (this.y > h && this.yvel > 0) this.y = -5
+        else if (this.y + this.h < 0 && this.yvel < 0) this.y = h + 5
 
         return 1
     }
@@ -166,7 +178,7 @@ class Player {
         }
 
         // Check Collision
-        // if (this.timer > duration/4 && this.timer < duration*3/4) {
+        if (this.timer > duration/4 && this.timer < duration*3/4) {
             enemies.forEach(enemy => {
                 if (this.collides(enemy)) {
                     if (enemy.state != en.state.dying
@@ -174,7 +186,7 @@ class Player {
                         enemy.state = en.state.dying
                 }
             })
-        // }
+        }
 
         if (this.timer >= duration) {
             this.xvel = 0
@@ -201,7 +213,7 @@ class Player {
         return false
     }
 
-    wiggle() {
+    wiggle(min, max) {
         // if (frameNumber % 20 == 0) {
             let rand = Math.random() > 0.5 ? 1 : -1;
             this.x = this.x + rand
@@ -210,10 +222,10 @@ class Player {
             this.y = this.y + rand
 
             rand = Math.random() > 0.5 ? 1 : -1;
-            this.w = clamp(this.w + rand, 40, 60)
+            this.w = clamp(this.w + rand, min, max)
 
             rand = Math.random() > 0.5 ? 1 : -1;
-            this.h = clamp(this.h + rand, 40, 60)
+            this.h = clamp(this.h + rand, min, max)
         // }
     }
 }

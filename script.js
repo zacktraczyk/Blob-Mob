@@ -92,9 +92,6 @@ function randomLocation(a) {
 const background = new Image()
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
 
-//-----------------------------------//
-//--------------SESSION--------------//
-
 class Game {
 
     constructor() {
@@ -133,29 +130,37 @@ class Game {
 }
 
 let Menu = {
-    draw(w, h) {
-        let grd = ctx.createLinearGradient(0, 0, w, 0)
-        grd.addColorStop(0, '#ffd6cc')
-        grd.addColorStop(0.8, 'grey')
-        grd.addColorStop(1, '#fffbf9')
+    draw(x, y, w, h) {
+        ctx.lineWidth = 10
+        ctx.strokeRect(x, y, w, h)
         ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        P.draw()
-        ctx.fillStyle = grd
+        ctx.fillRect(x, y, w, h)
+        ctx.fillStyle = '#ffd6cc'
         ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
+        ctx.fillText("BLOB MOB",
+            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
+            y + (h*1/8))
+
         ctx.font = '30px Arial Bold'
-        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
-        grd1.addColorStop(0, 'grey')
-        grd1.addColorStop(1, 'white')
-        ctx.fillStyle = grd1
-        ctx.font = '15px sans-serif'
-        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-    }
+        ctx.fillText("START",
+            x + w/2 - (ctx.measureText("START").width/2),
+            y + (h*7/8))
+        // ctx.fillStyle = '#ffd6cc'
+        // ctx.font = '15px sans-serif'
+        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+        // ctx.fillText(bottommenu,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2),
+        //     h - 10)
+        // ctx.fillRect(10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+    },
+
 }
 
 let Stage = {
@@ -525,66 +530,69 @@ function end() {
         }
     }, 50)
 }
-let x; //Mouse track x
-let y; //Mouse track Y
+class IO {
 
-let keyState = {
-    pressed: {
-        right: false,
-        up: false,
-        left: false,
-        down: false,
-        attack: false,
+    constructor() {
+        this.xmouse = 0
+        this.ymouse = 0
+        this.keyState = {
+            right: false,
+            up: false,
+            left: false,
+            down: false,
+            attack: false,
+        }
+
+        this.keyMap = {
+            39: 'right',
+            38: 'up',
+            37: 'left',
+            40: 'down',
+            32: 'attack'
+        }
+
+        console.log(this.keyMap)
     }
-}
 
-const keyMap = {
-    39: 'right',
-    38: 'up',
-    37: 'left',
-    40: 'down',
-    32: 'attack'
-}
 
-function listen() {
-    function keyDownHandler(e) {
+    addKeyListeners() {
+        console.log(this.keyMap)
+        document.addEventListener("keydown", this.keyDownHandler, false);
+        document.addEventListener("keyup", this.keyUpHandler, false);
+    }
+
+    keyDownHandler(e) {
         // e.preventDefault();
-        let key = keyMap[e.keyCode]
-        keyState.pressed[key] = true
-        // if (e.keyCode == 40)  = true; //Down arrow
-        // if (e.keyCode == 39) rDown = true; //Right arrow
-        // if (e.keyCode == 38) uDown = true; //Up arrow
-        // if (e.keyCode == 37) lDown = true; //Left arrow
+        let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS
+        I.keyState[key] = true // ALSO THIS (I reference)
         // if (e.keyCode == 77 && monce) muteSound(); //Mute
         // if (e.keyCode == 80 && ponce && playerDead === false) pauseMenu(); //Pause
         // else if (e.keyCode == 90 && cool === 0 && power >= 10) attackz = true; //Special Attack Push
         // else if (e.keyCode == 88 && cool === 0 && power > 0) attackx = true; //Special Regenerate
     }
 
-    function keyUpHandler(e) {
-        let key = keyMap[e.keyCode]
-        keyState.pressed[key] = false
-        // if (e.keyCode == 40) dDown = false;
-        // if (e.keyCode == 39) rDown = false;
-        // if (e.keyCode == 38) uDown = false;
-        // if (e.keyCode == 37) lDown = false;
+    keyUpHandler(e) {
+        let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS AS AWELL
+        I.keyState[key] = false // GOD HELP ME
         // if (e.keyCode == 77) monce = true;
         // if (e.keyCode == 80) ponce = true;
         // if (e.keyCode == 88) attackx = false;
     }
 
-    document.addEventListener("keydown", keyDownHandler, false);
-    document.addEventListener("keyup", keyUpHandler, false);
-}
+    mousePosition(event) {
+        I.xmouse = event.x - c.offsetLeft // ALSO BAD
+        I.ymouse = event.y - c.offsetTop // REAL BAD
+    }
 
-//Mouse Tracker
-function getPosition(event) {
-    x = event.x;
-    y = event.y;
-    x -= c.offsetLeft;
-    y -= c.offsetTop;
-}
+    addMouseListener() {
+        canvas.addEventListener("click", this.mousePosition, false);
+    }
 
+    removeMouseListener() {
+        canvas.removeEventListener("click", this.mousePosition, false);
+    }
+    
+}
 // REQUIRES: enum.js
 
 // Clamp number between two values with the following line:
@@ -601,8 +609,8 @@ class Player {
         this.ydir = 0
         this.color = '#ffd6cc'
 
-        this.maxSpeed = 3
-        this.accel = 0.1
+        this.maxSpeed = 5
+        this.accel = 0.4
         this.xvel = 0
         this.yvel = 0
 
@@ -615,6 +623,13 @@ class Player {
         this.action = en.act.norm
         this.timer = 0
         this.state = en.state.norm
+    }
+
+    title(x, y, w, h) {
+        this.wiggle(230, 280)
+
+        this.x = clamp(this.x, x + 10, x + w - this.w - 10) 
+        this.y = clamp(this.y, y + 10, y + h - this.h - 10) 
     }
 
     draw() {
@@ -645,7 +660,7 @@ class Player {
         ctx.closePath()
     }
 
-    controller(keys, enemies) {
+    controller(w, h, keys, enemies) {
 
         // Dead?
         if (this.state == en.state.dead) {
@@ -655,7 +670,7 @@ class Player {
 
         // Trigger Attack
         if (this.cool <= 0) {
-            if (keys.pressed.attack) this.action = en.act.attack
+            if (keys.attack) this.action = en.act.attack
         }
 
         // Action Controller
@@ -665,7 +680,7 @@ class Player {
                 this.attack(20, enemies)
                 return
             case en.act.norm:
-                this.move(keys.pressed)
+                this.move(w, h, keys)
                 break
             // case en.act.push:
             //     break
@@ -701,7 +716,7 @@ class Player {
         }
     }
 
-    move(dir) {
+    move(w, h, dir) {
         // Increase speed if keydown
         if (dir.right) this.xvel += this.accel
         if (dir.left) this.xvel -= this.accel
@@ -709,7 +724,6 @@ class Player {
         if (dir.up) this.yvel -= this.accel
 
         // Decrease speed if keyup
-
         if (!dir.right && !dir.left){
             if (Math.abs(this.xvel) <= this.accel) this.xvel = 0
             else if (this.xvel > 0) this.xvel -= this.accel
@@ -726,7 +740,13 @@ class Player {
 
         this.calculateDir()
 
-        this.wiggle()
+        this.wiggle(50, 69)
+
+        if (this.x > w && this.xvel > 0) this.x = -5
+        else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
+
+        if (this.y > h && this.yvel > 0) this.y = -5
+        else if (this.y + this.h < 0 && this.yvel < 0) this.y = h + 5
 
         return 1
     }
@@ -753,7 +773,7 @@ class Player {
         }
 
         // Check Collision
-        // if (this.timer > duration/4 && this.timer < duration*3/4) {
+        if (this.timer > duration/4 && this.timer < duration*3/4) {
             enemies.forEach(enemy => {
                 if (this.collides(enemy)) {
                     if (enemy.state != en.state.dying
@@ -761,7 +781,7 @@ class Player {
                         enemy.state = en.state.dying
                 }
             })
-        // }
+        }
 
         if (this.timer >= duration) {
             this.xvel = 0
@@ -788,7 +808,7 @@ class Player {
         return false
     }
 
-    wiggle() {
+    wiggle(min, max) {
         // if (frameNumber % 20 == 0) {
             let rand = Math.random() > 0.5 ? 1 : -1;
             this.x = this.x + rand
@@ -797,10 +817,10 @@ class Player {
             this.y = this.y + rand
 
             rand = Math.random() > 0.5 ? 1 : -1;
-            this.w = clamp(this.w + rand, 40, 60)
+            this.w = clamp(this.w + rand, min, max)
 
             rand = Math.random() > 0.5 ? 1 : -1;
-            this.h = clamp(this.h + rand, 40, 60)
+            this.h = clamp(this.h + rand, min, max)
         // }
     }
 }
@@ -966,12 +986,17 @@ class EnemyController {
 
     constructor(){
         this.instances = new Array()
+        this.cool = 0
     }
 
-    spawn(w, h, p, speed) {
-        let e = new Enemy(speed)
-        e.spawn(w, h, p)
-        this.instances.push(e)
+    spawner(w, h, p, speed) {
+        if (this.cool > 0) --this.cool
+        if (G.time % 1.00 && Enemies.instances.length < 30 && this.cool <= 0) {
+            let e = new Enemy(speed)
+            e.spawn(w, h, p)
+            this.instances.push(e)
+            this.cool = 50
+        }
     }
 
     draw() {
@@ -1250,24 +1275,14 @@ const c = document.getElementById('canvas')
 const ctx = c.getContext('2d')
 
 const G = new Game()
-const P = new Player(250, 250, 50, 50)
+const I = new IO()
+const P = new Player(250, 250, 250, 250)
 const Enemies = new EnemyController()
 
-let espawncool = 0
-
 function update() {
-    listen()
-    P.controller(keyState, Enemies.instances)
+    Enemies.spawner(G.w, G.h, P, 2)
+    P.controller(G.w, G.h, I.keyState, Enemies.instances)
     Enemies.controller()
-    
-
-    // TEMP SPAWNING --------------------
-    if (espawncool > 0) --espawncool
-    if (G.time % 1.00 && Enemies.instances.length < 30 && espawncool <= 0) {
-        Enemies.spawn(G.w, G.h, P, 0.6)
-        espawncool=50
-    }
-    //----------------------------------- 
 }
 
 function draw() {
@@ -1283,6 +1298,43 @@ function draw() {
 
 }
 
+function menu() {
+    ++G.frame
+    G.resizeWindow()
+
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+
+    // Center Player
+    if (G.frame == 1) {
+        I.addKeyListeners()
+        P.x = x + menuSize/2 - P.w/2
+        P.y = y + menuSize/2 - P.h/2
+    }
+
+    I.addMouseListener()
+    ctx.fillText(I.xmouse + ", " + I.ymouse, 40, 40)
+    if (I.xmouse > 500) {
+        window.requestAnimationFrame(main);
+        return
+    }
+    // } else if (G.frame == 10) {
+    //     G.fps = 60
+    //     window.requestAnimationFrame(main);
+    //     return
+    // }
+
+    Menu.draw(x, y, menuSize, menuSize)       
+
+    P.title(x, y, menuSize, menuSize)
+    P.draw()
+
+    setTimeout(() => {
+        window.requestAnimationFrame(menu);
+    }, 1000 / G.fps);
+}
+
 function main() {
     if (G.frame == 0) Stage.init
     ++G.frame
@@ -1294,4 +1346,3 @@ function main() {
         window.requestAnimationFrame(main);
     }, 1000 / G.fps);
 }
-// window.requestAnimationFrame(main)
