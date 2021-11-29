@@ -22,73 +22,6 @@ const en = {
         dead: 3
     }
 }
-function random(a) {
-    var rand = Math.random() * 10;
-    if (rand - 5 > 0 && a < 60) {
-        return a + 1;
-    } else if (rand - 5 <= 0 && a > 40) {
-        return a - 1;
-    } else {
-        return a;
-    }
-}
-
-function srandom(a) {
-    var rand = Math.random() * 10;
-    if (rand > 5) {
-        return a + 1;
-
-    } else {
-        return a - 1;
-    }
-}
-
-
-function mxrandom(a) {
-    var rand = Math.random() * 10;
-    if (rand > 5 && a < w - wx - 10) {
-        return a + 1;
-
-    } else if (rand <= 5 && a > 10) {
-        return a - 1;
-    } else {
-        return a;
-    }
-}
-
-
-function myrandom(a) {
-    var rand = Math.random() * 10;
-    if (rand > 5 && a > 10) {
-        return a - 1;
-
-    } else if (rand <= 5 && a < h - wy - 10) {
-        return a + 1;
-    } else {
-        return a;
-    }
-}
-
-function randomLocation(a) {
-    if (Math.random() * 10 >= 5) {
-        if (Math.random() * 10 >= 5) {
-            a.esx = Math.random() * w;
-            a.esy = -50 * Math.random() - 20;
-        } else {
-            a.esx = Math.random() * w;
-            a.esy = h + 50 * Math.random() + 20;
-        }
-    } else {
-        if (Math.random() * 10 >= 5) {
-            a.esx = -50 * Math.random() - 20;
-            a.esy = Math.random() * h;
-        } else {
-            a.esx = w + 50 * Math.random() + 20;
-            a.esy = Math.random() * h;
-        }
-    }
-
-}
 const difficultyTable = {
     3: {
         player: {
@@ -188,92 +121,7 @@ class Game {
 
 }
 
-let Menu = {
-    draw(x, y, w, h) {
-        ctx.lineWidth = 10
-        ctx.strokeRect(x, y, w, h)
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = '#ffd6cc'
-        ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB",
-            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y + (h*1/8))
-
-        ctx.font = '30px Arial Bold'
-        ctx.fillText("START",
-            x + w/2 - (ctx.measureText("START").width/2),
-            y + (h*7/8))
-        // ctx.fillStyle = '#ffd6cc'
-        // ctx.font = '15px sans-serif'
-        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        // ctx.fillText(bottommenu,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2),
-        //     h - 10)
-        // ctx.fillRect(10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-    },
-
-}
-
-let Stage = {
-    draw(w, h) {
-        document.body.style.backgroundColor = '#000000'
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        ctx.drawImage(background, 0, 0, w, h)
-        ctx.lineWidth = 10
-        ctx.strokeRect(0, 0, w, h)
-    },
-
-    HUD(w, h, player) {
-        // Health
-        ctx.fillStyle = 'black'
-        ctx.fillRect(w / 2, 10, w/2 - 10, 20)
-        ctx.fillStyle = player.color
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.health + "/100", w / 2 + 100, 23)
-        ctx.fillRect(w / 2 + 1, 11, Math.max(0, (player.health / player.maxHealth) * (w/2 - 10) - 2), 18)
-
-        // Power
-        ctx.fillStyle = 'black'
-        ctx.fillRect(w*3/4 + 5, 40, w/4 - 15, 20)
-        ctx.fillStyle = '#33cc33'
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.power + "/50", w - w/4 + 52, 53)
-        ctx.fillRect(w*3/4 + 6, 41, (player.power / 50) * (w/4 - 15) - 2, 18)
-
-        // Cool
-        ctx.fillStyle = 'black'
-        ctx.fillRect(w/2, 40, w/4 - 5, 20)
-        ctx.fillStyle = 'blue'
-        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / player.maxCool)) * (w/4 - 5) - 2, 18)
-
-        // Score
-        ctx.fillStyle = 'black'
-        ctx.font = "20px monospace"
-        ctx.fillText("Score: " + G.score, 18, 28, w / 2)
-        ctx.fillText("High-Score: " + G.highscore, 18, 58, w / 2)
-    },
-}
-
-let pauseMenu = {
-    draw(w, h) {
-        ctx.fillStyle = "rgba(225, 220, 212, 0.4)"
-        ctx.fillRect(0, 0, w, h)
-        ctx.fillStyle = "grey"
-        ctx.font = "50px monospace"
-        ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10)
-    }
-}
-
-function menu() {
+function oldmenu() {
     G.setHighScore
     G.highscore = localStorage.getItem("highscore")
     titleTheme.play()
@@ -581,6 +429,113 @@ function end() {
         }
     }, 50)
 }
+class Button {
+
+    constructor(x, y, w, h, click){
+        this.x = x
+        this.y = y
+        this.w = w
+        this.h = h
+
+        this.click = trigger
+    }
+
+    check(m) {
+        if (m.x > this.x && m.x < this.x + this.w &&
+            m.y > this.y && m.y < this.y + this.h) {
+            this.click
+        }
+    }
+
+}
+
+let Menu = {
+    draw(x, y, w, h) {
+        ctx.lineWidth = 10
+        ctx.strokeRect(x, y, w, h)
+        ctx.fillStyle = '#fffbf9'
+        ctx.fillRect(x, y, w, h)
+        ctx.fillStyle = '#ffd6cc'
+        ctx.font = '80px Arial Bold'
+        ctx.fillText("BLOB MOB",
+            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
+            y + (h*1/8))
+
+        ctx.font = '30px Arial Bold'
+        ctx.fillText("START",
+            x + w/2 - (ctx.measureText("START").width/2),
+            y + (h*7/8))
+        // ctx.fillStyle = '#ffd6cc'
+        // ctx.font = '15px sans-serif'
+        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+        // ctx.fillText(bottommenu,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2),
+        //     h - 10)
+        // ctx.fillRect(10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+    },
+
+
+
+}
+
+let Stage = {
+    draw(w, h) {
+        document.body.style.backgroundColor = '#000000'
+        ctx.fillStyle = '#fffbf9'
+        ctx.fillRect(0, 0, w, h)
+        ctx.drawImage(background, 0, 0, w, h)
+        ctx.lineWidth = 10
+        ctx.strokeRect(0, 0, w, h)
+    },
+
+    HUD(w, h, player) {
+        // Health
+        ctx.fillStyle = 'black'
+        ctx.fillRect(w / 2, 10, w/2 - 10, 20)
+        ctx.fillStyle = player.color
+        // ctx.font = "10px monospace"
+        // ctx.fillText(player.health + "/100", w / 2 + 100, 23)
+        ctx.fillRect(w / 2 + 1, 11, Math.max(0, (player.health / player.maxHealth) * (w/2 - 10) - 2), 18)
+
+        // Power
+        ctx.fillStyle = 'black'
+        ctx.fillRect(w*3/4 + 5, 40, w/4 - 15, 20)
+        ctx.fillStyle = '#33cc33'
+        // ctx.font = "10px monospace"
+        // ctx.fillText(player.power + "/50", w - w/4 + 52, 53)
+        ctx.fillRect(w*3/4 + 6, 41, (player.power / 50) * (w/4 - 15) - 2, 18)
+
+        // Cool
+        ctx.fillStyle = 'black'
+        ctx.fillRect(w/2, 40, w/4 - 5, 20)
+        ctx.fillStyle = 'blue'
+        ctx.fillRect(w/2 + 1, 41, (1 - (player.cool / player.maxCool)) * (w/4 - 5) - 2, 18)
+
+        // Score
+        ctx.fillStyle = 'black'
+        ctx.font = "20px monospace"
+        ctx.fillText("Score: " + G.score, 18, 28, w / 2)
+        ctx.fillText("High-Score: " + G.highscore, 18, 58, w / 2)
+    },
+}
+
+let pauseMenu = {
+    draw(w, h) {
+        ctx.fillStyle = "rgba(225, 220, 212, 0.4)"
+        ctx.fillRect(0, 0, w, h)
+        ctx.fillStyle = "grey"
+        ctx.font = "50px monospace"
+        ctx.fillText("PAUSE", w / 2 - (ctx.measureText("Pause").width/2), h/2 + 10)
+    }
+}
+
 class IO {
 
     constructor() {
@@ -1379,29 +1334,22 @@ function enemeySpeed(){
 //     ctx.closePath();
 // },
 
-// REQUIRES: player.js io.js
-
-const c = document.getElementById('canvas')
-const ctx = c.getContext('2d')
-
-const G = new Game()
-const I = new IO()
-const P = new Player(250, 250, 250, 250)
-const DP = new DPController()
-const Enemies = new EnemyController()
-
 function menu() {
     ++G.frame
     G.resizeWindow()
 
+    // Calculate Menu Window
     menuSize = 500
     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
 
-    // Center Player
     if (G.frame == 1) {
+        // let b_start = new Button(x + G.w/2, y,
+        // Initalize Controll
         I.addKeyListeners()
         I.addMouseListener()
+
+        // Center Player
         P.x = x + menuSize/2 - P.w/2
         P.y = y + menuSize/2 - P.h/2
     }
@@ -1418,10 +1366,25 @@ function menu() {
     Menu.draw(x, y, menuSize, menuSize)       
     P.draw()
 
+    // BUTTON BORDER
+    // ctx.strokeStyle = 'black'
+    // ctx.strokeRect(x + menuSize/2, y + menuSize/2, 50, 50)
+
     setTimeout(() => {
         window.requestAnimationFrame(menu);
     }, 1000 / G.fps);
 }
+
+// REQUIRES: player.js io.js
+
+const c = document.getElementById('canvas')
+const ctx = c.getContext('2d')
+
+const G = new Game()
+const I = new IO()
+const P = new Player(250, 250, 250, 250)
+const DP = new DPController()
+const Enemies = new EnemyController()
 
 function main() {
     if (G.frame == 0) Stage.init
