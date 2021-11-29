@@ -713,12 +713,13 @@ class Player {
         ctx.stroke()
         ctx.closePath()
 
-        if (this.act == en.act.push) {
+        // if (this.act == en.act.push) {
             ctx.beginPath()
-            ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
+            // ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
+            ctx.arc(this.x, this.y, this.pushRadius, 0, 2 * Math.PI)
             ctx.stroke()
             ctx.closePath()
-        }
+        // }
     }
 
     controller(w, h, keys, enemies, damagePoints) {
@@ -1079,6 +1080,7 @@ class EnemyController {
             }
             else {
                 this.instances[i].controller()
+                this.instances[i].push(P)
             }
         }
     }
@@ -1177,6 +1179,8 @@ class Enemy {
         ctx.bezierCurveTo(this.x + this.h / 8, this.y + this.h - this.h /3, this.x + this.w - this.h / 8, this.y + this.h - this.h /3, this.x + this.w - this.h / 8, this.y + this.h);
         ctx.stroke();
         ctx.closePath();
+
+        ctx.fillRect(this.x-5, this.y-5, 10, 10)
     }
 
     controller() {
@@ -1241,9 +1245,6 @@ class Enemy {
             this.x += 6*xdir
             this.y += 6*ydir
 
-        } else {
-            this.x = srandom(this.x);
-            this.y = srandom(this.y);
         }
     }
 
@@ -1399,6 +1400,7 @@ function main() {
         window.requestAnimationFrame(main);
     }, 1000 / G.fps);
 }
+
 function update() {
     Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)

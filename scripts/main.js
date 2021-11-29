@@ -22,6 +22,7 @@ function main() {
         window.requestAnimationFrame(main);
     }, 1000 / G.fps);
 }
+
 function update() {
     Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
