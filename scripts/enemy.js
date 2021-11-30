@@ -12,6 +12,8 @@ class EnemyController {
         // if (Enemies.instances.length < 1) {
         //     let e = new Enemy(this.speed)
         //     e.spawn(w, h, p)
+        //     // e.x = w/2
+        //     // e.y = w/2
         //     this.instances.push(e)
         //     this.cool = 50
         // }
@@ -48,8 +50,13 @@ class Enemy {
         this.y = 0
         this.w = 50
         this.h = 50
+        this.xdir = 0
+        this.ydir = 0
+
+        this.pushMag = 7
         this.speed = speed
         this.target //target needs a width, height, x, and y position
+        this.distance
 
         this.rcolors = ['#81ea25', '#6bba27', '#96e84e', '#abf966', '#b9f981']; //Enemy color strobe
         this.color = this.rcolors[0]
@@ -82,6 +89,11 @@ class Enemy {
         // if (this.state == en.state.spawn || this.state == en.state.dying) return 0
         if (this.state == en.state.spawn) return 0
 
+        // this.x is center while x 
+        // is drawing origin (top left corner)
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+
         ctx.lineWidth = 1;
         let rand = Math.round(Math.random() * 2);
         this.color = this.rcolors[rand];
@@ -93,22 +105,22 @@ class Enemy {
         ctx.beginPath();
 
         //Draws Body
-        ctx.moveTo(this.x - this.w / 8, this.y);
-        ctx.bezierCurveTo(this.x - this.w / 8, this.y - this.h / 4,
-            this.x + this.w + this.w / 8, this.y - this.h / 4,
-            this.x + this.w + this.w / 8, this.y);
+        ctx.moveTo(x - this.w / 8, y);
+        ctx.bezierCurveTo(x - this.w / 8, y - this.h / 4,
+            x + this.w + this.w / 8, y - this.h / 4,
+            x + this.w + this.w / 8, y);
 
-        ctx.bezierCurveTo(this.x + this.w * 2, this.y,
-            this.x + this.w * 2, this.y + this.h,
-            this.x + this.w - this.w / 8, this.y + this.h);
+        ctx.bezierCurveTo(x + this.w * 2, y,
+            x + this.w * 2, y + this.h,
+            x + this.w - this.w / 8, y + this.h);
 
-        ctx.bezierCurveTo(this.x + this.w - this.w / 8, this.y + this.h * 1.75,
-            this.x - this.w * 2, this.y + this.h / 4,
-            this.x, this.y + this.h / 2);
+        ctx.bezierCurveTo(x + this.w - this.w / 8, y + this.h * 1.75,
+            x - this.w * 2, y + this.h / 4,
+            x, y + this.h / 2);
 
-        ctx.bezierCurveTo(this.x - this.w, this.y + this.h / 2,
-            this.x - this.w / 2, this.y,
-            this.x - this.w / 8, this.y);
+        ctx.bezierCurveTo(x - this.w, y + this.h / 2,
+            x - this.w / 2, y,
+            x - this.w / 8, y);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
@@ -118,24 +130,23 @@ class Enemy {
         //Draws Left Eye
         ctx.beginPath();
         ctx.fillStyle = 'black';
-        ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
+        ctx.arc(x + this.w / 6, y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 
         //Draws Right Eye
         ctx.beginPath();
-        ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
+        ctx.arc(x + this.w - this.w / 8, y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 
         //Draws Mouth
         ctx.beginPath();
-        ctx.moveTo(this.x + this.w / 8, this.y + this.h);
-        ctx.bezierCurveTo(this.x + this.h / 8, this.y + this.h - this.h /3, this.x + this.w - this.h / 8, this.y + this.h - this.h /3, this.x + this.w - this.h / 8, this.y + this.h);
+        ctx.moveTo(x + this.w / 8, y + this.h);
+        ctx.bezierCurveTo(x + this.h / 8, y + this.h - this.h /3, x + this.w - this.h / 8, y + this.h - this.h /3, x + this.w - this.h / 8, y + this.h);
         ctx.stroke();
         ctx.closePath();
 
-        ctx.fillRect(this.x-5, this.y-5, 10, 10)
     }
 
     controller() {
@@ -153,15 +164,31 @@ class Enemy {
         }
     }
 
+    calculateDir() {
+        if (this.target == null) return 0
+
+        let xdiff = this.target.x - this.x 
+        let ydiff = this.target.y - this.y 
+        this.distance = Math.sqrt(xdiff*xdiff + ydiff*ydiff)
+        if (this.distance > 0) {
+            this.xdir = xdiff/this.distance
+            this.ydir = ydiff/this.distance
+        }
+    }
+        
     move() {
         if (this.target == null) return 0
-        // console.log(this.x, this.y)
+        this.calculateDir()
 
-        if (this.x > this.target.x + this.target.w/10) this.x -= this.speed;
-        if (this.x < this.target.x + this.target.w/10) this.x += this.speed;
+        this.x += this.xdir*this.speed
+        this.y += this.ydir*this.speed
 
-        if (this.y > this.target.y + this.target.h/10) this.y -= this.speed;
-        if (this.y < this.target.y + this.target.h/10) this.y += this.speed;
+        //faster direction picking
+        // if (this.x > this.target.x + this.target.w/10) this.x -= this.speed;
+        // if (this.x < this.target.x + this.target.w/10) this.x += this.speed;
+
+        // if (this.y > this.target.y + this.target.h/10) this.y -= this.speed;
+        // if (this.y < this.target.y + this.target.h/10) this.y += this.speed;
 
         this.wiggle()
     }
@@ -189,17 +216,9 @@ class Enemy {
     }
 
     push(player) {
-        let xdiff = this.x - player.x
-        let ydiff = this.y - player.y
-        let distance = Math.sqrt(xdiff*xdiff + ydiff*ydiff)
-        if (distance < player.pushRadius) {
-            // Normalize push vector
-            let xdir = xdiff/distance
-            let ydir = ydiff/distance
-
-            this.x += 6*xdir
-            this.y += 6*ydir
-
+        if (this.distance < player.pushRadius) {
+            this.x += this.pushMag * -this.xdir
+            this.y += this.pushMag * -this.ydir
         }
     }
 

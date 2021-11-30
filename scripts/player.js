@@ -82,29 +82,34 @@ class Player {
     }
 
     draw() {
+        // this.x is center while x 
+        // is drawing origin (top left corner)
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+
         //Draws body
         ctx.fillStyle = this.color //Set to #ffd6cc
-        ctx.fillRect(this.x, this.y, this.w, this.h)
+        ctx.fillRect(x, y, this.w, this.h)
 
         ctx.lineWidth = 1
 
         //Draws Left Eye
         ctx.beginPath()
         ctx.fillStyle = 'black'
-        ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI)
+        ctx.arc(x + this.w / 6, y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI)
         ctx.stroke()
         ctx.closePath()
 
         //Draws Right Eye
         ctx.beginPath()
-        ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI)
+        ctx.arc(x + this.w - this.w / 8, y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI)
         ctx.stroke()
         ctx.closePath()
 
         //Draws Mouth
         ctx.beginPath()
-        ctx.moveTo(this.x + this.w / 8, this.y + this.h - this.h / 3)
-        ctx.bezierCurveTo(this.x + this.h / 8, this.y + this.h, this.x + this.w - this.h / 8, this.y + this.h, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3)
+        ctx.moveTo(x + this.w / 8, y + this.h - this.h / 3)
+        ctx.bezierCurveTo(x + this.h / 8, y + this.h, x + this.w - this.h / 8, y + this.h, x + this.w - this.h / 8, y + this.h - this.h / 3)
         ctx.stroke()
         ctx.closePath()
 
