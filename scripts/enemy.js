@@ -37,7 +37,7 @@ class EnemyController {
             }
             else {
                 this.instances[i].controller()
-                this.instances[i].push(P)
+                // this.instances[i].push(P)
             }
         }
     }

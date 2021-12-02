@@ -69,10 +69,16 @@ class Game {
     }
 
     resizeWindow() {
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
-        this.w = innerWidth
-        this.h = innerHeight
+        // if (window.innerWidth != this.w && window.innerHeight != this.h) {
+            ctx.canvas.width = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
+            let xchange = innerWidth - this.w
+            let ychange = innerHeight - this.h
+            this.w = innerWidth
+            this.h = innerHeight
+
+            if (b_start != null) b_start.update(xchange, ychange)
+        // }
     }
 
     updateDifficulty(player, enemyController, d) {
@@ -431,57 +437,52 @@ function end() {
 }
 class Button {
 
-    constructor(x, y, w, h, click){
+    constructor(font, text, x, y, click){
+        this.font = font
+        this.text = text
+
+        this.x = x
+        this.y = y
+        this.w = 100 // value fixed on draw
+        this.h = 100 // value fixed on draw
+
+        this.click = click
+    }
+
+    draw() {
+        ctx.font = this.font
+        ctx.fillText(this.text, this.x - this.w/2, this.y + this.h/2)
+    }
+
+    check(m) {
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+        if (m.xmouse > x && m.xmouse < x + this.w &&
+            m.ymouse > y && m.ymouse < y + this.h) {
+            return true
+            // this.click()
+        }
+    }
+
+    update(xchange, ychange) {
+        this.x += xchange/2
+        this.y += ychange/2
+        ctx.font = this.font
+        this.w = ctx.measureText(this.text).width
+        this.h = parseInt(this.font.split(" ")[0], 10)
+    }
+
+    adjust(x, y, w, h){
         this.x = x
         this.y = y
         this.w = w
         this.h = h
-
-        this.click = trigger
     }
 
-    check(m) {
-        if (m.x > this.x && m.x < this.x + this.w &&
-            m.y > this.y && m.y < this.y + this.h) {
-            this.click
-        }
+    debug() {
+        ctx.strokeStyle = 'black'
+        ctx.strokeRect(this.x - this.w/2, this.y - this.h/2, this.w, this.h)
     }
-
-}
-
-let Menu = {
-    draw(x, y, w, h) {
-        ctx.lineWidth = 10
-        ctx.strokeRect(x, y, w, h)
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = '#ffd6cc'
-        ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB",
-            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y + (h*1/8))
-
-        ctx.font = '30px Arial Bold'
-        ctx.fillText("START",
-            x + w/2 - (ctx.measureText("START").width/2),
-            y + (h*7/8))
-        // ctx.fillStyle = '#ffd6cc'
-        // ctx.font = '15px sans-serif'
-        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        // ctx.fillText(bottommenu,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2),
-        //     h - 10)
-        // ctx.fillRect(10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-    },
-
-
 
 }
 
@@ -718,13 +719,13 @@ class Player {
         ctx.stroke()
         ctx.closePath()
 
-        // if (this.act == en.act.push) {
+        if (this.act == en.act.push) {
             ctx.beginPath()
             // ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
             ctx.arc(this.x, this.y, this.pushRadius, 0, 2 * Math.PI)
             ctx.stroke()
             ctx.closePath()
-        // }
+        }
     }
 
     controller(w, h, keys, enemies, damagePoints) {
@@ -1087,7 +1088,7 @@ class EnemyController {
             }
             else {
                 this.instances[i].controller()
-                this.instances[i].push(P)
+                // this.instances[i].push(P)
             }
         }
     }
@@ -1359,6 +1360,7 @@ function enemeySpeed(){
 //     ctx.closePath();
 // },
 
+let b_start = null
 function menu() {
     ++G.frame
     G.resizeWindow()
@@ -1368,29 +1370,42 @@ function menu() {
     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
 
+
     if (G.frame == 1) {
+        b_start = new Button("30px Arial Bold", "START", x + menuSize/2, y + menuSize*7/8, trans)
+
         // let b_start = new Button(x + G.w/2, y,
         // Initalize Controll
         I.addKeyListeners()
         I.addMouseListener()
 
         // Center Player
-        P.x = x + menuSize/2 - P.w/2
-        P.y = y + menuSize/2 - P.h/2
+        P.x = x + menuSize/2
+        P.y = y + menuSize/2
     }
 
     // Check Start Click
-    if (I.xmouse > 500) {
-        window.requestAnimationFrame(main);
-        G.updateDifficulty(P, Enemies, 3)
-        return
-    }
+    // if (I.xmouse > 500) {
+    //     window.requestAnimationFrame(main);
+    //     G.updateDifficulty(P, Enemies, 3)
+    //     return
+    // }
 
     P.title(x, y, menuSize, menuSize) // update
+    // Menu.checkButtons(mouse)
 
     Menu.draw(x, y, menuSize, menuSize)       
     P.draw()
 
+    if (b_start != null) {
+        ctx.fillStyle = 'red'
+        b_start.draw()
+        if (b_start.check(I)) {
+            window.requestAnimationFrame(main);
+            G.updateDifficulty(P, Enemies, 3)
+            return
+        }
+    }
     // BUTTON BORDER
     // ctx.strokeStyle = 'black'
     // ctx.strokeRect(x + menuSize/2, y + menuSize/2, 50, 50)
@@ -1400,6 +1415,45 @@ function menu() {
     }, 1000 / G.fps);
 }
 
+
+let trans = function() {
+    console.log("bookey")
+}
+
+let Menu = {
+    draw(x, y, w, h) {
+        ctx.lineWidth = 10
+        ctx.strokeRect(x, y, w, h)
+        ctx.fillStyle = '#fffbf9'
+        ctx.fillRect(x, y, w, h)
+        ctx.fillStyle = '#ffd6cc'
+        ctx.font = '80px Arial Bold'
+        ctx.fillText("BLOB MOB",
+            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
+            y + (h*1/8))
+
+        // ctx.fillStyle = '#ffd6cc'
+        // ctx.font = '15px sans-serif'
+        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+        // ctx.fillText(bottommenu,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2),
+        //     h - 10)
+        // ctx.fillRect(10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
+        //     h - 13,
+        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
+        //     1)
+    },
+
+    drawStartButton() {
+        b_start.check(mouse)
+    }
+
+
+}
 // REQUIRES: player.js io.js
 
 const c = document.getElementById('canvas')

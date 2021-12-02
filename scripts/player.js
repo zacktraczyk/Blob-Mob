@@ -113,13 +113,13 @@ class Player {
         ctx.stroke()
         ctx.closePath()
 
-        // if (this.act == en.act.push) {
+        if (this.act == en.act.push) {
             ctx.beginPath()
             // ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
             ctx.arc(this.x, this.y, this.pushRadius, 0, 2 * Math.PI)
             ctx.stroke()
             ctx.closePath()
-        // }
+        }
     }
 
     controller(w, h, keys, enemies, damagePoints) {

@@ -1,56 +1,51 @@
 class Button {
 
-    constructor(x, y, w, h, click){
+    constructor(font, text, x, y, click){
+        this.font = font
+        this.text = text
+
+        this.x = x
+        this.y = y
+        this.w = 100 // value fixed on draw
+        this.h = 100 // value fixed on draw
+
+        this.click = click
+    }
+
+    draw() {
+        ctx.font = this.font
+        ctx.fillText(this.text, this.x - this.w/2, this.y + this.h/2)
+    }
+
+    check(m) {
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+        if (m.xmouse > x && m.xmouse < x + this.w &&
+            m.ymouse > y && m.ymouse < y + this.h) {
+            return true
+            // this.click()
+        }
+    }
+
+    update(xchange, ychange) {
+        this.x += xchange/2
+        this.y += ychange/2
+        ctx.font = this.font
+        this.w = ctx.measureText(this.text).width
+        this.h = parseInt(this.font.split(" ")[0], 10)
+    }
+
+    adjust(x, y, w, h){
         this.x = x
         this.y = y
         this.w = w
         this.h = h
-
-        this.click = trigger
     }
 
-    check(m) {
-        if (m.x > this.x && m.x < this.x + this.w &&
-            m.y > this.y && m.y < this.y + this.h) {
-            this.click
-        }
+    debug() {
+        ctx.strokeStyle = 'black'
+        ctx.strokeRect(this.x - this.w/2, this.y - this.h/2, this.w, this.h)
     }
-
-}
-
-let Menu = {
-    draw(x, y, w, h) {
-        ctx.lineWidth = 10
-        ctx.strokeRect(x, y, w, h)
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = '#ffd6cc'
-        ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB",
-            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y + (h*1/8))
-
-        ctx.font = '30px Arial Bold'
-        ctx.fillText("START",
-            x + w/2 - (ctx.measureText("START").width/2),
-            y + (h*7/8))
-        // ctx.fillStyle = '#ffd6cc'
-        // ctx.font = '15px sans-serif'
-        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        // ctx.fillText(bottommenu,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2),
-        //     h - 10)
-        // ctx.fillRect(10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-    },
-
-
 
 }
 

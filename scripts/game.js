@@ -20,10 +20,16 @@ class Game {
     }
 
     resizeWindow() {
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
-        this.w = innerWidth
-        this.h = innerHeight
+        // if (window.innerWidth != this.w && window.innerHeight != this.h) {
+            ctx.canvas.width = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
+            let xchange = innerWidth - this.w
+            let ychange = innerHeight - this.h
+            this.w = innerWidth
+            this.h = innerHeight
+
+            if (b_start != null) b_start.update(xchange, ychange)
+        // }
     }
 
     updateDifficulty(player, enemyController, d) {
