@@ -11,22 +11,24 @@ const Enemies = new EnemyController()
 
 function main() {
     if (G.frame == 0) Stage.init
+
     ++G.frame
 
+    // Update
     if (!G.paused) update()
-    draw()
-
     G.pause(I.keyState.pause)
 
-    setTimeout(() => {
-        window.requestAnimationFrame(main);
-    }, 1000 / G.fps);
+    draw()
+
+
+    setTimeout(() => 
+        window.requestAnimationFrame(main),
+    1000 / G.fps);
 }
 
 function update() {
-    Enemies.spawner(G.w, G.h, P)
+    if (P.state != en.state.dead) Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
-    // DP.controller()    
     Enemies.controller()
 }
 
@@ -38,6 +40,7 @@ function draw() {
 
     P.draw()
     Enemies.draw()
+    DP.controller()    
 
     if (G.paused) pauseMenu.draw(G.w, G.h)
 

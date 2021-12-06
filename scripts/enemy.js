@@ -18,11 +18,11 @@ class EnemyController {
         //     this.cool = 50
         // }
         if (this.cool > 0) --this.cool
-        if (G.time % 1.00 && Enemies.instances.length < 30 && this.cool <= 0) {
+        if (G.time % 0.50 && Enemies.instances.length < 150 && this.cool <= 0) {
             let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
-            this.cool = 50
+            this.cool = 20
         }
     }
 
@@ -37,7 +37,6 @@ class EnemyController {
             }
             else {
                 this.instances[i].controller()
-                // this.instances[i].push(P)
             }
         }
     }
@@ -53,7 +52,7 @@ class Enemy {
         this.xdir = 0
         this.ydir = 0
 
-        this.pushMag = 7
+        this.pushMag = 17
         this.speed = speed
         this.target //target needs a width, height, x, and y position
         this.distance
@@ -71,12 +70,12 @@ class Enemy {
 
         let rand = Math.random()
         if (rand < 0.5) { // side
-            rand = Math.random()
             this.x = rand < 0.5 ? -this.w - 5 : w + 5
+            rand = Math.random()
             this.y = rand*(h+10) - 5
         } else { // top/bottom
-            rand = Math.random()
             this.x = rand*(w+10) - 5
+            rand = Math.random()
             this.y = rand < 0.5 ? -this.h - 5 : h + 5
         }
 
@@ -178,7 +177,13 @@ class Enemy {
         
     move() {
         if (this.target == null) return 0
+
         this.calculateDir()
+
+        if (this.target.state == en.state.dead) {
+            this.xdir = -this.xdir
+            this.ydir = -this.ydir
+        }
 
         this.x += this.xdir*this.speed
         this.y += this.ydir*this.speed
@@ -215,8 +220,8 @@ class Enemy {
         }
     }
 
-    push(player) {
-        if (this.distance < player.pushRadius) {
+    pushField(r) {
+        if (this.distance < r) {
             this.x += this.pushMag * -this.xdir
             this.y += this.pushMag * -this.ydir
         }

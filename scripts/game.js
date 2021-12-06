@@ -1,6 +1,4 @@
 // REQUIRES: difficulty.js
-const background = new Image()
-// background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
 
 class Game {
 
@@ -17,6 +15,9 @@ class Game {
         this.frame = 0
         this.paused = false
         this.pauseKeyRelease = true
+
+        this.fxSound = 1
+        this.musSound = 0.5
     }
 
     resizeWindow() {
@@ -41,7 +42,6 @@ class Game {
         // Player
         player.maxSpeed = pVals.speed
         player.accel = pVals.accel
-        console.log(player.maxSpeed)
 
         player.maxCool = pVals.cool
         player.maxHealth = pVals.health

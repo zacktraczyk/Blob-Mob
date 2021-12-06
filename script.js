@@ -27,11 +27,11 @@ const difficultyTable = {
         player: {
             speed:      4,
             accel:      0.4,
-            cool:       10,
+            cool:       5,
             health:     500,
         },
         enemy: {
-            speed:      2
+            speed:      1
         }
     },
 
@@ -46,10 +46,80 @@ const difficultyTable = {
             speed:      2
         }
     },
+
+    6: {
+        player: {
+            speed:      14,
+            accel:      1,
+            cool:       1,
+            health:     500,
+        },
+        enemy: {
+            speed:      5
+        }
+    },
+
+}
+//Howler Sound
+let titleTheme = new Howl({
+    src: ['Sound/Good-portion-of-distortion.mp3'],
+    volume: 0.7,
+    loop: true
+});
+
+let mainTheme = new Howl({
+    src: ['Sound/8-lit.mp3'],
+    volume: 0.5,
+    loop: true
+    
+});
+
+let endTheme = new Howl({
+    src: ['Sound/Game-Over.mp3'],
+    volume: 1,
+    loop: true
+});
+
+//Length of segment ~= 2100
+var hlSound = true;
+
+let effects = new Howl({
+    src: ['Sound/Sound-effects.mp3'],
+    sprite: {
+        attack: [0, 400],
+        healthLoss: [2031, 2350, true],
+        btn: [4980, 500],
+        death: [6450, 1000],
+        push: [8500, 5000],
+        heal: [14000, 10000]
+    }
+});
+
+
+function muteSound() {
+    if(monce) {
+        if (muted) muted = false;
+        else muted = true;
+        
+        monce = false;
+    }
+    
+    if(muted) {
+        mainTheme.mute(true);
+        titleTheme.mute(true);
+        effects.mute(true);
+        endTheme.mute(true);
+    } else {
+        mainTheme.mute(false);
+        titleTheme.mute(false);
+        effects.mute(false);
+        endTheme.mute(false);
+    }
+    
+    mainTheme.volume(mSound);
+    effects.volume(eSound);
 }
 // REQUIRES: difficulty.js
-const background = new Image()
-// background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
 
 class Game {
 
@@ -66,6 +136,9 @@ class Game {
         this.frame = 0
         this.paused = false
         this.pauseKeyRelease = true
+
+        this.fxSound = 1
+        this.musSound = 0.5
     }
 
     resizeWindow() {
@@ -90,7 +163,6 @@ class Game {
         // Player
         player.maxSpeed = pVals.speed
         player.accel = pVals.accel
-        console.log(player.maxSpeed)
 
         player.maxCool = pVals.cool
         player.maxHealth = pVals.health
@@ -435,6 +507,8 @@ function end() {
         }
     }, 50)
 }
+// REQUIRE: HOWLER.js 
+
 class Button {
 
     constructor(font, text, x, y, click){
@@ -443,10 +517,8 @@ class Button {
 
         this.x = x
         this.y = y
-        this.w = 100 // value fixed on draw
-        this.h = 100 // value fixed on draw
-
-        this.click = click
+        this.w = 100
+        this.h = 100
     }
 
     draw() {
@@ -459,8 +531,8 @@ class Button {
         let y = this.y - this.h/2
         if (m.xmouse > x && m.xmouse < x + this.w &&
             m.ymouse > y && m.ymouse < y + this.h) {
+            effects.play('btn');
             return true
-            // this.click()
         }
     }
 
@@ -485,6 +557,8 @@ class Button {
     }
 
 }
+let background = new Image();
+background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
 let Stage = {
     draw(w, h) {
@@ -501,17 +575,18 @@ let Stage = {
         ctx.fillStyle = 'black'
         ctx.fillRect(w / 2, 10, w/2 - 10, 20)
         ctx.fillStyle = player.color
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.health + "/100", w / 2 + 100, 23)
+        ctx.font = "10px monospace"
+        ctx.fillText(player.health + "/" + player.maxHealth, w*3/4 - 10, 23)
         ctx.fillRect(w / 2 + 1, 11, Math.max(0, (player.health / player.maxHealth) * (w/2 - 10) - 2), 18)
 
         // Power
         ctx.fillStyle = 'black'
         ctx.fillRect(w*3/4 + 5, 40, w/4 - 15, 20)
         ctx.fillStyle = '#33cc33'
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.power + "/50", w - w/4 + 52, 53)
-        ctx.fillRect(w*3/4 + 6, 41, (player.power / 50) * (w/4 - 15) - 2, 18)
+        // ctx.fillText(player.power + "/" + player.maxPower, w*7/8, 53)
+        if (player.power > 0) {
+            ctx.fillRect(w*3/4 + 6, 41, (player.power / player.maxPower) * (w/4 - 15) - 2, 18)
+        }
 
         // Cool
         ctx.fillStyle = 'black'
@@ -549,19 +624,28 @@ class IO {
             down: false,
 
             attack: false,
+            push: false,
 
             pause: false,
         }
 
         this.keyMap = {
+            // arrow
             39: 'right',
             38: 'up',
             37: 'left',
             40: 'down',
 
-            32: 'attack',
+            // wasd
+            68: 'right',
+            87: 'up',
+            65: 'left',
+            83: 'down',
 
-            80: 'pause'
+            32: 'attack',
+            81: 'push',
+
+            80: 'pause',
         }
 
     }
@@ -577,7 +661,6 @@ class IO {
         let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS
         I.keyState[key] = true // ALSO THIS (I reference)
         // if (e.keyCode == 77 && monce) muteSound(); //Mute
-        // if (e.keyCode == 80 && ponce && playerDead === false) pauseMenu(); //Pause
         // else if (e.keyCode == 90 && cool === 0 && power >= 10) attackz = true; //Special Attack Push
         // else if (e.keyCode == 88 && cool === 0 && power > 0) attackx = true; //Special Regenerate
     }
@@ -615,14 +698,19 @@ class DPController {
         this.interval = 50
         this.maxPoints = 15
         this.instances = new Array()
+        this.cool = 0
     }
 
     spawn(player) {
-        let dp = new DamagePoint(player)
-        this.instances.push(dp)
+        if (this.instances.length < 5 && this.cool <= 0) {
+            let dp = new DamagePoint(player)
+            this.instances.push(dp)
+            this.cool = 5
+        }
     }
 
     controller(){
+        if (this.cool > 0) --this.cool
         for (let i = 0; i < this.instances.length; i++) { 
             if (this.instances[i].life <= 0) {
                 this.instances.splice(i, 1)
@@ -635,20 +723,32 @@ class DPController {
     }
 }
 class DamagePoint {
+
     constructor(player) {
+        let w = player.w
+        let h = player.h
+        this.x = player.x
+        this.y = player.y
+
         // Spawn
-        this.x = player.x + player.w/2 + (Math.random() - 0.5)*player.w/2
-        this.y = player.y + player.h/2 + (Math.random() - 0.5)*player.h/2
+        let rand = Math.random()
+        if (rand < 0.5) { // side
+            this.x += rand < 0.5 ? -w/2 - 1 : w/2 + 1
+            rand = Math.random()
+            this.y += rand*(h+10) - 5
+        } else { // top/bottom
+            this.x += rand*(w+10) - 5
+            rand = Math.random()
+            this.y += rand < 0.5 ? -h/2 - 1 : h/2 + 1
+        }
         this.life = 100
     }
 
     draw() {
-        console.log(this.x + ", " + this.y)
         --this.life
-        ctx.font = '70px Comic Sans MS'
-        ctx.fillStyle = '#000000' //Set to #ffd6cc
-        ctx.fillRect(0, 0, 100, 100)
-        // ctx.fillText("GAME OVER", this.x, this.y)
+        ctx.font = '18px Comic Sans MS'
+        ctx.fillStyle = `rgba(225, 0, 0, ${this.life/100})`
+        ctx.fillText("-1", this.x, this.y)
     }
 
     live() { if (this.life > 0) --this.life }
@@ -670,12 +770,14 @@ class Player {
 
         this.maxCool = 50
         this.cool = 0
-        this.power = 50
+        this.maxPower = 50
+        this.power = this.maxPower
         this.maxHealth = 500
         this.health = this.maxHealth
 
         this.action = en.act.norm
-        this.pushRadius = 140
+        this.pushRadius = 240
+        this.pushR = 0
         this.timer = 0
         this.state = en.state.norm
     }
@@ -719,10 +821,9 @@ class Player {
         ctx.stroke()
         ctx.closePath()
 
-        if (this.act == en.act.push) {
+        if (this.action == en.act.push) {
             ctx.beginPath()
-            // ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
-            ctx.arc(this.x, this.y, this.pushRadius, 0, 2 * Math.PI)
+            ctx.arc(this.x, this.y, this.pushR, 0, 2 * Math.PI)
             ctx.stroke()
             ctx.closePath()
         }
@@ -736,12 +837,18 @@ class Player {
             return
         }
 
-        // Trigger Attack
+        // Action Controller
         if (this.cool <= 0) {
+            this.cool = 0
+            // Trigger Attack
             if (keys.attack) this.action = en.act.attack
+
+            // Trigger Push
+            if (this.power == this.maxPower) {
+                if (keys.push) this.action = en.act.push
+            }
         }
 
-        // Action Controller
         switch (this.action) {
             case en.act.attack:
                 this.color = '#adedff'
@@ -750,8 +857,10 @@ class Player {
             case en.act.norm:
                 this.move(w, h, keys)
                 break
-            // case en.act.push:
-            //     break
+            case en.act.push:
+                this.move(w, h, keys)
+                this.pushField(600, enemies)
+                break
             // case en.act.regen:
             //     break
         }
@@ -761,7 +870,7 @@ class Player {
         this.y += this.yvel
 
         // Cooldown
-        if (this.cool > 0) {
+        if (this.cool > 0 && this.action != en.act.push) {
             --this.cool;
             this.color = '#adedff'
         } else {
@@ -812,13 +921,14 @@ class Player {
         this.wiggle(50, 69)
 
         // Wrap Screen
-        if (this.x > w && this.xvel > 0) this.x = -this.w - 5
-        else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
+        // if (this.x > w && this.xvel > 0) this.x = -this.w - 5
+        // else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
 
-        if (this.y > h && this.yvel > 0) this.y = -5
-        else if (this.y + this.h < 0 && this.yvel < 0) this.y = h + 5
+        // if (this.y > h && this.yvel > 0) this.y = -5
+        // else if (this.y + this.h < 0 && this.yvel < 0) this.y = h + 5
 
-        return 1
+        this.x = clamp(this.x, this.w/2 + 5, w - this.w/2 - 5)
+        this.y = clamp(this.y, this.h/2 + 5, h - this.h/2 - 5)
     }
 
     calculateDir() {
@@ -853,6 +963,7 @@ class Player {
             })
         }
 
+        // End attack
         if (this.timer >= duration) {
             this.xvel = 0
             this.yvel = 0
@@ -861,7 +972,31 @@ class Player {
         }
     }
 
+    pushField(duration, enemies) {
+        this.power -= this.maxPower/duration
+        ++this.timer
+        this.cool += this.maxCool/duration
+
+        enemies.forEach(enemy => {
+            if (enemy.state != en.state.dying
+                && enemy.state != en.state.dead) {
+                    this.pushR = Math.min(this.timer/(duration/4), 1) * this.pushRadius
+                    enemy.pushField(this.pushR)
+            }
+        })
+
+
+        if (this.timer >= duration) {
+            this.timer = 0
+            this.action = en.act.norm
+            this.pushR = 0
+            this.power = 0
+        }
+    }
+
     death() {
+        this.highscore = G.score
+        localStorage.setItem("highscore", this.highscore)
     }
 
     collides(target) {
@@ -1069,11 +1204,11 @@ class EnemyController {
         //     this.cool = 50
         // }
         if (this.cool > 0) --this.cool
-        if (G.time % 1.00 && Enemies.instances.length < 30 && this.cool <= 0) {
+        if (G.time % 0.50 && Enemies.instances.length < 150 && this.cool <= 0) {
             let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
-            this.cool = 50
+            this.cool = 20
         }
     }
 
@@ -1088,7 +1223,6 @@ class EnemyController {
             }
             else {
                 this.instances[i].controller()
-                // this.instances[i].push(P)
             }
         }
     }
@@ -1104,7 +1238,7 @@ class Enemy {
         this.xdir = 0
         this.ydir = 0
 
-        this.pushMag = 7
+        this.pushMag = 17
         this.speed = speed
         this.target //target needs a width, height, x, and y position
         this.distance
@@ -1122,12 +1256,12 @@ class Enemy {
 
         let rand = Math.random()
         if (rand < 0.5) { // side
-            rand = Math.random()
             this.x = rand < 0.5 ? -this.w - 5 : w + 5
+            rand = Math.random()
             this.y = rand*(h+10) - 5
         } else { // top/bottom
-            rand = Math.random()
             this.x = rand*(w+10) - 5
+            rand = Math.random()
             this.y = rand < 0.5 ? -this.h - 5 : h + 5
         }
 
@@ -1229,7 +1363,13 @@ class Enemy {
         
     move() {
         if (this.target == null) return 0
+
         this.calculateDir()
+
+        if (this.target.state == en.state.dead) {
+            this.xdir = -this.xdir
+            this.ydir = -this.ydir
+        }
 
         this.x += this.xdir*this.speed
         this.y += this.ydir*this.speed
@@ -1266,8 +1406,8 @@ class Enemy {
         }
     }
 
-    push(player) {
-        if (this.distance < player.pushRadius) {
+    pushField(r) {
+        if (this.distance < r) {
             this.x += this.pushMag * -this.xdir
             this.y += this.pushMag * -this.ydir
         }
@@ -1360,7 +1500,23 @@ function enemeySpeed(){
 //     ctx.closePath();
 // },
 
+function intro() {
+    ++G.frame
+    G.resizeWindow()
+
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    IntroText.draw(x, y, menuSize, menuSize)
+
+    setTimeout(() => 
+        window.requestAnimationFrame(intro),
+    1000 / G.fps);
+}
+
+// Button Definitions
 let b_start = null
+
 function menu() {
     ++G.frame
     G.resizeWindow()
@@ -1372,7 +1528,8 @@ function menu() {
 
 
     if (G.frame == 1) {
-        b_start = new Button("30px Arial Bold", "START", x + menuSize/2, y + menuSize*7/8, trans)
+        titleTheme.play()
+        b_start = new Button("30px Arial Bold", "START", x + menuSize/2, y + menuSize*7/8)
 
         // let b_start = new Button(x + G.w/2, y,
         // Initalize Controll
@@ -1394,15 +1551,14 @@ function menu() {
     P.title(x, y, menuSize, menuSize) // update
     // Menu.checkButtons(mouse)
 
-    Menu.draw(x, y, menuSize, menuSize)       
+    Menu.draw(x, y, menuSize, menuSize, 0, 1)       
     P.draw()
 
     if (b_start != null) {
         ctx.fillStyle = 'red'
         b_start.draw()
         if (b_start.check(I)) {
-            window.requestAnimationFrame(main);
-            G.updateDifficulty(P, Enemies, 3)
+            window.requestAnimationFrame(MenuTrans);
             return
         }
     }
@@ -1410,21 +1566,48 @@ function menu() {
     // ctx.strokeStyle = 'black'
     // ctx.strokeRect(x + menuSize/2, y + menuSize/2, 50, 50)
 
-    setTimeout(() => {
-        window.requestAnimationFrame(menu);
-    }, 1000 / G.fps);
+    setTimeout(() => 
+        window.requestAnimationFrame(menu),
+    1000 / G.fps);
 }
 
+let transTimer = 0
+let transDuration = 100
+function MenuTrans() {
+    ++G.frame
+    G.resizeWindow()
+    transTimer += 1
 
-let trans = function() {
-    console.log("bookey")
+    // Calculate Menu Window
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+
+    Stage.draw(G.w, G.h)
+    Menu.draw(x, y, menuSize, menuSize, transTimer, transDuration)
+    P.title(x, y, menuSize, menuSize) // update
+    P.draw()
+
+    if (transTimer >= transDuration) {
+            G.updateDifficulty(P, Enemies, 5)
+            window.requestAnimationFrame(main);
+            return
+    }
+
+    setTimeout(() => 
+        window.requestAnimationFrame(MenuTrans),
+    1000 / G.fps);
+    
 }
 
 let Menu = {
-    draw(x, y, w, h) {
-        ctx.lineWidth = 10
-        ctx.strokeRect(x, y, w, h)
-        ctx.fillStyle = '#fffbf9'
+    draw(x, y, w, h, timer, duration) {
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, G.w, y - timer) // top
+        ctx.fillRect(0, 0, x - timer, G.h) // left
+        ctx.fillRect(0, y + h + timer, G.w, G.h - (y + h)) // bottom
+        ctx.fillRect(x + w + timer, 0, G.w - (x + w), G.h) // right
+        ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
         ctx.fillRect(x, y, w, h)
         ctx.fillStyle = '#ffd6cc'
         ctx.font = '80px Arial Bold'
@@ -1454,6 +1637,18 @@ let Menu = {
 
 
 }
+
+let IntroText = {
+    draw(x, y, w, h) {
+        ctx.fillStyle = '#ffd6cc'
+        ctx.fillRect(x, y, w, h)
+        ctx.font = '30px Arial Bold'
+        let tw = ctx.measureText("monke").width
+        ctx.fillStyle = 'black'
+        ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+
+    }
+}
 // REQUIRES: player.js io.js
 
 const c = document.getElementById('canvas')
@@ -1467,22 +1662,24 @@ const Enemies = new EnemyController()
 
 function main() {
     if (G.frame == 0) Stage.init
+
     ++G.frame
 
+    // Update
     if (!G.paused) update()
-    draw()
-
     G.pause(I.keyState.pause)
 
-    setTimeout(() => {
-        window.requestAnimationFrame(main);
-    }, 1000 / G.fps);
+    draw()
+
+
+    setTimeout(() => 
+        window.requestAnimationFrame(main),
+    1000 / G.fps);
 }
 
 function update() {
-    Enemies.spawner(G.w, G.h, P)
+    if (P.state != en.state.dead) Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
-    // DP.controller()    
     Enemies.controller()
 }
 
@@ -1494,6 +1691,7 @@ function draw() {
 
     P.draw()
     Enemies.draw()
+    DP.controller()    
 
     if (G.paused) pauseMenu.draw(G.w, G.h)
 

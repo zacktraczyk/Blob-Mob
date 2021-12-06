@@ -1,9 +1,9 @@
 const difficultyTable = {
     3: {
         player: {
-            speed:      4,
-            accel:      0.4,
-            cool:       5,
+            speed:      14,
+            accel:      1,
+            cool:       10,
             health:     500,
         },
         enemy: {
@@ -22,17 +22,4 @@ const difficultyTable = {
             speed:      2
         }
     },
-
-    6: {
-        player: {
-            speed:      14,
-            accel:      1,
-            cool:       1,
-            health:     500,
-        },
-        enemy: {
-            speed:      5
-        }
-    },
-
 }

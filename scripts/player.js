@@ -9,14 +9,19 @@ class DPController {
         this.interval = 50
         this.maxPoints = 15
         this.instances = new Array()
+        this.cool = 0
     }
 
     spawn(player) {
-        let dp = new DamagePoint(player)
-        this.instances.push(dp)
+        if (this.instances.length < 5 && this.cool <= 0) {
+            let dp = new DamagePoint(player)
+            this.instances.push(dp)
+            this.cool = 5
+        }
     }
 
     controller(){
+        if (this.cool > 0) --this.cool
         for (let i = 0; i < this.instances.length; i++) { 
             if (this.instances[i].life <= 0) {
                 this.instances.splice(i, 1)
@@ -29,20 +34,32 @@ class DPController {
     }
 }
 class DamagePoint {
+
     constructor(player) {
+        let w = player.w
+        let h = player.h
+        this.x = player.x
+        this.y = player.y
+
         // Spawn
-        this.x = player.x + player.w/2 + (Math.random() - 0.5)*player.w/2
-        this.y = player.y + player.h/2 + (Math.random() - 0.5)*player.h/2
+        let rand = Math.random()
+        if (rand < 0.5) { // side
+            this.x += rand < 0.5 ? -w/2 - 1 : w/2 + 1
+            rand = Math.random()
+            this.y += rand*(h+10) - 5
+        } else { // top/bottom
+            this.x += rand*(w+10) - 5
+            rand = Math.random()
+            this.y += rand < 0.5 ? -h/2 - 1 : h/2 + 1
+        }
         this.life = 100
     }
 
     draw() {
-        console.log(this.x + ", " + this.y)
         --this.life
-        ctx.font = '70px Comic Sans MS'
-        ctx.fillStyle = '#000000' //Set to #ffd6cc
-        ctx.fillRect(0, 0, 100, 100)
-        // ctx.fillText("GAME OVER", this.x, this.y)
+        ctx.font = '18px Comic Sans MS'
+        ctx.fillStyle = `rgba(225, 0, 0, ${this.life/100})`
+        ctx.fillText("-1", this.x, this.y)
     }
 
     live() { if (this.life > 0) --this.life }
@@ -64,12 +81,14 @@ class Player {
 
         this.maxCool = 50
         this.cool = 0
-        this.power = 50
+        this.maxPower = 50
+        this.power = this.maxPower
         this.maxHealth = 500
         this.health = this.maxHealth
 
         this.action = en.act.norm
-        this.pushRadius = 140
+        this.pushRadius = 240
+        this.pushR = 0
         this.timer = 0
         this.state = en.state.norm
     }
@@ -113,10 +132,9 @@ class Player {
         ctx.stroke()
         ctx.closePath()
 
-        if (this.act == en.act.push) {
+        if (this.action == en.act.push) {
             ctx.beginPath()
-            // ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.pushRadius, 0, 2 * Math.PI)
-            ctx.arc(this.x, this.y, this.pushRadius, 0, 2 * Math.PI)
+            ctx.arc(this.x, this.y, this.pushR, 0, 2 * Math.PI)
             ctx.stroke()
             ctx.closePath()
         }
@@ -130,12 +148,18 @@ class Player {
             return
         }
 
-        // Trigger Attack
+        // Action Controller
         if (this.cool <= 0) {
+            this.cool = 0
+            // Trigger Attack
             if (keys.attack) this.action = en.act.attack
+
+            // Trigger Push
+            if (this.power == this.maxPower) {
+                if (keys.push) this.action = en.act.push
+            }
         }
 
-        // Action Controller
         switch (this.action) {
             case en.act.attack:
                 this.color = '#adedff'
@@ -144,8 +168,10 @@ class Player {
             case en.act.norm:
                 this.move(w, h, keys)
                 break
-            // case en.act.push:
-            //     break
+            case en.act.push:
+                this.move(w, h, keys)
+                this.pushField(600, enemies)
+                break
             // case en.act.regen:
             //     break
         }
@@ -155,7 +181,7 @@ class Player {
         this.y += this.yvel
 
         // Cooldown
-        if (this.cool > 0) {
+        if (this.cool > 0 && this.action != en.act.push) {
             --this.cool;
             this.color = '#adedff'
         } else {
@@ -206,13 +232,14 @@ class Player {
         this.wiggle(50, 69)
 
         // Wrap Screen
-        if (this.x > w && this.xvel > 0) this.x = -this.w - 5
-        else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
+        // if (this.x > w && this.xvel > 0) this.x = -this.w - 5
+        // else if (this.x + this.w < 0 && this.xvel < 0) this.x = w + 5
 
-        if (this.y > h && this.yvel > 0) this.y = -5
-        else if (this.y + this.h < 0 && this.yvel < 0) this.y = h + 5
+        // if (this.y > h && this.yvel > 0) this.y = -5
+        // else if (this.y + this.h < 0 && this.yvel < 0) this.y = h + 5
 
-        return 1
+        this.x = clamp(this.x, this.w/2 + 5, w - this.w/2 - 5)
+        this.y = clamp(this.y, this.h/2 + 5, h - this.h/2 - 5)
     }
 
     calculateDir() {
@@ -247,6 +274,7 @@ class Player {
             })
         }
 
+        // End attack
         if (this.timer >= duration) {
             this.xvel = 0
             this.yvel = 0
@@ -255,7 +283,31 @@ class Player {
         }
     }
 
+    pushField(duration, enemies) {
+        this.power -= this.maxPower/duration
+        ++this.timer
+        this.cool += this.maxCool/duration
+
+        enemies.forEach(enemy => {
+            if (enemy.state != en.state.dying
+                && enemy.state != en.state.dead) {
+                    this.pushR = Math.min(this.timer/(duration/4), 1) * this.pushRadius
+                    enemy.pushField(this.pushR)
+            }
+        })
+
+
+        if (this.timer >= duration) {
+            this.timer = 0
+            this.action = en.act.norm
+            this.pushR = 0
+            this.power = 0
+        }
+    }
+
     death() {
+        this.highscore = G.score
+        localStorage.setItem("highscore", this.highscore)
     }
 
     collides(target) {

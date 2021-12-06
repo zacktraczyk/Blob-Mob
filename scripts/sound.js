@@ -1,23 +1,18 @@
 //Howler Sound
-var muted = false;
-var monce = true;
-var mSound = 0.5;
-var eSound = 1;
-
-var titleTheme = new Howl({
+let titleTheme = new Howl({
     src: ['Sound/Good-portion-of-distortion.mp3'],
     volume: 0.7,
     loop: true
 });
 
-var mainTheme = new Howl({
+let mainTheme = new Howl({
     src: ['Sound/8-lit.mp3'],
     volume: 0.5,
     loop: true
     
 });
 
-var endTheme = new Howl({
+let endTheme = new Howl({
     src: ['Sound/Game-Over.mp3'],
     volume: 1,
     loop: true
@@ -26,7 +21,7 @@ var endTheme = new Howl({
 //Length of segment ~= 2100
 var hlSound = true;
 
-var effects = new Howl({
+let effects = new Howl({
     src: ['Sound/Sound-effects.mp3'],
     sprite: {
         attack: [0, 400],

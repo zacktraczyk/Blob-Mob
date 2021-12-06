@@ -1,3 +1,5 @@
+// REQUIRE: HOWLER.js 
+
 class Button {
 
     constructor(font, text, x, y, click){
@@ -6,10 +8,8 @@ class Button {
 
         this.x = x
         this.y = y
-        this.w = 100 // value fixed on draw
-        this.h = 100 // value fixed on draw
-
-        this.click = click
+        this.w = 100
+        this.h = 100
     }
 
     draw() {
@@ -22,8 +22,8 @@ class Button {
         let y = this.y - this.h/2
         if (m.xmouse > x && m.xmouse < x + this.w &&
             m.ymouse > y && m.ymouse < y + this.h) {
+            effects.play('btn');
             return true
-            // this.click()
         }
     }
 
@@ -48,6 +48,8 @@ class Button {
     }
 
 }
+let background = new Image();
+background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
 let Stage = {
     draw(w, h) {
@@ -64,17 +66,18 @@ let Stage = {
         ctx.fillStyle = 'black'
         ctx.fillRect(w / 2, 10, w/2 - 10, 20)
         ctx.fillStyle = player.color
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.health + "/100", w / 2 + 100, 23)
+        ctx.font = "10px monospace"
+        ctx.fillText(player.health + "/" + player.maxHealth, w*3/4 - 10, 23)
         ctx.fillRect(w / 2 + 1, 11, Math.max(0, (player.health / player.maxHealth) * (w/2 - 10) - 2), 18)
 
         // Power
         ctx.fillStyle = 'black'
         ctx.fillRect(w*3/4 + 5, 40, w/4 - 15, 20)
         ctx.fillStyle = '#33cc33'
-        // ctx.font = "10px monospace"
-        // ctx.fillText(player.power + "/50", w - w/4 + 52, 53)
-        ctx.fillRect(w*3/4 + 6, 41, (player.power / 50) * (w/4 - 15) - 2, 18)
+        // ctx.fillText(player.power + "/" + player.maxPower, w*7/8, 53)
+        if (player.power > 0) {
+            ctx.fillRect(w*3/4 + 6, 41, (player.power / player.maxPower) * (w/4 - 15) - 2, 18)
+        }
 
         // Cool
         ctx.fillStyle = 'black'
