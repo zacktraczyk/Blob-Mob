@@ -1,4 +1,17 @@
+// DON'T CHANGE FORMAT (PARSED BY PYTHON)
 const difficultyTable = {
+    2: {
+        player: {
+            speed:      4,
+            accel:      0.6,
+            cool:       5,
+            health:     1000,
+        },
+        enemy: {
+            speed:      0.8,
+        }
+    },
+
     3: {
         player: {
             speed:      4,
@@ -7,7 +20,7 @@ const difficultyTable = {
             health:     500,
         },
         enemy: {
-            speed:      1
+            speed:      1,
         }
     },
 
@@ -19,7 +32,7 @@ const difficultyTable = {
             health:     300,
         },
         enemy: {
-            speed:      2
+            speed:      2,
         }
     },
 
@@ -31,7 +44,7 @@ const difficultyTable = {
             health:     500,
         },
         enemy: {
-            speed:      5
+            speed:      5,
         }
     },
 

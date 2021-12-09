@@ -146,6 +146,10 @@ class Enemy {
         ctx.stroke();
         ctx.closePath();
 
+        //Draw Hitbox (DEBUG)
+        // ctx.lineWidth = 1
+        // ctx.strokeRect(this.x - this.w/2, this.y - this.w/2, this.w, this.h)
+
     }
 
     controller() {

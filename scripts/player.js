@@ -2,7 +2,6 @@
 
 // Clamp number between two values with the following line:
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-// Normalize a vector
 
 class DPController {
     constructor() {
@@ -33,6 +32,7 @@ class DPController {
         }
     }
 }
+
 class DamagePoint {
 
     constructor(player) {
@@ -64,6 +64,7 @@ class DamagePoint {
 
     live() { if (this.life > 0) --this.life }
 }
+
 class Player {
     constructor(x, y, w, h) {
         this.x = x
@@ -94,10 +95,18 @@ class Player {
     }
 
     title(x, y, w, h) {
-        this.wiggle(230, 280)
+        this.wiggle(w/2, h/2)
 
-        this.x = clamp(this.x, x + 10, x + w - this.w - 10) 
-        this.y = clamp(this.y, y + 10, y + h - this.h - 10) 
+        this.x = clamp(this.x, x + w*3/8, x + w*5/8) 
+        this.y = clamp(this.y, y + w*3/8, y + h*5/8) 
+    }
+
+    shrink(dx, dy, w, h) {
+        w = clamp(w/2, 55, 60 + w/2)
+        this.wiggle(55, w)
+
+        this.x += dx
+        this.y += dy
     }
 
     draw() {
@@ -314,29 +323,28 @@ class Player {
         if (target == null)
             return false
 
-        if (this.x < target.x + target.w &&
-            this.x + this.w > target.x &&
-            this.y < target.y + target.h &&
-            this.h + this.y > target.y)
+        if (!(this.x + this.w/2 < target.x - target.w/2 ||  
+            this.x - this.w/2 > target.x + target.w/2) &&
+
+            !(this.y + this.h/2 < target.y - target.h/2 || 
+            this.y - this.h/2 > target.y + target.w/2))
             return true
 
         return false
     }
 
     wiggle(min, max) {
-        // if (frameNumber % 20 == 0) {
-            let rand = Math.random() > 0.5 ? 1 : -1;
-            this.x = this.x + rand
+        let rand = Math.random() > 0.5 ? 1 : -1;
+        this.x = this.x + rand
 
-            rand = Math.random() > 0.5 ? 1 : -1;
-            this.y = this.y + rand
+        rand = Math.random() > 0.5 ? 1 : -1;
+        this.y = this.y + rand
 
-            rand = Math.random() > 0.5 ? 1 : -1;
-            this.w = clamp(this.w + rand, min, max)
+        rand = Math.random() > 0.5 ? 1 : -1;
+        this.w = clamp(this.w + rand, min, max)
 
-            rand = Math.random() > 0.5 ? 1 : -1;
-            this.h = clamp(this.h + rand, min, max)
-        // }
+        rand = Math.random() > 0.5 ? 1 : -1;
+        this.h = clamp(this.h + rand, min, max)
     }
 }
 

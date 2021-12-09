@@ -1,17 +1,3 @@
-function intro() {
-    ++G.frame
-    G.resizeWindow()
-
-    menuSize = 500
-    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
-    IntroText.draw(x, y, menuSize, menuSize)
-
-    setTimeout(() => 
-        window.requestAnimationFrame(intro),
-    1000 / G.fps);
-}
-
 // Button Definitions
 let b_start = null
 
@@ -27,7 +13,9 @@ function menu() {
 
     if (G.frame == 1) {
         titleTheme.play()
-        b_start = new Button("30px Arial Bold", "START", x + menuSize/2, y + menuSize*7/8)
+        b_start = new Button("25px Comic Sans MS", "START",
+                        x + menuSize/2, y + menuSize*7/8,
+                        '#ffd6cc', 'black')
 
         // let b_start = new Button(x + G.w/2, y,
         // Initalize Controll
@@ -39,38 +27,26 @@ function menu() {
         P.y = y + menuSize/2
     }
 
-    // Check Start Click
-    // if (I.xmouse > 500) {
-    //     window.requestAnimationFrame(main);
-    //     G.updateDifficulty(P, Enemies, 3)
-    //     return
-    // }
-
+    Stage.draw(G.w, G.h)
     P.title(x, y, menuSize, menuSize) // update
     // Menu.checkButtons(mouse)
 
-    Menu.draw(x, y, menuSize, menuSize, 0, 1)       
+    Menu.draw(x, y, x + menuSize, y + menuSize)       
     P.draw()
 
     if (b_start != null) {
-        ctx.fillStyle = 'red'
         b_start.draw()
         if (b_start.check(I)) {
             window.requestAnimationFrame(MenuTrans);
             return
         }
     }
-    // BUTTON BORDER
-    // ctx.strokeStyle = 'black'
-    // ctx.strokeRect(x + menuSize/2, y + menuSize/2, 50, 50)
 
-    setTimeout(() => 
-        window.requestAnimationFrame(menu),
-    1000 / G.fps);
+    loop(menu)
 }
 
 let transTimer = 0
-let transDuration = 100
+let transDuration = 50
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()
@@ -78,40 +54,61 @@ function MenuTrans() {
 
     // Calculate Menu Window
     menuSize = 500
-    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    let progress = ((transDuration - transTimer)/transDuration)
 
+    // Update
+    P.shrink(-1, -1, menuSize*progress, menuSize*progress) // update
+    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
+
+    // Draw
     Stage.draw(G.w, G.h)
-    Menu.draw(x, y, menuSize, menuSize, transTimer, transDuration)
-    P.title(x, y, menuSize, menuSize) // update
+
+    let x2 = x1 + menuSize
+    let y2 = y1 + menuSize
+    Menu.draw(x1*progress, y1*progress,         // x1 and y1
+              x2 + (G.w - x2)*(1 - progress),   // x2
+              y2 + (G.h - y2)*(1 - progress))   // y1
+
+    b_start.draw()
+
     P.draw()
 
     if (transTimer >= transDuration) {
-            G.updateDifficulty(P, Enemies, 5)
-            window.requestAnimationFrame(main);
-            return
+        G.updateDifficulty(P, Enemies, 5)
+        window.requestAnimationFrame(main);
+        return
     }
 
-    setTimeout(() => 
-        window.requestAnimationFrame(MenuTrans),
-    1000 / G.fps);
-    
+    loop(MenuTrans)
 }
 
 let Menu = {
-    draw(x, y, w, h, timer, duration) {
+    draw(x1, y1, x2, y2) { 
         ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, G.w, y - timer) // top
-        ctx.fillRect(0, 0, x - timer, G.h) // left
-        ctx.fillRect(0, y + h + timer, G.w, G.h - (y + h)) // bottom
-        ctx.fillRect(x + w + timer, 0, G.w - (x + w), G.h) // right
-        ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
-        ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = '#ffd6cc'
-        ctx.font = '80px Arial Bold'
+        ctx.fillRect(0, 0, G.w, y1) // top
+        ctx.fillRect(0, 0, x1, G.h) // left
+
+        ctx.fillRect(0, y2, G.w, G.h) // bottom
+        ctx.fillRect(x2, 0, G.w, G.h) // right
+
+        let w = x2 - x1
+        let h = y2 - y1
+
+        // ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
+        // ctx.fillRect(x, y, w, h)
+        ctx.fillStyle = 'black'
+        ctx.font = '30px Comic Sans MS'
+
         ctx.fillText("BLOB MOB",
-            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y + (h*1/8))
+            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2) - 3,
+            y1 + (h*1/8) - 3)
+
+        ctx.fillStyle = '#ffd6cc'
+        ctx.fillText("BLOB MOB",
+            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2),
+            y1 + (h*1/8))
 
         // ctx.fillStyle = '#ffd6cc'
         // ctx.font = '15px sans-serif'
@@ -136,14 +133,27 @@ let Menu = {
 
 }
 
-let IntroText = {
-    draw(x, y, w, h) {
-        ctx.fillStyle = '#ffd6cc'
-        ctx.fillRect(x, y, w, h)
-        ctx.font = '30px Arial Bold'
-        let tw = ctx.measureText("monke").width
-        ctx.fillStyle = 'black'
-        ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+// function intro() {
+//     ++G.frame
+//     G.resizeWindow()
 
-    }
-}
+//     menuSize = 500
+//     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+//     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+//     IntroText.draw(x, y, menuSize, menuSize)
+
+//     loop(intro)
+// }
+
+
+// let IntroText = {
+//     draw(x, y, w, h) {
+//         ctx.fillStyle = '#ffd6cc'
+//         ctx.fillRect(x, y, w, h)
+//         ctx.font = '30px Arial Bold'
+//         let tw = ctx.measureText("monke").width
+//         ctx.fillStyle = 'black'
+//         ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+
+//     }
+// }

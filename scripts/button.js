@@ -1,0 +1,51 @@
+class Button {
+
+    constructor(font, text, x, y, c1, c2){
+        this.font = font
+        this.text = text
+        this.c1 = c1
+        this.c2 = c2
+
+        this.x = x
+        this.y = y
+        this.w = 100
+        this.h = 100
+    }
+
+    draw() {
+        ctx.font = this.font
+        ctx.fillStyle = this.c2
+        ctx.fillText(this.text, this.x - this.w/2 - 3, this.y + this.h/2 - 3)
+        ctx.fillStyle = this.c1
+        ctx.fillText(this.text, this.x - this.w/2, this.y + this.h/2)
+    }
+
+    check(m) {
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+        if (m.xmouse > x && m.xmouse < x + this.w &&
+            m.ymouse > y && m.ymouse < y + this.h) {
+            effects.play('btn');
+            return true
+        }
+    }
+
+    update(xchange, ychange) {
+        this.x += xchange/2
+        this.y += ychange/2
+        ctx.font = this.font
+        this.w = ctx.measureText(this.text).width
+        this.h = parseInt(this.font.split(" ")[0], 10)
+    }
+
+    adjust(x, y){
+        this.x = x
+        this.y = y
+    }
+
+    debug() {
+        ctx.strokeStyle = 'black'
+        ctx.strokeRect(this.x - this.w/2, this.y - this.h/2, this.w, this.h)
+    }
+
+}

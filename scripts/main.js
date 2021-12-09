@@ -11,19 +11,19 @@ const Enemies = new EnemyController()
 
 function main() {
     if (G.frame == 0) Stage.init
-
     ++G.frame
 
     // Update
     if (!G.paused) update()
     G.pause(I.keyState.pause)
 
+    // Draw
     draw()
 
+    // Debug
+    G.debug()
 
-    setTimeout(() => 
-        window.requestAnimationFrame(main),
-    1000 / G.fps);
+    loop(main)
 }
 
 function update() {

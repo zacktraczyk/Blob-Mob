@@ -1,53 +1,5 @@
 // REQUIRE: HOWLER.js 
 
-class Button {
-
-    constructor(font, text, x, y, click){
-        this.font = font
-        this.text = text
-
-        this.x = x
-        this.y = y
-        this.w = 100
-        this.h = 100
-    }
-
-    draw() {
-        ctx.font = this.font
-        ctx.fillText(this.text, this.x - this.w/2, this.y + this.h/2)
-    }
-
-    check(m) {
-        let x = this.x - this.w/2
-        let y = this.y - this.h/2
-        if (m.xmouse > x && m.xmouse < x + this.w &&
-            m.ymouse > y && m.ymouse < y + this.h) {
-            effects.play('btn');
-            return true
-        }
-    }
-
-    update(xchange, ychange) {
-        this.x += xchange/2
-        this.y += ychange/2
-        ctx.font = this.font
-        this.w = ctx.measureText(this.text).width
-        this.h = parseInt(this.font.split(" ")[0], 10)
-    }
-
-    adjust(x, y, w, h){
-        this.x = x
-        this.y = y
-        this.w = w
-        this.h = h
-    }
-
-    debug() {
-        ctx.strokeStyle = 'black'
-        ctx.strokeRect(this.x - this.w/2, this.y - this.h/2, this.w, this.h)
-    }
-
-}
 let background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 

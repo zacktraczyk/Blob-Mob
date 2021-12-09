@@ -48,9 +48,10 @@ plt.rcParams['figure.figsize'] = [4, 12]
 plt.xlabel('difficulty')
 plt.ylabel('value')
 
+xpoints = list(map(int, (table.keys())))
+
 x = []
 y = []
-print(list(table[list(table.keys())[0]]['player'].keys()))
 
 for t in ['player', 'enemy']:
     plt.title(t)
@@ -62,6 +63,7 @@ for t in ['player', 'enemy']:
             y.append(table[di][t][a])
         plt.plot(x, y, '--o', label = a)
 
+    plt.xticks(xpoints, xpoints)
     plt.legend()
     plt.show()
 

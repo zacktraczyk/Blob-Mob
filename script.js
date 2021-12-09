@@ -22,7 +22,20 @@ const en = {
         dead: 3
     }
 }
+// DON'T CHANGE FORMAT (PARSED BY PYTHON)
 const difficultyTable = {
+    2: {
+        player: {
+            speed:      4,
+            accel:      0.6,
+            cool:       5,
+            health:     1000,
+        },
+        enemy: {
+            speed:      0.8,
+        }
+    },
+
     3: {
         player: {
             speed:      4,
@@ -31,7 +44,7 @@ const difficultyTable = {
             health:     500,
         },
         enemy: {
-            speed:      1
+            speed:      1,
         }
     },
 
@@ -43,7 +56,7 @@ const difficultyTable = {
             health:     300,
         },
         enemy: {
-            speed:      2
+            speed:      2,
         }
     },
 
@@ -55,7 +68,7 @@ const difficultyTable = {
             health:     500,
         },
         enemy: {
-            speed:      5
+            speed:      5,
         }
     },
 
@@ -119,7 +132,65 @@ function muteSound() {
     mainTheme.volume(mSound);
     effects.volume(eSound);
 }
+class Button {
+
+    constructor(font, text, x, y, c1, c2){
+        this.font = font
+        this.text = text
+        this.c1 = c1
+        this.c2 = c2
+
+        this.x = x
+        this.y = y
+        this.w = 100
+        this.h = 100
+    }
+
+    draw() {
+        ctx.font = this.font
+        ctx.fillStyle = this.c2
+        ctx.fillText(this.text, this.x - this.w/2 - 3, this.y + this.h/2 - 3)
+        ctx.fillStyle = this.c1
+        ctx.fillText(this.text, this.x - this.w/2, this.y + this.h/2)
+    }
+
+    check(m) {
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+        if (m.xmouse > x && m.xmouse < x + this.w &&
+            m.ymouse > y && m.ymouse < y + this.h) {
+            effects.play('btn');
+            return true
+        }
+    }
+
+    update(xchange, ychange) {
+        this.x += xchange/2
+        this.y += ychange/2
+        ctx.font = this.font
+        this.w = ctx.measureText(this.text).width
+        this.h = parseInt(this.font.split(" ")[0], 10)
+    }
+
+    adjust(x, y){
+        this.x = x
+        this.y = y
+    }
+
+    debug() {
+        ctx.strokeStyle = 'black'
+        ctx.strokeRect(this.x - this.w/2, this.y - this.h/2, this.w, this.h)
+    }
+
+}
 // REQUIRES: difficulty.js
+
+// animation loop
+function loop(dest) {
+    setTimeout(() => 
+        window.requestAnimationFrame(dest),
+    1000 / G.fps);
+}
 
 class Game {
 
@@ -197,366 +268,351 @@ class Game {
         }
     }
 
+    debug() {
+        ctx.font = "20px Arial Bold"
+        ctx.color = "black"
+        
+        let x = 40
+        let y = this.h*3/4
+
+        let pVals = difficultyTable[this.difficulty].player
+        let eVals = difficultyTable[this.difficulty].enemy
+
+        ctx.fillText("difficulty: " + this.difficulty, x, y)
+        y += 30
+        ctx.fillText("player: ", x, y)
+        x += 30
+        y += 20
+        ctx.fillText("speed: " + pVals.speed, x, y)
+        y += 20
+        ctx.fillText("accel: " + pVals.accel, x, y)
+        y += 20
+        ctx.fillText("cool: " + pVals.cool, x, y)
+        y += 20
+        ctx.fillText("health: " + pVals.health, x, y)
+        y += 30
+        x -= 30
+        ctx.fillText("enemy: ", x, y)
+        x += 30
+        y += 20
+        ctx.fillText("speed: " + eVals.speed, x, y)
+        y += 40
+        if (Enemies != null) ctx.fillText("Blobs: " + Enemies.instances.length, x, y)
+
+    }
+
 }
 
-function oldmenu() {
-    G.setHighScore
-    G.highscore = localStorage.getItem("highscore")
-    titleTheme.play()
-    var sessionME = setInterval(function() {
-        ctx.clearRect(0, 0, w, h)
+//function oldmenu() {
+//    G.setHighScore
+//    G.highscore = localStorage.getItem("highscore")
+//    titleTheme.play()
+//    var sessionME = setInterval(function() {
+//        ctx.clearRect(0, 0, w, h)
         
-        let grd = ctx.createLinearGradient(0, 0, w, 0)
-        grd.addColorStop(0, '#ffd6cc')
-        grd.addColorStop(0.8, 'grey')
-        grd.addColorStop(1, '#fffbf9')
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        drawChar()
-        ctx.fillStyle = grd
-        ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
-        ctx.font = '30px Arial Bold'
-        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
-        grd1.addColorStop(0, 'grey')
-        grd1.addColorStop(1, 'white')
-        ctx.fillStyle = grd1
-        ctx.font = '15px sans-serif'
-        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
+//        let grd = ctx.createLinearGradient(0, 0, w, 0)
+//        grd.addColorStop(0, '#ffd6cc')
+//        grd.addColorStop(0.8, 'grey')
+//        grd.addColorStop(1, '#fffbf9')
+//        ctx.fillStyle = '#fffbf9'
+//        ctx.fillRect(0, 0, w, h)
+//        drawChar()
+//        ctx.fillStyle = grd
+//        ctx.font = '80px Arial Bold'
+//        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
+//        ctx.font = '30px Arial Bold'
+//        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
+//        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
+//        grd1.addColorStop(0, 'grey')
+//        grd1.addColorStop(1, 'white')
+//        ctx.fillStyle = grd1
+//        ctx.font = '15px sans-serif'
+//        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+//        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
+//        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
+//        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
         
-        if(pause === false){
-            sx = mxrandom(sx)
-            sy = myrandom(sy)
-            wx = srandom(wx)
-            wy = srandom(wy)
-        }
+//        if(pause === false){
+//            sx = mxrandom(sx)
+//            sy = myrandom(sy)
+//            wx = srandom(wx)
+//            wy = srandom(wy)
+//        }
         
-        pauseMenu()
+//        pauseMenu()
         
-        listen()
+//        listen()
 
-        if(HowTo) HowToPlay()
+//        if(HowTo) HowToPlay()
 
-        canvas.addEventListener("mousedown", getPosition, false)
-        //Start Click Area --> ctx.strokeRect(w / 2 - 40, 380, 80, 40)
-        //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30)
-        //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30)
+//        canvas.addEventListener("mousedown", getPosition, false)
+//        //Start Click Area --> ctx.strokeRect(w / 2 - 40, 380, 80, 40)
+//        //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30)
+//        //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30)
         
-        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
-            clearInterval(sessionME)
-            canvas.removeEventListener("mousedown", getPosition, false)
-            window.location.href = '/about.html'
-        }
+//        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
+//            clearInterval(sessionME)
+//            canvas.removeEventListener("mousedown", getPosition, false)
+//            window.location.href = '/about.html'
+//        }
         
-        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
-            clearInterval(sessionME)
-            transition()
-            canvas.removeEventListener("mousedown", getPosition, false)
-        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo === false && pause === false){
-            effects.play('btn')
-            HowTo = true
-            x = 0
-            y = 0
-        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause === false){
-            effects.play('btn')
-            HowTo = false
-            x = 0
-            y = 0
-        }
-        document.body.style.backgroundColor = '#fffbf9'
-    }, 50)
-}
+//        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
+//            clearInterval(sessionME)
+//            transition()
+//            canvas.removeEventListener("mousedown", getPosition, false)
+//        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo === false && pause === false){
+//            effects.play('btn')
+//            HowTo = true
+//            x = 0
+//            y = 0
+//        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause === false){
+//            effects.play('btn')
+//            HowTo = false
+//            x = 0
+//            y = 0
+//        }
+//        document.body.style.backgroundColor = '#fffbf9'
+//    }, 50)
+//}
 
-function HowToPlay(){
-    ctx.fillStyle = '#ffd6cc'
-    ctx.fillRect(30,30,w - 60, h - 60)
-    ctx.fillStyle = 'black'
-    ctx.font = '20px monospace'
-    ctx.fillText("X",w - 35 - ctx.measureText("X").width, 50)
-    var grd = ctx.createLinearGradient(0, 0, w, 0)
-    grd.addColorStop(0, '#ffd6cc')
-    grd.addColorStop(0.5, 'grey')
-    grd.addColorStop(1, '#fffbf9')
-    ctx.fillStyle = grd
-    ctx.font = '50px Arial Bold'
-    ctx.fillText("HOW TO PLAY", w / 2 - (ctx.measureText("HOW TO PLAY").width/2), 80)
-    ctx.fillStyle = 'grey'
-    ctx.font = '15px monospace'
-    var instruction1 = "Use the Arrow keys to move,"
-    var instruction2 = "And press Space to attack."
-    var instruction3 = "You can only attack if your blue bar is full!"
-    var instruction4 = "Try to attack the enemies"
-    var instruction5 = "But use Z, your powerup, if you are swarmed."
-    var instruction6 = "You can also hold X to regenerate health."
-    var instruction7 = "Just remember, powerups and regeneration use power!"
-    var instruction8 = "Press M to mute and P to pause"
-    ctx.fillText(instruction1, w / 2 - (ctx.measureText(instruction1).width/2), 122)
-    ctx.fillText(instruction2, w / 2 - (ctx.measureText(instruction2).width/2), 154)
-    ctx.fillText(instruction3, w / 2 - (ctx.measureText(instruction3).width/2), 186)
-    ctx.fillText(instruction4, w / 2 - (ctx.measureText(instruction4).width/2), 218)
-    ctx.fillText(instruction5, w / 2 - (ctx.measureText(instruction5).width/2), 250)
-    ctx.fillText(instruction6, w / 2 - (ctx.measureText(instruction6).width/2), 282)
-    ctx.fillText(instruction7, w / 2 - (ctx.measureText(instruction7).width/2), 314)
-    ctx.fillStyle = 'red'
-    ctx.fillText(instruction8, w / 2 -40, 463)
+//function HowToPlay(){
+//    ctx.fillStyle = '#ffd6cc'
+//    ctx.fillRect(30,30,w - 60, h - 60)
+//    ctx.fillStyle = 'black'
+//    ctx.font = '20px monospace'
+//    ctx.fillText("X",w - 35 - ctx.measureText("X").width, 50)
+//    var grd = ctx.createLinearGradient(0, 0, w, 0)
+//    grd.addColorStop(0, '#ffd6cc')
+//    grd.addColorStop(0.5, 'grey')
+//    grd.addColorStop(1, '#fffbf9')
+//    ctx.fillStyle = grd
+//    ctx.font = '50px Arial Bold'
+//    ctx.fillText("HOW TO PLAY", w / 2 - (ctx.measureText("HOW TO PLAY").width/2), 80)
+//    ctx.fillStyle = 'grey'
+//    ctx.font = '15px monospace'
+//    var instruction1 = "Use the Arrow keys to move,"
+//    var instruction2 = "And press Space to attack."
+//    var instruction3 = "You can only attack if your blue bar is full!"
+//    var instruction4 = "Try to attack the enemies"
+//    var instruction5 = "But use Z, your powerup, if you are swarmed."
+//    var instruction6 = "You can also hold X to regenerate health."
+//    var instruction7 = "Just remember, powerups and regeneration use power!"
+//    var instruction8 = "Press M to mute and P to pause"
+//    ctx.fillText(instruction1, w / 2 - (ctx.measureText(instruction1).width/2), 122)
+//    ctx.fillText(instruction2, w / 2 - (ctx.measureText(instruction2).width/2), 154)
+//    ctx.fillText(instruction3, w / 2 - (ctx.measureText(instruction3).width/2), 186)
+//    ctx.fillText(instruction4, w / 2 - (ctx.measureText(instruction4).width/2), 218)
+//    ctx.fillText(instruction5, w / 2 - (ctx.measureText(instruction5).width/2), 250)
+//    ctx.fillText(instruction6, w / 2 - (ctx.measureText(instruction6).width/2), 282)
+//    ctx.fillText(instruction7, w / 2 - (ctx.measureText(instruction7).width/2), 314)
+//    ctx.fillStyle = 'red'
+//    ctx.fillText(instruction8, w / 2 -40, 463)
 
-    var esx = 380
-    var esy = 390
-    var ewx = 20
-    var ewy = 40
+//    var esx = 380
+//    var esy = 390
+//    var ewx = 20
+//    var ewy = 40
 
-    ctx.lineWidth = 1
+//    ctx.lineWidth = 1
 
-    randNum = Math.round(Math.random() * 2)
-    var erandomColor = ecolors[randNum]
-    ctx.fillStyle = erandomColor
+//    randNum = Math.round(Math.random() * 2)
+//    var erandomColor = ecolors[randNum]
+//    ctx.fillStyle = erandomColor
 
-    ctx.beginPath()
+//    ctx.beginPath()
 
-    ctx.moveTo(esx - esx / 20, esy)
-    ctx.bezierCurveTo(esx - esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy)
+//    ctx.moveTo(esx - esx / 20, esy)
+//    ctx.bezierCurveTo(esx - esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy)
 
-    ctx.bezierCurveTo(esx + ewx + esx / 10, esy, esx + ewx + esx / 10, esy + ewy, esx + ewx, esy + ewy)
+//    ctx.bezierCurveTo(esx + ewx + esx / 10, esy, esx + ewx + esx / 10, esy + ewy, esx + ewx, esy + ewy)
 
-    ctx.bezierCurveTo(esx + ewx / 10, esy + esy / 4, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy + ewy / 2)
+//    ctx.bezierCurveTo(esx + ewx / 10, esy + esy / 4, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy + ewy / 2)
 
-    ctx.bezierCurveTo(esx - esx / 20, esy + ewy / 2, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy)
-    ctx.fill()
-    ctx.stroke()
-    ctx.closePath()
+//    ctx.bezierCurveTo(esx - esx / 20, esy + ewy / 2, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy)
+//    ctx.fill()
+//    ctx.stroke()
+//    ctx.closePath()
 
-    ctx.lineWidth = 1
+//    ctx.lineWidth = 1
 
-    ctx.beginPath()
-    ctx.fillStyle = 'black'
-    ctx.arc(esx + ewx / 6, esy + ewy / 6, (ewx / 4 + ewy / 4) / 4, 0, 2 * Math.PI)
-    ctx.stroke()
-    ctx.closePath()
+//    ctx.beginPath()
+//    ctx.fillStyle = 'black'
+//    ctx.arc(esx + ewx / 6, esy + ewy / 6, (ewx / 4 + ewy / 4) / 4, 0, 2 * Math.PI)
+//    ctx.stroke()
+//    ctx.closePath()
 
-    ctx.beginPath()
-    ctx.arc(esx + ewx - ewx / 8, esy + ewy / 6, (ewx / 4 + ewy / 4) / 6, 0, 2 * Math.PI)
-    ctx.stroke()
-    ctx.closePath()
+//    ctx.beginPath()
+//    ctx.arc(esx + ewx - ewx / 8, esy + ewy / 6, (ewx / 4 + ewy / 4) / 6, 0, 2 * Math.PI)
+//    ctx.stroke()
+//    ctx.closePath()
 
-    ctx.beginPath()
-    ctx.moveTo(esx + ewx / 8, esy + ewy - ewy / 3)
-    ctx.bezierCurveTo(esx + ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy - ewy / 3)
-    ctx.stroke()
-    ctx.closePath()
+//    ctx.beginPath()
+//    ctx.moveTo(esx + ewx / 8, esy + ewy - ewy / 3)
+//    ctx.bezierCurveTo(esx + ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy - ewy / 3)
+//    ctx.stroke()
+//    ctx.closePath()
 
-    ctx.font = '15px monospace'
+//    ctx.font = '15px monospace'
 
-    ctx.fillText("ENEMY", 390 - (ctx.measureText("ENEMY").width/2), 360)
+//    ctx.fillText("ENEMY", 390 - (ctx.measureText("ENEMY").width/2), 360)
 
-    ctx.fillStyle = 'black'
-    ctx.fillRect(w / 2 - 115 / 2 + 5, 395, 115, 20)
-    ctx.fillStyle = 'blue'
-    ctx.fillRect(w / 2 + 0.5 - 115 / 2 + 5, 396, 113 - (0 / 50) * 113, 18)
+//    ctx.fillStyle = 'black'
+//    ctx.fillRect(w / 2 - 115 / 2 + 5, 395, 115, 20)
+//    ctx.fillStyle = 'blue'
+//    ctx.fillRect(w / 2 + 0.5 - 115 / 2 + 5, 396, 113 - (0 / 50) * 113, 18)
 
-    ctx.fillStyle = 'black'
-    ctx.fillText("COOL-DOWN BAR", w/2 - (ctx.measureText("COOL-DOWN BAR").width/2)+ 5, 360)
+//    ctx.fillStyle = 'black'
+//    ctx.fillText("COOL-DOWN BAR", w/2 - (ctx.measureText("COOL-DOWN BAR").width/2)+ 5, 360)
 
-    ctx.fillStyle = 'black'
-    ctx.fillRect((w-60) * (1 / 3)-90, 395, 115, 20)
-    ctx.fillStyle = '#33cc33'
-    ctx.font = "10px monospace"
-    ctx.fillText(20 + "/50", (w-60) * (1 / 3)-90 + 52, 409)
-    ctx.fillRect((w-60) * (1 / 3)-90 + 1, 396, (20 / 50) * 113, 18)
+//    ctx.fillStyle = 'black'
+//    ctx.fillRect((w-60) * (1 / 3)-90, 395, 115, 20)
+//    ctx.fillStyle = '#33cc33'
+//    ctx.font = "10px monospace"
+//    ctx.fillText(20 + "/50", (w-60) * (1 / 3)-90 + 52, 409)
+//    ctx.fillRect((w-60) * (1 / 3)-90 + 1, 396, (20 / 50) * 113, 18)
 
-    ctx.font = '15px monospace'
-    ctx.fillStyle = 'black'
+//    ctx.font = '15px monospace'
+//    ctx.fillStyle = 'black'
 
-    ctx.fillText("POWER", 90, 360)
-}
+//    ctx.fillText("POWER", 90, 360)
+//}
 
-function transition() {
-    var gw = 0
-    var time = 0
-    titleTheme.fade(1.0, 0.0, 7000)
-    titleTheme.on('fade', function(){
-        titleTheme.stop()
-    })
-    var sessionT = setInterval(function() {
-        time++
-        ctx.clearRect(0, 0, w, h)
-        var grd = ctx.createLinearGradient(0, 0, w - gw, 0)
-        grd.addColorStop(0, '#ffd6cc')
-        grd.addColorStop(0.8, 'grey')
-        grd.addColorStop(1, '#fffbf9')
-        ctx.fillStyle = '#fffbf9'
-        ctx.fillRect(0, 0, w, h)
-        drawChar()
-        ctx.fillStyle = grd
-        ctx.font = '80px Arial Bold'
-        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
-        ctx.font = '30px Arial Bold'
-        ctx.fillStyle = grd
-        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-        var grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0)
-        grd1.addColorStop(0, 'grey')
-        grd1.addColorStop(1, 'white')
-        ctx.fillStyle = grd1
-        ctx.font = '15px sans-serif'
-        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        if (time < 40) {
-            titleTheme.rate(1.5)
-            if (time % 2 === 0) {
-                wx -= 4
-                wy -= 4
-                sx += 2
-                sy += 2
-            } else if (Math.abs(time % 2) == 1) {
-                wx += 4
-                wy += 4
-                sx -= 2
-                sy -= 2
-            }
-        } else if (time >= 40) {
-            titleTheme.rate(0.75)
-            if (gw <= w - 50) gw += 25
-            sx += 2
-            sy += 2
-            sx = srandom(sx)
-            sy = srandom(sy)
-            wx -= 4
-            wy -= 4
-        }
-        if (wx <= 50 || wy <= 10) {
-            mainTheme.play()
-            background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
-            ctx.drawImage(background, 0, 0, w, h)
-            clearInterval(sessionT)
-            main()
-        }
-    }, 50)
-}
-function shrink() {
-    var shrinksx = sx
-    var shrinksy = sy
-    var shrinkwx = wx
-    var shrinkwy = wy
-    var sessionS = setInterval(function() {
-        de = effects.play('death')
-        ctx.clearRect(0, 0, w, h)
-        drawStage()
-        shrinksx += 4
-        shrinksy += 4
-        shrinkwx -= 8
-        shrinkwy -= 8
-        ctx.fillStyle = pcolor
-        ctx.fillRect(shrinksx, shrinksy, shrinkwx, shrinkwy)
-        stateDefinition()
-        drawHealth()
-        drawPower()
-        drawCool()
-        drawScore()
-        if (shrinkwx <= 0 || shrinkwy <= 0 || shrinksx > w || shrinksy > h) {
-            clearInterval(sessionS)
-            end()
-        }
+//function transition() {
+//    var gw = 0
+//    var time = 0
+//    titleTheme.fade(1.0, 0.0, 7000)
+//    titleTheme.on('fade', function(){
+//        titleTheme.stop()
+//    })
+//    var sessionT = setInterval(function() {
+//        time++
+//        ctx.clearRect(0, 0, w, h)
+//        var grd = ctx.createLinearGradient(0, 0, w - gw, 0)
+//        grd.addColorStop(0, '#ffd6cc')
+//        grd.addColorStop(0.8, 'grey')
+//        grd.addColorStop(1, '#fffbf9')
+//        ctx.fillStyle = '#fffbf9'
+//        ctx.fillRect(0, 0, w, h)
+//        drawChar()
+//        ctx.fillStyle = grd
+//        ctx.font = '80px Arial Bold'
+//        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
+//        ctx.font = '30px Arial Bold'
+//        ctx.fillStyle = grd
+//        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
+//        var grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0)
+//        grd1.addColorStop(0, 'grey')
+//        grd1.addColorStop(1, 'white')
+//        ctx.fillStyle = grd1
+//        ctx.font = '15px sans-serif'
+//        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
+//        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
+//        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
+//        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
+//        if (time < 40) {
+//            titleTheme.rate(1.5)
+//            if (time % 2 === 0) {
+//                wx -= 4
+//                wy -= 4
+//                sx += 2
+//                sy += 2
+//            } else if (Math.abs(time % 2) == 1) {
+//                wx += 4
+//                wy += 4
+//                sx -= 2
+//                sy -= 2
+//            }
+//        } else if (time >= 40) {
+//            titleTheme.rate(0.75)
+//            if (gw <= w - 50) gw += 25
+//            sx += 2
+//            sy += 2
+//            sx = srandom(sx)
+//            sy = srandom(sy)
+//            wx -= 4
+//            wy -= 4
+//        }
+//        if (wx <= 50 || wy <= 10) {
+//            mainTheme.play()
+//            background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
+//            ctx.drawImage(background, 0, 0, w, h)
+//            clearInterval(sessionT)
+//            main()
+//        }
+//    }, 50)
+//}
+//function shrink() {
+//    var shrinksx = sx
+//    var shrinksy = sy
+//    var shrinkwx = wx
+//    var shrinkwy = wy
+//    var sessionS = setInterval(function() {
+//        de = effects.play('death')
+//        ctx.clearRect(0, 0, w, h)
+//        drawStage()
+//        shrinksx += 4
+//        shrinksy += 4
+//        shrinkwx -= 8
+//        shrinkwy -= 8
+//        ctx.fillStyle = pcolor
+//        ctx.fillRect(shrinksx, shrinksy, shrinkwx, shrinkwy)
+//        stateDefinition()
+//        drawHealth()
+//        drawPower()
+//        drawCool()
+//        drawScore()
+//        if (shrinkwx <= 0 || shrinkwy <= 0 || shrinksx > w || shrinksy > h) {
+//            clearInterval(sessionS)
+//            end()
+//        }
 
-    }, 150)
-}
+//    }, 150)
+//}
 
-function end() {
-    var gx = -w
-    var gx2 = -0.5*w
-    effects.stop(ah)
-    mainTheme.stop()
-    endTheme.play()
-    var sessionE = setInterval(function() {
-        if (gx !== 0) gx += 4
-        if (gx2 !== 0 + 200) gx2 += 14
-        setHighScore()
-        pcolor = '#ffd6cc'
-        ctx.clearRect(0, 0, w, 0)
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, h, w)
-        var grd = ctx.createLinearGradient(0, 0, w + gx, 0)
-        grd.addColorStop(0, pcolor)
-        grd.addColorStop(1, 'black')
-        ctx.font = '70px Comic Sans MS'
-        ctx.fillStyle = grd
-        ctx.fillText("GAME OVER", w / 2 - (ctx.measureText("GAME OVER").width/2), h / 2 - 5)
-        ctx.font = '12px monospace'
-        if(highscore < score){
-            ctx.fillText("The high score was " + highscore, w / 2 - (ctx.measureText("The high score was " + highscore).width/2), h * 8.5 / 16)
-            ctx.fillText("Your score is " + score, w / 2 - (ctx.measureText("Your score is " + score).width/2), h * 9 / 16)
-        }
-        else {
-            ctx.fillText("The high score is " + highscore, w / 2 - (ctx.measureText("The high score is " + highscore).width/2), h * 8.5 / 16)
-            ctx.fillText("Your score was " + score, w / 2 - (ctx.measureText("Your score was " + score).width/2), h * 9 / 16)
-        }
-        ctx.font = '20px monospace'
-        var grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0)
-        grd2.addColorStop(0, pcolor)
-        grd2.addColorStop(1, 'black')
-        ctx.fillStyle = grd2
-        ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10)
-        canvas.addEventListener("mousedown", getPosition, false)
-        if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
-            clearInterval(sessionE)
-            location.reload()
-        }
-    }, 50)
-}
+//function end() {
+//    var gx = -w
+//    var gx2 = -0.5*w
+//    effects.stop(ah)
+//    mainTheme.stop()
+//    endTheme.play()
+//    var sessionE = setInterval(function() {
+//        if (gx !== 0) gx += 4
+//        if (gx2 !== 0 + 200) gx2 += 14
+//        setHighScore()
+//        pcolor = '#ffd6cc'
+//        ctx.clearRect(0, 0, w, 0)
+//        ctx.fillStyle = 'black'
+//        ctx.fillRect(0, 0, h, w)
+//        var grd = ctx.createLinearGradient(0, 0, w + gx, 0)
+//        grd.addColorStop(0, pcolor)
+//        grd.addColorStop(1, 'black')
+//        ctx.font = '70px Comic Sans MS'
+//        ctx.fillStyle = grd
+//        ctx.fillText("GAME OVER", w / 2 - (ctx.measureText("GAME OVER").width/2), h / 2 - 5)
+//        ctx.font = '12px monospace'
+//        if(highscore < score){
+//            ctx.fillText("The high score was " + highscore, w / 2 - (ctx.measureText("The high score was " + highscore).width/2), h * 8.5 / 16)
+//            ctx.fillText("Your score is " + score, w / 2 - (ctx.measureText("Your score is " + score).width/2), h * 9 / 16)
+//        }
+//        else {
+//            ctx.fillText("The high score is " + highscore, w / 2 - (ctx.measureText("The high score is " + highscore).width/2), h * 8.5 / 16)
+//            ctx.fillText("Your score was " + score, w / 2 - (ctx.measureText("Your score was " + score).width/2), h * 9 / 16)
+//        }
+//        ctx.font = '20px monospace'
+//        var grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0)
+//        grd2.addColorStop(0, pcolor)
+//        grd2.addColorStop(1, 'black')
+//        ctx.fillStyle = grd2
+//        ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10)
+//        canvas.addEventListener("mousedown", getPosition, false)
+//        if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
+//            clearInterval(sessionE)
+//            location.reload()
+//        }
+//    }, 50)
+//}
 // REQUIRE: HOWLER.js 
 
-class Button {
-
-    constructor(font, text, x, y, click){
-        this.font = font
-        this.text = text
-
-        this.x = x
-        this.y = y
-        this.w = 100
-        this.h = 100
-    }
-
-    draw() {
-        ctx.font = this.font
-        ctx.fillText(this.text, this.x - this.w/2, this.y + this.h/2)
-    }
-
-    check(m) {
-        let x = this.x - this.w/2
-        let y = this.y - this.h/2
-        if (m.xmouse > x && m.xmouse < x + this.w &&
-            m.ymouse > y && m.ymouse < y + this.h) {
-            effects.play('btn');
-            return true
-        }
-    }
-
-    update(xchange, ychange) {
-        this.x += xchange/2
-        this.y += ychange/2
-        ctx.font = this.font
-        this.w = ctx.measureText(this.text).width
-        this.h = parseInt(this.font.split(" ")[0], 10)
-    }
-
-    adjust(x, y, w, h){
-        this.x = x
-        this.y = y
-        this.w = w
-        this.h = h
-    }
-
-    debug() {
-        ctx.strokeStyle = 'black'
-        ctx.strokeRect(this.x - this.w/2, this.y - this.h/2, this.w, this.h)
-    }
-
-}
 let background = new Image();
 background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
 
@@ -691,7 +747,6 @@ class IO {
 
 // Clamp number between two values with the following line:
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-// Normalize a vector
 
 class DPController {
     constructor() {
@@ -722,6 +777,7 @@ class DPController {
         }
     }
 }
+
 class DamagePoint {
 
     constructor(player) {
@@ -753,6 +809,7 @@ class DamagePoint {
 
     live() { if (this.life > 0) --this.life }
 }
+
 class Player {
     constructor(x, y, w, h) {
         this.x = x
@@ -783,10 +840,18 @@ class Player {
     }
 
     title(x, y, w, h) {
-        this.wiggle(230, 280)
+        this.wiggle(w/2, h/2)
 
-        this.x = clamp(this.x, x + 10, x + w - this.w - 10) 
-        this.y = clamp(this.y, y + 10, y + h - this.h - 10) 
+        this.x = clamp(this.x, x + w*3/8, x + w*5/8) 
+        this.y = clamp(this.y, y + w*3/8, y + h*5/8) 
+    }
+
+    shrink(dx, dy, w, h) {
+        w = clamp(w/2, 55, 60 + w/2)
+        this.wiggle(55, w)
+
+        this.x += dx
+        this.y += dy
     }
 
     draw() {
@@ -1003,29 +1068,28 @@ class Player {
         if (target == null)
             return false
 
-        if (this.x < target.x + target.w &&
-            this.x + this.w > target.x &&
-            this.y < target.y + target.h &&
-            this.h + this.y > target.y)
+        if (!(this.x + this.w/2 < target.x - target.w/2 ||  
+            this.x - this.w/2 > target.x + target.w/2) &&
+
+            !(this.y + this.h/2 < target.y - target.h/2 || 
+            this.y - this.h/2 > target.y + target.w/2))
             return true
 
         return false
     }
 
     wiggle(min, max) {
-        // if (frameNumber % 20 == 0) {
-            let rand = Math.random() > 0.5 ? 1 : -1;
-            this.x = this.x + rand
+        let rand = Math.random() > 0.5 ? 1 : -1;
+        this.x = this.x + rand
 
-            rand = Math.random() > 0.5 ? 1 : -1;
-            this.y = this.y + rand
+        rand = Math.random() > 0.5 ? 1 : -1;
+        this.y = this.y + rand
 
-            rand = Math.random() > 0.5 ? 1 : -1;
-            this.w = clamp(this.w + rand, min, max)
+        rand = Math.random() > 0.5 ? 1 : -1;
+        this.w = clamp(this.w + rand, min, max)
 
-            rand = Math.random() > 0.5 ? 1 : -1;
-            this.h = clamp(this.h + rand, min, max)
-        // }
+        rand = Math.random() > 0.5 ? 1 : -1;
+        this.h = clamp(this.h + rand, min, max)
     }
 }
 
@@ -1332,6 +1396,10 @@ class Enemy {
         ctx.stroke();
         ctx.closePath();
 
+        //Draw Hitbox (DEBUG)
+        // ctx.lineWidth = 1
+        // ctx.strokeRect(this.x - this.w/2, this.y - this.w/2, this.w, this.h)
+
     }
 
     controller() {
@@ -1500,20 +1568,6 @@ function enemeySpeed(){
 //     ctx.closePath();
 // },
 
-function intro() {
-    ++G.frame
-    G.resizeWindow()
-
-    menuSize = 500
-    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
-    IntroText.draw(x, y, menuSize, menuSize)
-
-    setTimeout(() => 
-        window.requestAnimationFrame(intro),
-    1000 / G.fps);
-}
-
 // Button Definitions
 let b_start = null
 
@@ -1529,7 +1583,9 @@ function menu() {
 
     if (G.frame == 1) {
         titleTheme.play()
-        b_start = new Button("30px Arial Bold", "START", x + menuSize/2, y + menuSize*7/8)
+        b_start = new Button("25px Comic Sans MS", "START",
+                        x + menuSize/2, y + menuSize*7/8,
+                        '#ffd6cc', 'black')
 
         // let b_start = new Button(x + G.w/2, y,
         // Initalize Controll
@@ -1541,38 +1597,26 @@ function menu() {
         P.y = y + menuSize/2
     }
 
-    // Check Start Click
-    // if (I.xmouse > 500) {
-    //     window.requestAnimationFrame(main);
-    //     G.updateDifficulty(P, Enemies, 3)
-    //     return
-    // }
-
+    Stage.draw(G.w, G.h)
     P.title(x, y, menuSize, menuSize) // update
     // Menu.checkButtons(mouse)
 
-    Menu.draw(x, y, menuSize, menuSize, 0, 1)       
+    Menu.draw(x, y, x + menuSize, y + menuSize)       
     P.draw()
 
     if (b_start != null) {
-        ctx.fillStyle = 'red'
         b_start.draw()
         if (b_start.check(I)) {
             window.requestAnimationFrame(MenuTrans);
             return
         }
     }
-    // BUTTON BORDER
-    // ctx.strokeStyle = 'black'
-    // ctx.strokeRect(x + menuSize/2, y + menuSize/2, 50, 50)
 
-    setTimeout(() => 
-        window.requestAnimationFrame(menu),
-    1000 / G.fps);
+    loop(menu)
 }
 
 let transTimer = 0
-let transDuration = 100
+let transDuration = 50
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()
@@ -1580,40 +1624,61 @@ function MenuTrans() {
 
     // Calculate Menu Window
     menuSize = 500
-    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    let progress = ((transDuration - transTimer)/transDuration)
 
+    // Update
+    P.shrink(-1, -1, menuSize*progress, menuSize*progress) // update
+    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
+
+    // Draw
     Stage.draw(G.w, G.h)
-    Menu.draw(x, y, menuSize, menuSize, transTimer, transDuration)
-    P.title(x, y, menuSize, menuSize) // update
+
+    let x2 = x1 + menuSize
+    let y2 = y1 + menuSize
+    Menu.draw(x1*progress, y1*progress,         // x1 and y1
+              x2 + (G.w - x2)*(1 - progress),   // x2
+              y2 + (G.h - y2)*(1 - progress))   // y1
+
+    b_start.draw()
+
     P.draw()
 
     if (transTimer >= transDuration) {
-            G.updateDifficulty(P, Enemies, 5)
-            window.requestAnimationFrame(main);
-            return
+        G.updateDifficulty(P, Enemies, 5)
+        window.requestAnimationFrame(main);
+        return
     }
 
-    setTimeout(() => 
-        window.requestAnimationFrame(MenuTrans),
-    1000 / G.fps);
-    
+    loop(MenuTrans)
 }
 
 let Menu = {
-    draw(x, y, w, h, timer, duration) {
+    draw(x1, y1, x2, y2) { 
         ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, G.w, y - timer) // top
-        ctx.fillRect(0, 0, x - timer, G.h) // left
-        ctx.fillRect(0, y + h + timer, G.w, G.h - (y + h)) // bottom
-        ctx.fillRect(x + w + timer, 0, G.w - (x + w), G.h) // right
-        ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
-        ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = '#ffd6cc'
-        ctx.font = '80px Arial Bold'
+        ctx.fillRect(0, 0, G.w, y1) // top
+        ctx.fillRect(0, 0, x1, G.h) // left
+
+        ctx.fillRect(0, y2, G.w, G.h) // bottom
+        ctx.fillRect(x2, 0, G.w, G.h) // right
+
+        let w = x2 - x1
+        let h = y2 - y1
+
+        // ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
+        // ctx.fillRect(x, y, w, h)
+        ctx.fillStyle = 'black'
+        ctx.font = '30px Comic Sans MS'
+
         ctx.fillText("BLOB MOB",
-            x + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y + (h*1/8))
+            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2) - 3,
+            y1 + (h*1/8) - 3)
+
+        ctx.fillStyle = '#ffd6cc'
+        ctx.fillText("BLOB MOB",
+            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2),
+            y1 + (h*1/8))
 
         // ctx.fillStyle = '#ffd6cc'
         // ctx.font = '15px sans-serif'
@@ -1638,17 +1703,30 @@ let Menu = {
 
 }
 
-let IntroText = {
-    draw(x, y, w, h) {
-        ctx.fillStyle = '#ffd6cc'
-        ctx.fillRect(x, y, w, h)
-        ctx.font = '30px Arial Bold'
-        let tw = ctx.measureText("monke").width
-        ctx.fillStyle = 'black'
-        ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+// function intro() {
+//     ++G.frame
+//     G.resizeWindow()
 
-    }
-}
+//     menuSize = 500
+//     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+//     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+//     IntroText.draw(x, y, menuSize, menuSize)
+
+//     loop(intro)
+// }
+
+
+// let IntroText = {
+//     draw(x, y, w, h) {
+//         ctx.fillStyle = '#ffd6cc'
+//         ctx.fillRect(x, y, w, h)
+//         ctx.font = '30px Arial Bold'
+//         let tw = ctx.measureText("monke").width
+//         ctx.fillStyle = 'black'
+//         ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+
+//     }
+// }
 // REQUIRES: player.js io.js
 
 const c = document.getElementById('canvas')
@@ -1662,19 +1740,19 @@ const Enemies = new EnemyController()
 
 function main() {
     if (G.frame == 0) Stage.init
-
     ++G.frame
 
     // Update
     if (!G.paused) update()
     G.pause(I.keyState.pause)
 
+    // Draw
     draw()
 
+    // Debug
+    G.debug()
 
-    setTimeout(() => 
-        window.requestAnimationFrame(main),
-    1000 / G.fps);
+    loop(main)
 }
 
 function update() {
