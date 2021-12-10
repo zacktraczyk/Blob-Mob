@@ -38,8 +38,8 @@ function menu() {
 }
 
 let transTimer = 0
-let transDuration = 100
-// let transDuration = 460
+// let transDuration = 100
+let transDuration = 460
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()

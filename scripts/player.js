@@ -173,12 +173,13 @@ class Player {
             case en.act.attack:
                 this.color = '#adedff'
                 this.attack(20, enemies)
-                return
+                return // exit control loop
             case en.act.norm:
                 this.move(w, h, keys)
                 break
             case en.act.push:
                 this.move(w, h, keys)
+                this.color = '#adedff'
                 this.pushField(600, enemies)
                 break
             // case en.act.regen:
@@ -190,11 +191,13 @@ class Player {
         this.y += this.yvel
 
         // Cooldown
-        if (this.cool > 0 && this.action != en.act.push) {
-            --this.cool;
-            this.color = '#adedff'
-        } else {
-            this.color = '#ffd6cc'
+        if (this.action != en.act.push) {
+            if (this.cool > 0) {
+                --this.cool;
+                this.color = '#adedff'
+            } else {
+                this.color = '#ffd6cc'
+            }
         }
 
         // Check for damage

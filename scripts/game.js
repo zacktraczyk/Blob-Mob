@@ -115,7 +115,7 @@ class Game {
         y += 20
         ctx.fillText("speed: " + eVals.speed, x, y)
         y += 20
-        ctx.fillText("Spawn Rate: " + eVals.spawnRate, x, y)
+        ctx.fillText("Spawn Rate: " + eVals.spawnRate + "s", x, y)
         y += 20
         ctx.fillText("Max Number: " + eVals.maxInst, x, y)
         y += 40

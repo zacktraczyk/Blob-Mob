@@ -1,5 +1,5 @@
 let gtransTimer = 0
-let gtransDuration = 100
+let gtransDuration = 200
 function GameoverTrans() {
     ++G.frame
     G.resizeWindow()
@@ -11,6 +11,9 @@ function GameoverTrans() {
     Stage.draw(G.w, G.h)
 
     P.draw()
+    Enemies.draw()
+    Enemies.controller()
+
     if (gtransTimer >= gtransDuration) {
         window.requestAnimationFrame(Gameover);
         return
@@ -25,7 +28,7 @@ function Gameover() {
 
     ctx.fillStyle = 'red'
     ctx.font = "30px Arial Bold"
-    ctx.fillText("GAMEOVER", G.w/2, G.h/2)
+    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
     console.log("gameover")
 
 

@@ -75,8 +75,8 @@ const difficultyTable = {
         },
         enemy: {
             speed:      5,
-            spawnRate:  1,
-            maxInst:    100,
+            spawnRate:  0.1,
+            maxInst:    200,
         }
     },
 
@@ -311,7 +311,7 @@ class Game {
         y += 20
         ctx.fillText("speed: " + eVals.speed, x, y)
         y += 20
-        ctx.fillText("Spawn Rate: " + eVals.spawnRate, x, y)
+        ctx.fillText("Spawn Rate: " + eVals.spawnRate + "s", x, y)
         y += 20
         ctx.fillText("Max Number: " + eVals.maxInst, x, y)
         y += 40
@@ -940,12 +940,13 @@ class Player {
             case en.act.attack:
                 this.color = '#adedff'
                 this.attack(20, enemies)
-                return
+                return // exit control loop
             case en.act.norm:
                 this.move(w, h, keys)
                 break
             case en.act.push:
                 this.move(w, h, keys)
+                this.color = '#adedff'
                 this.pushField(600, enemies)
                 break
             // case en.act.regen:
@@ -957,11 +958,13 @@ class Player {
         this.y += this.yvel
 
         // Cooldown
-        if (this.cool > 0 && this.action != en.act.push) {
-            --this.cool;
-            this.color = '#adedff'
-        } else {
-            this.color = '#ffd6cc'
+        if (this.action != en.act.push) {
+            if (this.cool > 0) {
+                --this.cool;
+                this.color = '#adedff'
+            } else {
+                this.color = '#ffd6cc'
+            }
         }
 
         // Check for damage
@@ -1627,8 +1630,8 @@ function menu() {
 }
 
 let transTimer = 0
-let transDuration = 100
-// let transDuration = 460
+// let transDuration = 100
+let transDuration = 460
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()
@@ -1774,10 +1777,11 @@ function main() {
     draw()
 
     // Debug
-    G.debug()
+    // G.debug()
 
     if (P.state == en.state.dead) {
         window.requestAnimationFrame(GameoverTrans)
+        mainTheme.stop()
         return
     }
 
@@ -1805,7 +1809,7 @@ function draw() {
     Stage.HUD(G.w, G.h, P)
 }
 let gtransTimer = 0
-let gtransDuration = 100
+let gtransDuration = 200
 function GameoverTrans() {
     ++G.frame
     G.resizeWindow()
@@ -1817,6 +1821,9 @@ function GameoverTrans() {
     Stage.draw(G.w, G.h)
 
     P.draw()
+    Enemies.draw()
+    Enemies.controller()
+
     if (gtransTimer >= gtransDuration) {
         window.requestAnimationFrame(Gameover);
         return
@@ -1831,7 +1838,7 @@ function Gameover() {
 
     ctx.fillStyle = 'red'
     ctx.font = "30px Arial Bold"
-    ctx.fillText("GAMEOVER", G.w/2, G.h/2)
+    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
     console.log("gameover")
 
 

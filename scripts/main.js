@@ -20,10 +20,11 @@ function main() {
     draw()
 
     // Debug
-    G.debug()
+    // G.debug()
 
     if (P.state == en.state.dead) {
         window.requestAnimationFrame(GameoverTrans)
+        mainTheme.stop()
         return
     }
 
