@@ -51,7 +51,7 @@ const difficultyTable = {
         },
         enemy: {
             speed:      5,
-            spawnRate:  5,
+            spawnRate:  1,
             maxInst:    100,
         }
     },

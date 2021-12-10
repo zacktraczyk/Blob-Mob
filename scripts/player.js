@@ -264,12 +264,12 @@ class Player {
         this.cool += this.maxCool/duration
 
         if (this.timer < duration/2) {
-            this.x += this.xdir*5
-            this.y += this.ydir*5
+            this.x += this.xdir*7
+            this.y += this.ydir*7
         }
         if (this.timer > duration/2) {
-            this.x -= this.xdir*5
-            this.y -= this.ydir*5
+            this.x -= this.xdir*7
+            this.y -= this.ydir*7
         }
 
         // Check Collision
@@ -315,8 +315,10 @@ class Player {
     }
 
     death() {
-        this.highscore = G.score
-        localStorage.setItem("highscore", this.highscore)
+        if (G.score > G.highscore) {
+            G.highscore = G.score
+            localStorage.setItem("highscore", this.highscore)
+        }
     }
 
     collides(target) {

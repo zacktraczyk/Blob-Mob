@@ -22,6 +22,11 @@ function main() {
     // Debug
     G.debug()
 
+    if (P.state == en.state.dead) {
+        window.requestAnimationFrame(GameoverTrans)
+        return
+    }
+
     loop(main)
 }
 

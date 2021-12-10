@@ -1,7 +1,7 @@
 // REQUIRE: HOWLER.js 
 
 let background = new Image();
-background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
+background.src = 'paper.jpg'; //NOT IN USE
 
 let Stage = {
     draw(w, h) {

@@ -75,7 +75,7 @@ const difficultyTable = {
         },
         enemy: {
             speed:      5,
-            spawnRate:  5,
+            spawnRate:  1,
             maxInst:    100,
         }
     },
@@ -170,6 +170,7 @@ class Button {
             m.ymouse > y && m.ymouse < y + this.h && m.mouseDown){
             if (!effects.playing('btn'))
                 effects.play('btn')
+            m.mouseDown = false
             return true
         }
     }
@@ -631,7 +632,7 @@ class Game {
 // REQUIRE: HOWLER.js 
 
 let background = new Image();
-background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'; //NOT IN USE
+background.src = 'paper.jpg'; //NOT IN USE
 
 let Stage = {
     draw(w, h) {
@@ -751,17 +752,12 @@ class IO {
     mousePosition(event) {
         I.xmouse = event.x - c.offsetLeft // ALSO BAD
         I.ymouse = event.y - c.offsetTop // REAL BAD
+        I.mouseDown = true
 
     }
 
     addMouseListener() {
         canvas.addEventListener("click", this.mousePosition, false);
-        document.body.onmousedown = function() { 
-            I.mouseDown = true
-        }
-        document.body.onmouseup = function() {
-            I.mouseDown = false
-        }
     }
 
     removeMouseListener() {
@@ -1035,12 +1031,12 @@ class Player {
         this.cool += this.maxCool/duration
 
         if (this.timer < duration/2) {
-            this.x += this.xdir*5
-            this.y += this.ydir*5
+            this.x += this.xdir*7
+            this.y += this.ydir*7
         }
         if (this.timer > duration/2) {
-            this.x -= this.xdir*5
-            this.y -= this.ydir*5
+            this.x -= this.xdir*7
+            this.y -= this.ydir*7
         }
 
         // Check Collision
@@ -1086,8 +1082,10 @@ class Player {
     }
 
     death() {
-        this.highscore = G.score
-        localStorage.setItem("highscore", this.highscore)
+        if (G.score > G.highscore) {
+            G.highscore = G.score
+            localStorage.setItem("highscore", this.highscore)
+        }
     }
 
     collides(target) {
@@ -1288,12 +1286,12 @@ class EnemyController {
     }
 
     spawner(w, h, p) {
-        if (this.cool > 0) --this.cool
-        if (G.time % this.spawnRate == 0 && Enemies.instances.length < this.maxInst && this.cool <= 0) {
+        --this.cool
+        if (Enemies.instances.length < this.maxInst && this.cool <= 0) {
             let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
-            this.cool = G.fps + 10
+            this.cool = this.spawnRate*G.fps
         }
     }
 
@@ -1605,11 +1603,9 @@ function menu() {
 
     if (G.frame == 1) {
         titleTheme.play()
-        b_start.x = x + menuSize/2
-        b_start.y = y + menuSize*7/8
 
-        b_options.x = x + menuSize*7/8
-        b_options.y = y + menuSize - 20
+        // Set coords of Buttons
+        Menu.placeButtons(x, y, menuSize, menuSize)
 
         // Initalize Controll
         I.addKeyListeners()
@@ -1622,34 +1618,17 @@ function menu() {
 
     Stage.draw(G.w, G.h)
     P.title(x, y, menuSize, menuSize) // update
-    // Menu.checkButtons(mouse)
 
     Menu.draw(x, y, x + menuSize, y + menuSize)       
     P.draw()
 
-    if (b_start != null) {
-        b_start.draw()
-        if (b_start.check(I)) {
-            window.requestAnimationFrame(MenuTrans);
-            mainTheme.play()
-            return
-        }
-    }
-
-    if (b_options != null) {
-        b_options.draw()
-        if (b_options.check(I)) {
-            console.log("MONKE")
-        }
-    }
-
-    if (I.mouseDown == true) console.log(I.mouseDown)
-
+    if (Menu.checkButtons()) return // end loop
     loop(menu)
 }
 
 let transTimer = 0
-let transDuration = 460
+let transDuration = 100
+// let transDuration = 460
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()
@@ -1671,15 +1650,15 @@ function MenuTrans() {
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize
     Menu.draw(x1*progress, y1*progress,         // x1 and y1
-              x2 + (G.w - x2)*(1 - progress),   // x2
-              y2 + (G.h - y2)*(1 - progress))   // y1
+        x2 + (G.w - x2)*(1 - progress),   // x2
+        y2 + (G.h - y2)*(1 - progress))   // y1
 
     b_start.draw()
 
     P.draw()
 
     if (transTimer >= transDuration) {
-        G.updateDifficulty(P, Enemies, 3)
+        G.updateDifficulty(P, Enemies, 6)
         window.requestAnimationFrame(main);
         return
     }
@@ -1720,8 +1699,30 @@ let Menu = {
         //     3. Options -----> take you to options fke
     },
 
-    drawStartButton() {
-        b_start.check(mouse)
+    placeButtons(x, y, w, h) {
+        b_start.x = x + w/2
+        b_start.y = y + h*7/8
+
+        b_options.x = x + w*7/8
+        b_options.y = y + h - 20
+    },
+
+    checkButtons() {
+        if (b_start != null) {
+            b_start.draw()
+            if (b_start.check(I)) {
+                window.requestAnimationFrame(MenuTrans);
+                mainTheme.play()
+                return true
+            }
+        }
+
+        if (b_options != null) {
+            b_options.draw()
+            if (b_options.check(I)) {
+                console.log("MONKE")
+            }
+        }
     }
 
 
@@ -1775,6 +1776,11 @@ function main() {
     // Debug
     G.debug()
 
+    if (P.state == en.state.dead) {
+        window.requestAnimationFrame(GameoverTrans)
+        return
+    }
+
     loop(main)
 }
 
@@ -1797,4 +1803,37 @@ function draw() {
     if (G.paused) pauseMenu.draw(G.w, G.h)
 
     Stage.HUD(G.w, G.h, P)
+}
+let gtransTimer = 0
+let gtransDuration = 100
+function GameoverTrans() {
+    ++G.frame
+    G.resizeWindow()
+    gtransTimer += 1
+
+    let progress = ((gtransDuration - gtransTimer)/gtransDuration)
+
+    // Draw
+    Stage.draw(G.w, G.h)
+
+    P.draw()
+    if (gtransTimer >= gtransDuration) {
+        window.requestAnimationFrame(Gameover);
+        return
+    }
+
+    loop(GameoverTrans)
+}
+
+function Gameover() {
+    ++G.frame
+    G.resizeWindow()
+
+    ctx.fillStyle = 'red'
+    ctx.font = "30px Arial Bold"
+    ctx.fillText("GAMEOVER", G.w/2, G.h/2)
+    console.log("gameover")
+
+
+    loop(Gameover)
 }

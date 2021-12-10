@@ -64,17 +64,12 @@ class IO {
     mousePosition(event) {
         I.xmouse = event.x - c.offsetLeft // ALSO BAD
         I.ymouse = event.y - c.offsetTop // REAL BAD
+        I.mouseDown = true
 
     }
 
     addMouseListener() {
         canvas.addEventListener("click", this.mousePosition, false);
-        document.body.onmousedown = function() { 
-            I.mouseDown = true
-        }
-        document.body.onmouseup = function() {
-            I.mouseDown = false
-        }
     }
 
     removeMouseListener() {

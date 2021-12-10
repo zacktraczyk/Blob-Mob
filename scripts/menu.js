@@ -14,11 +14,9 @@ function menu() {
 
     if (G.frame == 1) {
         titleTheme.play()
-        b_start.x = x + menuSize/2
-        b_start.y = y + menuSize*7/8
 
-        b_options.x = x + menuSize*7/8
-        b_options.y = y + menuSize - 20
+        // Set coords of Buttons
+        Menu.placeButtons(x, y, menuSize, menuSize)
 
         // Initalize Controll
         I.addKeyListeners()
@@ -31,34 +29,17 @@ function menu() {
 
     Stage.draw(G.w, G.h)
     P.title(x, y, menuSize, menuSize) // update
-    // Menu.checkButtons(mouse)
 
     Menu.draw(x, y, x + menuSize, y + menuSize)       
     P.draw()
 
-    if (b_start != null) {
-        b_start.draw()
-        if (b_start.check(I)) {
-            window.requestAnimationFrame(MenuTrans);
-            mainTheme.play()
-            return
-        }
-    }
-
-    if (b_options != null) {
-        b_options.draw()
-        if (b_options.check(I)) {
-            console.log("MONKE")
-        }
-    }
-
-    if (I.mouseDown == true) console.log(I.mouseDown)
-
+    if (Menu.checkButtons()) return // end loop
     loop(menu)
 }
 
 let transTimer = 0
-let transDuration = 460
+let transDuration = 100
+// let transDuration = 460
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()
@@ -80,15 +61,15 @@ function MenuTrans() {
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize
     Menu.draw(x1*progress, y1*progress,         // x1 and y1
-              x2 + (G.w - x2)*(1 - progress),   // x2
-              y2 + (G.h - y2)*(1 - progress))   // y1
+        x2 + (G.w - x2)*(1 - progress),   // x2
+        y2 + (G.h - y2)*(1 - progress))   // y1
 
     b_start.draw()
 
     P.draw()
 
     if (transTimer >= transDuration) {
-        G.updateDifficulty(P, Enemies, 3)
+        G.updateDifficulty(P, Enemies, 6)
         window.requestAnimationFrame(main);
         return
     }
@@ -129,8 +110,30 @@ let Menu = {
         //     3. Options -----> take you to options fke
     },
 
-    drawStartButton() {
-        b_start.check(mouse)
+    placeButtons(x, y, w, h) {
+        b_start.x = x + w/2
+        b_start.y = y + h*7/8
+
+        b_options.x = x + w*7/8
+        b_options.y = y + h - 20
+    },
+
+    checkButtons() {
+        if (b_start != null) {
+            b_start.draw()
+            if (b_start.check(I)) {
+                window.requestAnimationFrame(MenuTrans);
+                mainTheme.play()
+                return true
+            }
+        }
+
+        if (b_options != null) {
+            b_options.draw()
+            if (b_options.check(I)) {
+                console.log("MONKE")
+            }
+        }
     }
 
 

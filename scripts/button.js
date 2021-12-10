@@ -27,6 +27,7 @@ class Button {
             m.ymouse > y && m.ymouse < y + this.h && m.mouseDown){
             if (!effects.playing('btn'))
                 effects.play('btn')
+            m.mouseDown = false
             return true
         }
     }
