@@ -3,6 +3,8 @@ class IO {
     constructor() {
         this.xmouse = 0
         this.ymouse = 0
+        this.mouseDown = false
+
         this.keyState = {
             right: false,
             up: false,
@@ -62,10 +64,17 @@ class IO {
     mousePosition(event) {
         I.xmouse = event.x - c.offsetLeft // ALSO BAD
         I.ymouse = event.y - c.offsetTop // REAL BAD
+
     }
 
     addMouseListener() {
         canvas.addEventListener("click", this.mousePosition, false);
+        document.body.onmousedown = function() { 
+            I.mouseDown = true
+        }
+        document.body.onmouseup = function() {
+            I.mouseDown = false
+        }
     }
 
     removeMouseListener() {

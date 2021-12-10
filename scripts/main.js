@@ -10,7 +10,6 @@ const DP = new DPController()
 const Enemies = new EnemyController()
 
 function main() {
-    if (G.frame == 0) Stage.init
     ++G.frame
 
     // Update
@@ -45,5 +44,4 @@ function draw() {
     if (G.paused) pauseMenu.draw(G.w, G.h)
 
     Stage.HUD(G.w, G.h, P)
-
 }

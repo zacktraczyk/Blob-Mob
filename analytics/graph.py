@@ -40,10 +40,16 @@ for l in f:
 
 table[diff] = {'player': p, 'enemy': e}
 
-
+# Refit
+for t in ['player', 'enemy']:
+    for a in list(table[list(table.keys())[0]][t].keys()):
+        for di in list(table.keys()):
+            if a == 'health':
+                table[di][t][a] /= 100
+            if a == 'maxInst':
+                table[di][t][a] /= 10
 
 # Draw
-
 plt.rcParams['figure.figsize'] = [4, 12]
 plt.xlabel('difficulty')
 plt.ylabel('value')

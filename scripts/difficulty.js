@@ -9,6 +9,8 @@ const difficultyTable = {
         },
         enemy: {
             speed:      0.8,
+            spawnRate:  2,
+            maxInst:    2,
         }
     },
 
@@ -16,11 +18,13 @@ const difficultyTable = {
         player: {
             speed:      4,
             accel:      0.4,
-            cool:       5,
+            cool:       25,
             health:     500,
         },
         enemy: {
             speed:      1,
+            spawnRate:  5,
+            maxInst:    150,
         }
     },
 
@@ -28,11 +32,13 @@ const difficultyTable = {
         player: {
             speed:      3,
             accel:      0.4,
-            cool:       60,
+            cool:       40,
             health:     300,
         },
         enemy: {
             speed:      2,
+            spawnRate:  5,
+            maxInst:    100,
         }
     },
 
@@ -45,6 +51,8 @@ const difficultyTable = {
         },
         enemy: {
             speed:      5,
+            spawnRate:  5,
+            maxInst:    100,
         }
     },
 

@@ -6,23 +6,18 @@ class EnemyController {
         this.instances = new Array()
         this.cool = 0
         this.speed
+
+        this.maxInst
+        this.spawnRate
     }
 
     spawner(w, h, p) {
-        // if (Enemies.instances.length < 1) {
-        //     let e = new Enemy(this.speed)
-        //     e.spawn(w, h, p)
-        //     // e.x = w/2
-        //     // e.y = w/2
-        //     this.instances.push(e)
-        //     this.cool = 50
-        // }
         if (this.cool > 0) --this.cool
-        if (G.time % 0.50 && Enemies.instances.length < 150 && this.cool <= 0) {
+        if (G.time % this.spawnRate == 0 && Enemies.instances.length < this.maxInst && this.cool <= 0) {
             let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
-            this.cool = 20
+            this.cool = G.fps + 10
         }
     }
 

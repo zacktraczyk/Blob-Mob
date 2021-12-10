@@ -33,6 +33,8 @@ const difficultyTable = {
         },
         enemy: {
             speed:      0.8,
+            spawnRate:  2,
+            maxInst:    2,
         }
     },
 
@@ -40,11 +42,13 @@ const difficultyTable = {
         player: {
             speed:      4,
             accel:      0.4,
-            cool:       5,
+            cool:       25,
             health:     500,
         },
         enemy: {
             speed:      1,
+            spawnRate:  5,
+            maxInst:    150,
         }
     },
 
@@ -52,11 +56,13 @@ const difficultyTable = {
         player: {
             speed:      3,
             accel:      0.4,
-            cool:       60,
+            cool:       40,
             health:     300,
         },
         enemy: {
             speed:      2,
+            spawnRate:  5,
+            maxInst:    100,
         }
     },
 
@@ -69,6 +75,8 @@ const difficultyTable = {
         },
         enemy: {
             speed:      5,
+            spawnRate:  5,
+            maxInst:    100,
         }
     },
 
@@ -81,7 +89,8 @@ let titleTheme = new Howl({
 });
 
 let mainTheme = new Howl({
-    src: ['Sound/8-lit.mp3'],
+    // src: ['Sound/8-lit.mp3'],
+    src: ['Sound/No-Thanksv1.1.mp3'],
     volume: 0.5,
     loop: true
     
@@ -158,8 +167,9 @@ class Button {
         let x = this.x - this.w/2
         let y = this.y - this.h/2
         if (m.xmouse > x && m.xmouse < x + this.w &&
-            m.ymouse > y && m.ymouse < y + this.h) {
-            effects.play('btn');
+            m.ymouse > y && m.ymouse < y + this.h && m.mouseDown){
+            if (!effects.playing('btn'))
+                effects.play('btn')
             return true
         }
     }
@@ -222,6 +232,7 @@ class Game {
             this.h = innerHeight
 
             if (b_start != null) b_start.update(xchange, ychange)
+            if (b_options != null) b_options.update(xchange, ychange)
         // }
     }
 
@@ -241,6 +252,8 @@ class Game {
 
         // Enemy
         enemyController.speed = eVals.speed
+        enemyController.maxInst = eVals.maxInst
+        enemyController.spawnRate = eVals.spawnRate
     }
 
     get time() {
@@ -273,7 +286,7 @@ class Game {
         ctx.color = "black"
         
         let x = 40
-        let y = this.h*3/4
+        let y = this.h*5/8 + 100
 
         let pVals = difficultyTable[this.difficulty].player
         let eVals = difficultyTable[this.difficulty].enemy
@@ -296,6 +309,10 @@ class Game {
         x += 30
         y += 20
         ctx.fillText("speed: " + eVals.speed, x, y)
+        y += 20
+        ctx.fillText("Spawn Rate: " + eVals.spawnRate, x, y)
+        y += 20
+        ctx.fillText("Max Number: " + eVals.maxInst, x, y)
         y += 40
         if (Enemies != null) ctx.fillText("Blobs: " + Enemies.instances.length, x, y)
 
@@ -673,6 +690,8 @@ class IO {
     constructor() {
         this.xmouse = 0
         this.ymouse = 0
+        this.mouseDown = false
+
         this.keyState = {
             right: false,
             up: false,
@@ -732,10 +751,17 @@ class IO {
     mousePosition(event) {
         I.xmouse = event.x - c.offsetLeft // ALSO BAD
         I.ymouse = event.y - c.offsetTop // REAL BAD
+
     }
 
     addMouseListener() {
         canvas.addEventListener("click", this.mousePosition, false);
+        document.body.onmousedown = function() { 
+            I.mouseDown = true
+        }
+        document.body.onmouseup = function() {
+            I.mouseDown = false
+        }
     }
 
     removeMouseListener() {
@@ -1256,23 +1282,18 @@ class EnemyController {
         this.instances = new Array()
         this.cool = 0
         this.speed
+
+        this.maxInst
+        this.spawnRate
     }
 
     spawner(w, h, p) {
-        // if (Enemies.instances.length < 1) {
-        //     let e = new Enemy(this.speed)
-        //     e.spawn(w, h, p)
-        //     // e.x = w/2
-        //     // e.y = w/2
-        //     this.instances.push(e)
-        //     this.cool = 50
-        // }
         if (this.cool > 0) --this.cool
-        if (G.time % 0.50 && Enemies.instances.length < 150 && this.cool <= 0) {
+        if (G.time % this.spawnRate == 0 && Enemies.instances.length < this.maxInst && this.cool <= 0) {
             let e = new Enemy(this.speed)
             e.spawn(w, h, p)
             this.instances.push(e)
-            this.cool = 20
+            this.cool = G.fps + 10
         }
     }
 
@@ -1569,7 +1590,8 @@ function enemeySpeed(){
 // },
 
 // Button Definitions
-let b_start = null
+let b_start = new Button("25px Comic Sans MS", "START", 0, 0, '#ffd6cc', 'black')
+let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
 
 function menu() {
     ++G.frame
@@ -1583,11 +1605,12 @@ function menu() {
 
     if (G.frame == 1) {
         titleTheme.play()
-        b_start = new Button("25px Comic Sans MS", "START",
-                        x + menuSize/2, y + menuSize*7/8,
-                        '#ffd6cc', 'black')
+        b_start.x = x + menuSize/2
+        b_start.y = y + menuSize*7/8
 
-        // let b_start = new Button(x + G.w/2, y,
+        b_options.x = x + menuSize*7/8
+        b_options.y = y + menuSize - 20
+
         // Initalize Controll
         I.addKeyListeners()
         I.addMouseListener()
@@ -1608,15 +1631,25 @@ function menu() {
         b_start.draw()
         if (b_start.check(I)) {
             window.requestAnimationFrame(MenuTrans);
+            mainTheme.play()
             return
         }
     }
+
+    if (b_options != null) {
+        b_options.draw()
+        if (b_options.check(I)) {
+            console.log("MONKE")
+        }
+    }
+
+    if (I.mouseDown == true) console.log(I.mouseDown)
 
     loop(menu)
 }
 
 let transTimer = 0
-let transDuration = 50
+let transDuration = 460
 function MenuTrans() {
     ++G.frame
     G.resizeWindow()
@@ -1629,7 +1662,7 @@ function MenuTrans() {
     let progress = ((transDuration - transTimer)/transDuration)
 
     // Update
-    P.shrink(-1, -1, menuSize*progress, menuSize*progress) // update
+    P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
     b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
 
     // Draw
@@ -1646,7 +1679,7 @@ function MenuTrans() {
     P.draw()
 
     if (transTimer >= transDuration) {
-        G.updateDifficulty(P, Enemies, 5)
+        G.updateDifficulty(P, Enemies, 3)
         window.requestAnimationFrame(main);
         return
     }
@@ -1680,20 +1713,11 @@ let Menu = {
             x1 + w/2 - (ctx.measureText("BLOB MOB").width/2),
             y1 + (h*1/8))
 
-        // ctx.fillStyle = '#ffd6cc'
-        // ctx.font = '15px sans-serif'
-        // const bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-        // ctx.fillText(bottommenu,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2),
-        //     h - 10)
-        // ctx.fillRect(10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
-        // ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10,
-        //     h - 13,
-        //     w / 2 - (ctx.measureText(bottommenu).width/2) - 10,
-        //     1)
+        // Big text = BLOB MOB
+        // Small text = Line 1-30px oninvalid
+        //     1, Start game -----> you start the game fke
+        //     2. How to play ----> tutorial or whatever fke
+        //     3. Options -----> take you to options fke
     },
 
     drawStartButton() {
@@ -1739,7 +1763,6 @@ const DP = new DPController()
 const Enemies = new EnemyController()
 
 function main() {
-    if (G.frame == 0) Stage.init
     ++G.frame
 
     // Update
@@ -1774,5 +1797,4 @@ function draw() {
     if (G.paused) pauseMenu.draw(G.w, G.h)
 
     Stage.HUD(G.w, G.h, P)
-
 }

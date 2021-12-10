@@ -6,7 +6,8 @@ let titleTheme = new Howl({
 });
 
 let mainTheme = new Howl({
-    src: ['Sound/8-lit.mp3'],
+    // src: ['Sound/8-lit.mp3'],
+    src: ['Sound/No-Thanksv1.1.mp3'],
     volume: 0.5,
     loop: true
     

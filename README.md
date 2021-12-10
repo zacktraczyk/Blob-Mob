@@ -13,21 +13,21 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
  
 # TODO
 
-* [X] Break up files
 * [o] Implement OOP:
-	* [ ] Character
-		* [ ] Push
+	* [.] Character
+		* [X] Push
 		* [ ] Regen
 		* [ ] Death
-	* [.] Enemy
-		* [X] Controller
-		* [ ] Death
-		* [ ] Push
+	* [o] Enemy
+		* [ ] Controller
+			* [ ] add spawn settings
+		* [X] Death
+		* [X] Push
 	* [X] HUD
-	* [o] io
+	* [X] io
 		* [X] Mouse
 		* [X] Keyboard
-		* [ ] Buttons
+		* [X] Buttons
 	* [X] Game
 	* [ ] main
 		* [ ] Make single game loop?

@@ -24,8 +24,9 @@ class Button {
         let x = this.x - this.w/2
         let y = this.y - this.h/2
         if (m.xmouse > x && m.xmouse < x + this.w &&
-            m.ymouse > y && m.ymouse < y + this.h) {
-            effects.play('btn');
+            m.ymouse > y && m.ymouse < y + this.h && m.mouseDown){
+            if (!effects.playing('btn'))
+                effects.play('btn')
             return true
         }
     }

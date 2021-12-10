@@ -37,6 +37,7 @@ class Game {
             this.h = innerHeight
 
             if (b_start != null) b_start.update(xchange, ychange)
+            if (b_options != null) b_options.update(xchange, ychange)
         // }
     }
 
@@ -56,6 +57,8 @@ class Game {
 
         // Enemy
         enemyController.speed = eVals.speed
+        enemyController.maxInst = eVals.maxInst
+        enemyController.spawnRate = eVals.spawnRate
     }
 
     get time() {
@@ -88,7 +91,7 @@ class Game {
         ctx.color = "black"
         
         let x = 40
-        let y = this.h*3/4
+        let y = this.h*5/8 + 100
 
         let pVals = difficultyTable[this.difficulty].player
         let eVals = difficultyTable[this.difficulty].enemy
@@ -111,6 +114,10 @@ class Game {
         x += 30
         y += 20
         ctx.fillText("speed: " + eVals.speed, x, y)
+        y += 20
+        ctx.fillText("Spawn Rate: " + eVals.spawnRate, x, y)
+        y += 20
+        ctx.fillText("Max Number: " + eVals.maxInst, x, y)
         y += 40
         if (Enemies != null) ctx.fillText("Blobs: " + Enemies.instances.length, x, y)
 
