@@ -28,9 +28,11 @@ function Gameover() {
 
     ctx.fillStyle = 'red'
     ctx.font = "30px Arial Bold"
-    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
-    console.log("gameover")
+    ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
+    ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
+    console.log(G.highscore)
 
+    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
 
     loop(Gameover)
 }

@@ -212,7 +212,7 @@ class Game {
         this.difficulty = 5 // 0 - 9
 
         this.score = 0
-        this.highscore = localStorage.getItem("highscore")
+        this.highscore = this.getHighscore()
 
         this.fps = 60
         this.frame = 0
@@ -261,15 +261,18 @@ class Game {
         return Math.floor(this.frame/this.fps * 100)/100
     }
 
-    setHighScore() {
-        if (this.highscore !== null) {
-            if (this.score > this.highscore) {
-                localStorage.setItem("highscore", this.score);
-            }
-        } else {
-            this.highscore = 0;
-            localStorage.setItem("highscore", this.score);
-        }
+    setHighscore() {
+        if (this.score > this.highscore)
+            console.log("new highscore")
+            this.highscore = this.score
+        localStorage.setItem("highscore", this.highscore);
+    }
+
+    getHighscore() {
+        let score = localStorage.getItem("highscore")
+        if (score == null)
+            return 0
+        return score
     }
 
     pause(p) {
@@ -919,10 +922,7 @@ class Player {
     controller(w, h, keys, enemies, damagePoints) {
 
         // Dead?
-        if (this.state == en.state.dead) {
-            this.death()
-            return
-        }
+        if (this.state == en.state.dead) return
 
         // Action Controller
         if (this.cool <= 0) {
@@ -1081,13 +1081,6 @@ class Player {
             this.action = en.act.norm
             this.pushR = 0
             this.power = 0
-        }
-    }
-
-    death() {
-        if (G.score > G.highscore) {
-            G.highscore = G.score
-            localStorage.setItem("highscore", this.highscore)
         }
     }
 
@@ -1782,6 +1775,7 @@ function main() {
     if (P.state == en.state.dead) {
         window.requestAnimationFrame(GameoverTrans)
         mainTheme.stop()
+        G.setHighscore()
         return
     }
 
@@ -1838,9 +1832,11 @@ function Gameover() {
 
     ctx.fillStyle = 'red'
     ctx.font = "30px Arial Bold"
-    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
-    console.log("gameover")
+    ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
+    ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
+    console.log(G.highscore)
 
+    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
 
     loop(Gameover)
 }

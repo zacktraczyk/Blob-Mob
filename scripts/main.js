@@ -25,6 +25,7 @@ function main() {
     if (P.state == en.state.dead) {
         window.requestAnimationFrame(GameoverTrans)
         mainTheme.stop()
+        G.setHighscore()
         return
     }
 

@@ -16,7 +16,7 @@ class Game {
         this.difficulty = 5 // 0 - 9
 
         this.score = 0
-        this.highscore = localStorage.getItem("highscore")
+        this.highscore = this.getHighscore()
 
         this.fps = 60
         this.frame = 0
@@ -65,15 +65,18 @@ class Game {
         return Math.floor(this.frame/this.fps * 100)/100
     }
 
-    setHighScore() {
-        if (this.highscore !== null) {
-            if (this.score > this.highscore) {
-                localStorage.setItem("highscore", this.score);
-            }
-        } else {
-            this.highscore = 0;
-            localStorage.setItem("highscore", this.score);
-        }
+    setHighscore() {
+        if (this.score > this.highscore)
+            console.log("new highscore")
+            this.highscore = this.score
+        localStorage.setItem("highscore", this.highscore);
+    }
+
+    getHighscore() {
+        let score = localStorage.getItem("highscore")
+        if (score == null)
+            return 0
+        return score
     }
 
     pause(p) {

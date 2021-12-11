@@ -152,10 +152,7 @@ class Player {
     controller(w, h, keys, enemies, damagePoints) {
 
         // Dead?
-        if (this.state == en.state.dead) {
-            this.death()
-            return
-        }
+        if (this.state == en.state.dead) return
 
         // Action Controller
         if (this.cool <= 0) {
@@ -314,13 +311,6 @@ class Player {
             this.action = en.act.norm
             this.pushR = 0
             this.power = 0
-        }
-    }
-
-    death() {
-        if (G.score > G.highscore) {
-            G.highscore = G.score
-            localStorage.setItem("highscore", this.highscore)
         }
     }
 
