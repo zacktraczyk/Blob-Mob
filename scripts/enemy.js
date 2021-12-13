@@ -8,14 +8,14 @@ class EnemyController {
         this.speed
 
         this.maxInst
-        this.spawnRate
+        this.spawnWait
     }
 
     spawner(w, h, p) {
         --this.cool
         if (Enemies.instances.length < this.maxInst && this.cool <= 0) {
             this.spawn(w, h, p)
-            this.cool = this.spawnRate*G.fps
+            this.cool = this.spawnWait*G.fps
         }
     }
 

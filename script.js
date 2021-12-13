@@ -33,7 +33,7 @@ const difficultyTable = {
         },
         enemy: {
             speed:      0.8,
-            spawnRate:  2,
+            spawnWait:  2,
             maxInst:    2,
         }
     },
@@ -47,7 +47,7 @@ const difficultyTable = {
         },
         enemy: {
             speed:      1,
-            spawnRate:  5,
+            spawnWait:  5,
             maxInst:    150,
         }
     },
@@ -61,7 +61,7 @@ const difficultyTable = {
         },
         enemy: {
             speed:      2,
-            spawnRate:  5,
+            spawnWait:  5,
             maxInst:    100,
         }
     },
@@ -75,7 +75,7 @@ const difficultyTable = {
         },
         enemy: {
             speed:      5,
-            spawnRate:  0.1,
+            spawnWait:  0.1,
             maxInst:    200,
         }
     },
@@ -244,7 +244,7 @@ class Game {
         // Enemy
         enemyController.speed = eVals.speed
         enemyController.maxInst = eVals.maxInst
-        enemyController.spawnRate = eVals.spawnRate
+        enemyController.spawnWait = eVals.spawnWait
     }
 
     get time() {
@@ -295,8 +295,6 @@ class Game {
         
         p.xvel = 0
         p.yvel = 0
-        p.x = G.w/2
-        p.x = G.h/2
 
         e.instances = new Array()
         damagePoints.instances = new Array()
@@ -333,7 +331,7 @@ class Game {
         y += 20
         ctx.fillText("speed: " + eVals.speed, x, y)
         y += 20
-        ctx.fillText("Spawn Rate: " + eVals.spawnRate + "s", x, y)
+        ctx.fillText("Spawn Rate: " + eVals.spawnWait + "s", x, y)
         y += 20
         ctx.fillText("Max Number: " + eVals.maxInst, x, y)
         y += 40
@@ -990,14 +988,14 @@ class EnemyController {
         this.speed
 
         this.maxInst
-        this.spawnRate
+        this.spawnWait
     }
 
     spawner(w, h, p) {
         --this.cool
         if (Enemies.instances.length < this.maxInst && this.cool <= 0) {
             this.spawn(w, h, p)
-            this.cool = this.spawnRate*G.fps
+            this.cool = this.spawnWait*G.fps
         }
     }
 
@@ -1317,6 +1315,7 @@ function MenuTrans() {
 
     // Draw
     Stage.draw(G.w, G.h)
+    Stage.HUD(G.w, G.h, P)
 
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize
@@ -1324,7 +1323,6 @@ function MenuTrans() {
         x2 + (G.w - x2)*(1 - progress),   // x2
         y2 + (G.h - y2)*(1 - progress))   // y1
 
-    // menu.buttons.draw(0, y1*progress, G.w, y2 + (G.h - y2)*(1 - progress) - y1*progress)
     P.draw()
 
     if (transTimer >= transDuration) {
@@ -1822,6 +1820,8 @@ function Gameover() {
 
     if (gameover.buttons.restart.check(I)) {
         G.reset(P, Enemies, DP)
+        P.x = G.w/2
+        P.y = G.h/2
 
         window.requestAnimationFrame(main)
         if (!mainTheme.playing()) mainTheme.play()

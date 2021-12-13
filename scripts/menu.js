@@ -91,6 +91,7 @@ function MenuTrans() {
 
     // Draw
     Stage.draw(G.w, G.h)
+    Stage.HUD(G.w, G.h, P)
 
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize
@@ -98,7 +99,6 @@ function MenuTrans() {
         x2 + (G.w - x2)*(1 - progress),   // x2
         y2 + (G.h - y2)*(1 - progress))   // y1
 
-    // menu.buttons.draw(0, y1*progress, G.w, y2 + (G.h - y2)*(1 - progress) - y1*progress)
     P.draw()
 
     if (transTimer >= transDuration) {

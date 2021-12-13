@@ -37,6 +37,8 @@ function Gameover() {
 
     if (gameover.buttons.restart.check(I)) {
         G.reset(P, Enemies, DP)
+        P.x = G.w/2
+        P.y = G.h/2
 
         window.requestAnimationFrame(main)
         if (!mainTheme.playing()) mainTheme.play()

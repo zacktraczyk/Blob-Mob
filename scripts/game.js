@@ -53,7 +53,7 @@ class Game {
         // Enemy
         enemyController.speed = eVals.speed
         enemyController.maxInst = eVals.maxInst
-        enemyController.spawnRate = eVals.spawnRate
+        enemyController.spawnWait = eVals.spawnWait
     }
 
     get time() {
@@ -104,8 +104,6 @@ class Game {
         
         p.xvel = 0
         p.yvel = 0
-        p.x = G.w/2
-        p.x = G.h/2
 
         e.instances = new Array()
         damagePoints.instances = new Array()
@@ -142,7 +140,7 @@ class Game {
         y += 20
         ctx.fillText("speed: " + eVals.speed, x, y)
         y += 20
-        ctx.fillText("Spawn Rate: " + eVals.spawnRate + "s", x, y)
+        ctx.fillText("Spawn Rate: " + eVals.spawnWait + "s", x, y)
         y += 20
         ctx.fillText("Max Number: " + eVals.maxInst, x, y)
         y += 40
