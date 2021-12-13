@@ -42,6 +42,12 @@ let Stage = {
         ctx.font = "20px monospace"
         ctx.fillText("Score: " + G.score, 18, 28, w / 2)
         ctx.fillText("High-Score: " + G.highscore, 18, 58, w / 2)
+
+        // Difficulty
+        ctx.fillStyle = 'black'
+        ctx.font = "20px monospace"
+        let text = `Difficulty ${G.difficulty}`
+        ctx.fillText(text, G.w - ctx.measureText(text).width - 20, h - 25)
     },
 }
 

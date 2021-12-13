@@ -248,7 +248,9 @@ function tutorial() {
     // T.debug()
 
     if (T.step == 'end') {
-        G.restart(P)
+        G.reset(P, Enemies, DP)
+        G.setTutorial()
+        window.requestAnimationFrame(main)
         return
     }
 

@@ -1,63 +1,6 @@
 // Button Definitions
-let b_start = new Button("25px Comic Sans MS", "START", '#ffd6cc', 'black')
-// let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
+// let b_options = new Button('20px Comic Sans MS', 'OPTIONS', 0, 0, '#ffd6cc', 'black')
 
-let Menu = {
-    draw(x1, y1, x2, y2) { 
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, G.w, y1) // top
-        ctx.fillRect(0, 0, x1, G.h) // left
-
-        ctx.fillRect(0, y2, G.w, G.h) // bottom
-        ctx.fillRect(x2, 0, G.w, G.h) // right
-
-        let w = x2 - x1
-        let h = y2 - y1
-
-        // ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
-        // ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = 'black'
-        ctx.font = '30px Comic Sans MS'
-
-        ctx.fillText("BLOB MOB",
-            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2) - 3,
-            y1 + (h*1/8) - 3)
-
-        ctx.fillStyle = '#ffd6cc'
-        ctx.fillText("BLOB MOB",
-            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y1 + (h*1/8))
-
-        // Big text = BLOB MOB
-        // Small text = Line 1-30px oninvalid
-        //     1, Start game -----> you start the game fke
-        //     2. How to play ----> tutorial or whatever fke
-        //     3. Options -----> take you to options fke
-    },
-
-    drawButtons(x, y, w, h) {
-        b_start.adjust(x + w/2, y + h*7/8)
-        b_start.draw()
-
-        // b_options.x = x + w*7/8
-        // b_options.y = y + h - 20
-        //     b_options.draw()
-    },
-
-    checkButtons() {
-        if (b_start.check(I)) {
-            window.requestAnimationFrame(MenuTrans);
-            mainTheme.play()
-            return true
-        }
-
-        //     if (b_options.check(I)) {
-        //         console.log("MONKE")
-        //     }
-    }
-
-
-}
 function menu() {
     ++G.frame
     G.resizeWindow()
@@ -67,12 +10,7 @@ function menu() {
     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
 
-
     if (G.frame == 1) {
-        titleTheme.play()
-
-        // Set coords of Buttons
-
         // Initalize Controll
         I.addKeyListeners()
         I.addMouseListener()
@@ -85,12 +23,53 @@ function menu() {
     Stage.draw(G.w, G.h)
     P.title(x, y, menuSize, menuSize) // update
 
-    Menu.draw(x, y, x + menuSize, y + menuSize)       
-    Menu.drawButtons(x, y, menuSize, menuSize)
+    Menu.drawBorder(x, y, x + menuSize, y + menuSize)
+
     P.draw()
 
-    if (Menu.checkButtons()) return // end loop
+    Menu.title.draw(x, y, menuSize, menuSize)       
+    Menu.title.buttons.draw(x, y, menuSize, menuSize)
+
+    if (Menu.title.buttons.start.check(I)) {
+        Menu.difficulty.buttons.generate(x, y, menuSize, menuSize)
+        if (G.getTutorial()) {
+            window.requestAnimationFrame(diffSelect)
+        } else {
+            G.updateDifficulty(P, Enemies, 3)
+            window.requestAnimationFrame(MenuTrans)
+        }
+        mainTheme.play()
+        return // end loop
+    }
     loop(menu)
+}
+
+function diffSelect() {
+    ++G.frame
+    G.resizeWindow()
+
+    // Calculate Menu Window
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+
+    Stage.draw(G.w, G.h)
+    P.title(x, y, menuSize, menuSize) // update
+
+    Menu.drawBorder(x, y, x + menuSize, y + menuSize)
+
+    P.draw()
+
+    Menu.difficulty.draw(x, y, menuSize, menuSize)       
+    Menu.difficulty.buttons.draw(x, y, menuSize, menuSize)
+
+    if (Menu.difficulty.buttons.check(I)) {
+        window.requestAnimationFrame(MenuTrans)
+        return
+    }
+
+    loop(diffSelect)
+
 }
 
 let transTimer = 0
@@ -109,26 +88,27 @@ function MenuTrans() {
 
     // Update
     P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
-    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
 
     // Draw
     Stage.draw(G.w, G.h)
 
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize
-    Menu.draw(x1*progress, y1*progress,         // x1 and y1
+    Menu.drawBorder(x1*progress, y1*progress,         // x1 and y1
         x2 + (G.w - x2)*(1 - progress),   // x2
         y2 + (G.h - y2)*(1 - progress))   // y1
 
-    b_start.draw()
-
+    // menu.buttons.draw(0, y1*progress, G.w, y2 + (G.h - y2)*(1 - progress) - y1*progress)
     P.draw()
 
     if (transTimer >= transDuration) {
-        // G.updateDifficulty(P, Enemies, 6)
-        window.requestAnimationFrame(main)
-        G.updateDifficulty(P, Enemies, 6)
-        // window.requestAnimationFrame(tutorial)
+        transTimer = 0
+        if (G.getTutorial()) {
+            window.requestAnimationFrame(main)
+        } else {
+            window.requestAnimationFrame(tutorial)
+        }
+
 
         return
     }
@@ -136,6 +116,112 @@ function MenuTrans() {
     loop(MenuTrans)
 }
 
+let Menu = {
+    drawBorder(x1, y1, x2, y2) {
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, G.w, y1) // top
+        ctx.fillRect(0, 0, x1, G.h) // left
+
+        ctx.fillRect(0, y2, G.w, G.h) // bottom
+        ctx.fillRect(x2, 0, G.w, G.h) // right
+    },
+
+    title: {
+        draw(x, y, w, h) { 
+            ctx.fillStyle = 'black'
+            ctx.font = '30px Comic Sans MS'
+
+            let text = 'BLOB MOB'
+            let xt= x + w/2 - (ctx.measureText('BLOB MOB').width/2)
+            let yt= y + (h*1/8)
+
+            ctx.fillText(text, xt, yt)
+
+            ctx.fillStyle = '#ffd6cc'
+            xt -= 3
+            yt -= 3
+            ctx.fillText(text, xt, yt)
+        },
+
+        buttons: {
+            start: new Button('25px Comic Sans MS', 'START', '#ffd6cc', 'black'),
+
+            draw(x, y, w, h) {
+                this.start.adjust(x + w/2, y + h*6/8 + 30)
+                this.start.draw()
+            }
+        }
+
+    },
+
+    difficulty: {
+        draw(x, y, w, h) {
+            ctx.fillStyle = 'black'
+            ctx.font = '30px Comic Sans MS'
+
+            let text = 'DIFFICULTY'
+            let xt = x + w/2 - (ctx.measureText('BLOB MOB').width/2)
+            let yt = y + (h*1/8)
+
+            ctx.fillText(text, xt, yt)
+
+            ctx.fillStyle = '#ffd6cc'
+            xt -= 3
+            yt -= 3
+            ctx.fillText(text, xt, yt)
+
+        },
+
+        buttons: {
+            diffs: new Array(),
+
+            generate(x, y, w, h) {
+                Object.keys(difficultyTable).forEach(diff => {
+                    let b = new Button('25px Comic Sans MS', diff, 'black', '#ffd6cc')
+                    this.diffs.push(b)
+                })
+            },
+
+
+            draw(x, y, w, h) {
+                text = '0'
+                let dnum = Object.keys(difficultyTable).length // Number of difficulties
+                let xgap = (w - dnum*ctx.measureText(text).width)/dnum
+
+                let yt = y + h*6/8 + 30
+                let xt = x 
+
+                this.diffs.forEach(b => {
+                    xt += xgap
+                    b.adjust(xt, yt)
+                    b.draw()
+                })
+            },
+
+            check(m) {
+                let d = null
+                this.diffs.forEach(b => {
+                    if (b.check(m)) {
+                        d = parseInt(b.text, 10)
+                    }
+                })
+
+                if (d != null) {
+                    G.updateDifficulty(P, Enemies, d)
+                    return true
+                }
+            }
+
+        }
+    }
+
+    // checkButtons() {
+    //     if (b_start.check(I)) {
+    //         window.requestAnimationFrame(diffSelect);
+    //         mainTheme.play()
+    //         return true
+    //     }
+}
 
 // function intro() {
 //     ++G.frame
@@ -155,9 +241,9 @@ function MenuTrans() {
 //         ctx.fillStyle = '#ffd6cc'
 //         ctx.fillRect(x, y, w, h)
 //         ctx.font = '30px Arial Bold'
-//         let tw = ctx.measureText("monke").width
+//         let tw = ctx.measureText('monke').width
 //         ctx.fillStyle = 'black'
-//         ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+//         ctx.fillText('monke', x + w/2 - tw/2, y + h/2)
 
 //     }
 // }

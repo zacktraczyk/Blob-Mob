@@ -45,20 +45,15 @@ class IO {
     }
 
     keyDownHandler(e) {
-        // e.preventDefault();
         let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS
         I.keyState[key] = true // ALSO THIS (I reference)
         // if (e.keyCode == 77 && monce) muteSound(); //Mute
-        // else if (e.keyCode == 90 && cool === 0 && power >= 10) attackz = true; //Special Attack Push
         // else if (e.keyCode == 88 && cool === 0 && power > 0) attackx = true; //Special Regenerate
     }
 
     keyUpHandler(e) {
         let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS AS AWELL
         I.keyState[key] = false // GOD HELP ME
-        // if (e.keyCode == 77) monce = true;
-        // if (e.keyCode == 80) ponce = true;
-        // if (e.keyCode == 88) attackx = false;
     }
 
     mousePosition(event) {

@@ -95,6 +95,7 @@ class Player {
     }
 
     title(x, y, w, h) {
+        this.color = '#ffd6cc'
         this.wiggle(w/2, h/2)
 
         this.x = clamp(this.x, x + w*3/8, x + w*5/8) 

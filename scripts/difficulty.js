@@ -46,8 +46,8 @@ const difficultyTable = {
         player: {
             speed:      14,
             accel:      1,
-            cool:       1,
-            health:     500,
+            cool:       15,
+            health:     100,
         },
         enemy: {
             speed:      5,

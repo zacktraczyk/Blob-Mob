@@ -32,15 +32,10 @@ class Button {
         }
     }
 
-    update(xchange, ychange) {
-        this.x += xchange/2
-        this.y += ychange/2
+    adjust(x, y){
         ctx.font = this.font
         this.w = ctx.measureText(this.text).width
         this.h = parseInt(this.font.split(" ")[0], 10)
-    }
-
-    adjust(x, y){
         this.x = x
         this.y = y
     }

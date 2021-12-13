@@ -70,8 +70,8 @@ const difficultyTable = {
         player: {
             speed:      14,
             accel:      1,
-            cool:       1,
-            health:     500,
+            cool:       15,
+            health:     100,
         },
         enemy: {
             speed:      5,
@@ -175,15 +175,10 @@ class Button {
         }
     }
 
-    update(xchange, ychange) {
-        this.x += xchange/2
-        this.y += ychange/2
+    adjust(x, y){
         ctx.font = this.font
         this.w = ctx.measureText(this.text).width
         this.h = parseInt(this.font.split(" ")[0], 10)
-    }
-
-    adjust(x, y){
         this.x = x
         this.y = y
     }
@@ -210,6 +205,8 @@ class Game {
         this.h = window.innerHeight
 
         this.difficulty = 5 // 0 - 9
+
+        this.tutorial = false
 
         this.score = 0
         this.highscore = this.getHighscore()
@@ -254,6 +251,17 @@ class Game {
         return Math.floor(this.frame/this.fps * 100)/100
     }
 
+    setTutorial() {
+        localStorage.setItem("tutorial", this.tutorial);
+    }
+
+    getTutorial() {
+        let t = localStorage.getItem("tutorial")
+        if (t == null)
+            return false
+        return true
+    }
+
     setHighscore() {
         if (this.score > this.highscore)
             this.highscore = this.score
@@ -277,17 +285,23 @@ class Game {
         }
     }
 
-    restart(p) {
+    reset(p, e, damagePoints) {
         // player
         p.health = p.maxHealth
         p.power = 0
+        p.cool = 0
         p.state = en.state.alive
+        p.action = en.state.norm
+        
+        p.xvel = 0
+        p.yvel = 0
+        p.x = G.w/2
+        p.x = G.h/2
 
-        Enemies.instances = new Array()
-        DP.instances = new Array()
+        e.instances = new Array()
+        damagePoints.instances = new Array()
 
         this.score = 0
-        window.requestAnimationFrame(main)
     }
 
     debug() {
@@ -328,315 +342,6 @@ class Game {
     }
 
 }
-
-//function oldmenu() {
-//    G.setHighScore
-//    G.highscore = localStorage.getItem("highscore")
-//    titleTheme.play()
-//    var sessionME = setInterval(function() {
-//        ctx.clearRect(0, 0, w, h)
-        
-//        let grd = ctx.createLinearGradient(0, 0, w, 0)
-//        grd.addColorStop(0, '#ffd6cc')
-//        grd.addColorStop(0.8, 'grey')
-//        grd.addColorStop(1, '#fffbf9')
-//        ctx.fillStyle = '#fffbf9'
-//        ctx.fillRect(0, 0, w, h)
-//        drawChar()
-//        ctx.fillStyle = grd
-//        ctx.font = '80px Arial Bold'
-//        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
-//        ctx.font = '30px Arial Bold'
-//        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-//        var grd1 = ctx.createLinearGradient(0, 0, w*3, 0)
-//        grd1.addColorStop(0, 'grey')
-//        grd1.addColorStop(1, 'white')
-//        ctx.fillStyle = grd1
-//        ctx.font = '15px sans-serif'
-//        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-//        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-//        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-//        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-        
-//        if(pause === false){
-//            sx = mxrandom(sx)
-//            sy = myrandom(sy)
-//            wx = srandom(wx)
-//            wy = srandom(wy)
-//        }
-        
-//        pauseMenu()
-        
-//        listen()
-
-//        if(HowTo) HowToPlay()
-
-//        canvas.addEventListener("mousedown", getPosition, false)
-//        //Start Click Area --> ctx.strokeRect(w / 2 - 40, 380, 80, 40)
-//        //Howto Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/4), h-30, (ctx.measureText(bottommenu).width/2), 30)
-//        //About Click Area --> ctx.strokeRect(w / 2 - (ctx.measureText(bottommenu).width/2) - 5, h - 30, 60, 30)
-        
-//        if (x >= w / 2 - (ctx.measureText(bottommenu).width/2) - 5 && x <= w / 2 - (ctx.measureText(bottommenu).width/2) + 55 && y >= h - 30 && y <= h && pause === false){
-//            clearInterval(sessionME)
-//            canvas.removeEventListener("mousedown", getPosition, false)
-//            window.location.href = '/about.html'
-//        }
-        
-//        if (x >= w / 2 - 40 && x <= w / 2 + 40 && y >= 380 && y <= 420 && pause === false) {
-//            clearInterval(sessionME)
-//            transition()
-//            canvas.removeEventListener("mousedown", getPosition, false)
-//        } else if(x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo === false && pause === false){
-//            effects.play('btn')
-//            HowTo = true
-//            x = 0
-//            y = 0
-//        } else if((x >= w / 2 - (ctx.measureText(bottommenu).width/4) && x <= w / 2 + (ctx.measureText(bottommenu).width/4) && y >= h - 30 && y <= h && HowTo) || (x >= w - 35 - ctx.measureText("X").width && x <=  h - 30 && y >= 30 && y <= 60) && pause === false){
-//            effects.play('btn')
-//            HowTo = false
-//            x = 0
-//            y = 0
-//        }
-//        document.body.style.backgroundColor = '#fffbf9'
-//    }, 50)
-//}
-
-//function HowToPlay(){
-//    ctx.fillStyle = '#ffd6cc'
-//    ctx.fillRect(30,30,w - 60, h - 60)
-//    ctx.fillStyle = 'black'
-//    ctx.font = '20px monospace'
-//    ctx.fillText("X",w - 35 - ctx.measureText("X").width, 50)
-//    var grd = ctx.createLinearGradient(0, 0, w, 0)
-//    grd.addColorStop(0, '#ffd6cc')
-//    grd.addColorStop(0.5, 'grey')
-//    grd.addColorStop(1, '#fffbf9')
-//    ctx.fillStyle = grd
-//    ctx.font = '50px Arial Bold'
-//    ctx.fillText("HOW TO PLAY", w / 2 - (ctx.measureText("HOW TO PLAY").width/2), 80)
-//    ctx.fillStyle = 'grey'
-//    ctx.font = '15px monospace'
-//    var instruction1 = "Use the Arrow keys to move,"
-//    var instruction2 = "And press Space to attack."
-//    var instruction3 = "You can only attack if your blue bar is full!"
-//    var instruction4 = "Try to attack the enemies"
-//    var instruction5 = "But use Z, your powerup, if you are swarmed."
-//    var instruction6 = "You can also hold X to regenerate health."
-//    var instruction7 = "Just remember, powerups and regeneration use power!"
-//    var instruction8 = "Press M to mute and P to pause"
-//    ctx.fillText(instruction1, w / 2 - (ctx.measureText(instruction1).width/2), 122)
-//    ctx.fillText(instruction2, w / 2 - (ctx.measureText(instruction2).width/2), 154)
-//    ctx.fillText(instruction3, w / 2 - (ctx.measureText(instruction3).width/2), 186)
-//    ctx.fillText(instruction4, w / 2 - (ctx.measureText(instruction4).width/2), 218)
-//    ctx.fillText(instruction5, w / 2 - (ctx.measureText(instruction5).width/2), 250)
-//    ctx.fillText(instruction6, w / 2 - (ctx.measureText(instruction6).width/2), 282)
-//    ctx.fillText(instruction7, w / 2 - (ctx.measureText(instruction7).width/2), 314)
-//    ctx.fillStyle = 'red'
-//    ctx.fillText(instruction8, w / 2 -40, 463)
-
-//    var esx = 380
-//    var esy = 390
-//    var ewx = 20
-//    var ewy = 40
-
-//    ctx.lineWidth = 1
-
-//    randNum = Math.round(Math.random() * 2)
-//    var erandomColor = ecolors[randNum]
-//    ctx.fillStyle = erandomColor
-
-//    ctx.beginPath()
-
-//    ctx.moveTo(esx - esx / 20, esy)
-//    ctx.bezierCurveTo(esx - esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy - esy / 20, esx + ewx + esx / 20, esy)
-
-//    ctx.bezierCurveTo(esx + ewx + esx / 10, esy, esx + ewx + esx / 10, esy + ewy, esx + ewx, esy + ewy)
-
-//    ctx.bezierCurveTo(esx + ewx / 10, esy + esy / 4, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy + ewy / 2)
-
-//    ctx.bezierCurveTo(esx - esx / 20, esy + ewy / 2, esx - ewx * 2, esy + ewy / 4, esx - esx / 20, esy)
-//    ctx.fill()
-//    ctx.stroke()
-//    ctx.closePath()
-
-//    ctx.lineWidth = 1
-
-//    ctx.beginPath()
-//    ctx.fillStyle = 'black'
-//    ctx.arc(esx + ewx / 6, esy + ewy / 6, (ewx / 4 + ewy / 4) / 4, 0, 2 * Math.PI)
-//    ctx.stroke()
-//    ctx.closePath()
-
-//    ctx.beginPath()
-//    ctx.arc(esx + ewx - ewx / 8, esy + ewy / 6, (ewx / 4 + ewy / 4) / 6, 0, 2 * Math.PI)
-//    ctx.stroke()
-//    ctx.closePath()
-
-//    ctx.beginPath()
-//    ctx.moveTo(esx + ewx / 8, esy + ewy - ewy / 3)
-//    ctx.bezierCurveTo(esx + ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy, esx + ewx - ewy / 8, esy + ewy - ewy / 3)
-//    ctx.stroke()
-//    ctx.closePath()
-
-//    ctx.font = '15px monospace'
-
-//    ctx.fillText("ENEMY", 390 - (ctx.measureText("ENEMY").width/2), 360)
-
-//    ctx.fillStyle = 'black'
-//    ctx.fillRect(w / 2 - 115 / 2 + 5, 395, 115, 20)
-//    ctx.fillStyle = 'blue'
-//    ctx.fillRect(w / 2 + 0.5 - 115 / 2 + 5, 396, 113 - (0 / 50) * 113, 18)
-
-//    ctx.fillStyle = 'black'
-//    ctx.fillText("COOL-DOWN BAR", w/2 - (ctx.measureText("COOL-DOWN BAR").width/2)+ 5, 360)
-
-//    ctx.fillStyle = 'black'
-//    ctx.fillRect((w-60) * (1 / 3)-90, 395, 115, 20)
-//    ctx.fillStyle = '#33cc33'
-//    ctx.font = "10px monospace"
-//    ctx.fillText(20 + "/50", (w-60) * (1 / 3)-90 + 52, 409)
-//    ctx.fillRect((w-60) * (1 / 3)-90 + 1, 396, (20 / 50) * 113, 18)
-
-//    ctx.font = '15px monospace'
-//    ctx.fillStyle = 'black'
-
-//    ctx.fillText("POWER", 90, 360)
-//}
-
-//function transition() {
-//    var gw = 0
-//    var time = 0
-//    titleTheme.fade(1.0, 0.0, 7000)
-//    titleTheme.on('fade', function(){
-//        titleTheme.stop()
-//    })
-//    var sessionT = setInterval(function() {
-//        time++
-//        ctx.clearRect(0, 0, w, h)
-//        var grd = ctx.createLinearGradient(0, 0, w - gw, 0)
-//        grd.addColorStop(0, '#ffd6cc')
-//        grd.addColorStop(0.8, 'grey')
-//        grd.addColorStop(1, '#fffbf9')
-//        ctx.fillStyle = '#fffbf9'
-//        ctx.fillRect(0, 0, w, h)
-//        drawChar()
-//        ctx.fillStyle = grd
-//        ctx.font = '80px Arial Bold'
-//        ctx.fillText("BLOB MOB", w / 2 - (ctx.measureText("BLOB MOB").width/2), 100)
-//        ctx.font = '30px Arial Bold'
-//        ctx.fillStyle = grd
-//        ctx.fillText("START", w / 2 - (ctx.measureText("START").width/2), 400)
-//        var grd1 = ctx.createLinearGradient(0, 0, w*3 - gw*3, 0)
-//        grd1.addColorStop(0, 'grey')
-//        grd1.addColorStop(1, 'white')
-//        ctx.fillStyle = grd1
-//        ctx.font = '15px sans-serif'
-//        var bottommenu = "  About   -   HOW TO PLAY   -   Traczyk"
-//        ctx.fillText(bottommenu, w / 2 - (ctx.measureText(bottommenu).width/2), h - 10)
-//        ctx.fillRect(10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-//        ctx.fillRect(w / 2 + (ctx.measureText(bottommenu).width/2) + 10, h - 13, w / 2 - (ctx.measureText(bottommenu).width/2) - 10, 1)
-//        if (time < 40) {
-//            titleTheme.rate(1.5)
-//            if (time % 2 === 0) {
-//                wx -= 4
-//                wy -= 4
-//                sx += 2
-//                sy += 2
-//            } else if (Math.abs(time % 2) == 1) {
-//                wx += 4
-//                wy += 4
-//                sx -= 2
-//                sy -= 2
-//            }
-//        } else if (time >= 40) {
-//            titleTheme.rate(0.75)
-//            if (gw <= w - 50) gw += 25
-//            sx += 2
-//            sy += 2
-//            sx = srandom(sx)
-//            sy = srandom(sy)
-//            wx -= 4
-//            wy -= 4
-//        }
-//        if (wx <= 50 || wy <= 10) {
-//            mainTheme.play()
-//            background.src = 'http://www.photos-public-domain.com/wp-content/uploads/2011/02/crumpled-notebook-paper-texture.jpg'
-//            ctx.drawImage(background, 0, 0, w, h)
-//            clearInterval(sessionT)
-//            main()
-//        }
-//    }, 50)
-//}
-//function shrink() {
-//    var shrinksx = sx
-//    var shrinksy = sy
-//    var shrinkwx = wx
-//    var shrinkwy = wy
-//    var sessionS = setInterval(function() {
-//        de = effects.play('death')
-//        ctx.clearRect(0, 0, w, h)
-//        drawStage()
-//        shrinksx += 4
-//        shrinksy += 4
-//        shrinkwx -= 8
-//        shrinkwy -= 8
-//        ctx.fillStyle = pcolor
-//        ctx.fillRect(shrinksx, shrinksy, shrinkwx, shrinkwy)
-//        stateDefinition()
-//        drawHealth()
-//        drawPower()
-//        drawCool()
-//        drawScore()
-//        if (shrinkwx <= 0 || shrinkwy <= 0 || shrinksx > w || shrinksy > h) {
-//            clearInterval(sessionS)
-//            end()
-//        }
-
-//    }, 150)
-//}
-
-//function end() {
-//    var gx = -w
-//    var gx2 = -0.5*w
-//    effects.stop(ah)
-//    mainTheme.stop()
-//    endTheme.play()
-//    var sessionE = setInterval(function() {
-//        if (gx !== 0) gx += 4
-//        if (gx2 !== 0 + 200) gx2 += 14
-//        setHighScore()
-//        pcolor = '#ffd6cc'
-//        ctx.clearRect(0, 0, w, 0)
-//        ctx.fillStyle = 'black'
-//        ctx.fillRect(0, 0, h, w)
-//        var grd = ctx.createLinearGradient(0, 0, w + gx, 0)
-//        grd.addColorStop(0, pcolor)
-//        grd.addColorStop(1, 'black')
-//        ctx.font = '70px Comic Sans MS'
-//        ctx.fillStyle = grd
-//        ctx.fillText("GAME OVER", w / 2 - (ctx.measureText("GAME OVER").width/2), h / 2 - 5)
-//        ctx.font = '12px monospace'
-//        if(highscore < score){
-//            ctx.fillText("The high score was " + highscore, w / 2 - (ctx.measureText("The high score was " + highscore).width/2), h * 8.5 / 16)
-//            ctx.fillText("Your score is " + score, w / 2 - (ctx.measureText("Your score is " + score).width/2), h * 9 / 16)
-//        }
-//        else {
-//            ctx.fillText("The high score is " + highscore, w / 2 - (ctx.measureText("The high score is " + highscore).width/2), h * 8.5 / 16)
-//            ctx.fillText("Your score was " + score, w / 2 - (ctx.measureText("Your score was " + score).width/2), h * 9 / 16)
-//        }
-//        ctx.font = '20px monospace'
-//        var grd2 = ctx.createLinearGradient(0, 0, w + gx2, 0)
-//        grd2.addColorStop(0, pcolor)
-//        grd2.addColorStop(1, 'black')
-//        ctx.fillStyle = grd2
-//        ctx.fillText("TITLE >>",w - (ctx.measureText("TITLE >>").width), h - 10)
-//        canvas.addEventListener("mousedown", getPosition, false)
-//        if (x >= w - (ctx.measureText("TITLE >>").width)-10 && x <= w && y >= h - 20 && y <= h) {
-//            clearInterval(sessionE)
-//            location.reload()
-//        }
-//    }, 50)
-//}
 // REQUIRE: HOWLER.js 
 
 let background = new Image();
@@ -681,6 +386,12 @@ let Stage = {
         ctx.font = "20px monospace"
         ctx.fillText("Score: " + G.score, 18, 28, w / 2)
         ctx.fillText("High-Score: " + G.highscore, 18, 58, w / 2)
+
+        // Difficulty
+        ctx.fillStyle = 'black'
+        ctx.font = "20px monospace"
+        let text = `Difficulty ${G.difficulty}`
+        ctx.fillText(text, G.w - ctx.measureText(text).width - 20, h - 25)
     },
 }
 
@@ -741,20 +452,15 @@ class IO {
     }
 
     keyDownHandler(e) {
-        // e.preventDefault();
         let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS
         I.keyState[key] = true // ALSO THIS (I reference)
         // if (e.keyCode == 77 && monce) muteSound(); //Mute
-        // else if (e.keyCode == 90 && cool === 0 && power >= 10) attackz = true; //Special Attack Push
         // else if (e.keyCode == 88 && cool === 0 && power > 0) attackx = true; //Special Regenerate
     }
 
     keyUpHandler(e) {
         let key = I.keyMap[e.keyCode] // THIS IS HORRENDOUS AS AWELL
         I.keyState[key] = false // GOD HELP ME
-        // if (e.keyCode == 77) monce = true;
-        // if (e.keyCode == 80) ponce = true;
-        // if (e.keyCode == 88) attackx = false;
     }
 
     mousePosition(event) {
@@ -870,6 +576,7 @@ class Player {
     }
 
     title(x, y, w, h) {
+        this.color = '#ffd6cc'
         this.wiggle(w/2, h/2)
 
         this.x = clamp(this.x, x + w*3/8, x + w*5/8) 
@@ -1508,150 +1215,18 @@ class Enemy {
 
 }
 
-
-function enemySpawn(){
-    if (Otime == 20)enemy1.state = 'spawn';
-
-    if (Otime == 100) enemy2.state = 'spawn';
-
-    if (Otime == 300) enemy3.state = 'spawn';
-
-    if (Otime == 500) enemy4.state = 'spawn';
-
-    if (Otime == 800) enemy5.state = 'spawn';
-
-    if (Otime == 1000) enemy6.state = 'spawn';
-
-    if (Otime == 1500) enemy7.state = 'spawn';
-
-    if (Otime == 1800) enemy8.state = 'spawn';
-
-    if (Otime == 2000) enemy9.state = 'spawn';
-
-    if (Otime == 2500) enemy10.state = 'spawn';
-
-    if (Otime == 3000) enemy11.state = 'spawn';
-
-    if (Otime == 3500) enemy12.state = 'spawn';
-
-    if (Otime == 4000){ 
-        enemy13.state = 'spawn';
-        enemy14.state = 'spawn';
-        enemy15.state = 'spawn';
-    }
-}
-
-function enemeySpeed(){
-    if(score >= 20 && score < 40)speed=1.2;
-    if(score >= 40 && score < 80)speed=1.25;
-    if(score >= 80 && score < 100)speed=1.5;
-    if(score >= 100 && score < 200)speed=1.75;
-    if(score >= 200 && score < 250)speed=2;
-    if(score >= 250 && score < 300)speed=2.5;
-    if(score >= 300)speed=3;
-}
-
-// this.drawBoss = function() {
-//     ctx.lineWidth = 1;
-//     randNum = Math.round(Math.random() * 2);
-//     var ebrandomColor = ebcolors[randNum];
-//     ctx.fillStyle = ebrandomColor;
-//     this.w = wx - 10;
-//     this.h = wy * 2 - 10;
-//     ctx.beginPath();
-
-//     ctx.moveTo(this.x - this.x / 20, this.y);
-//     ctx.bezierCurveTo(this.x - this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y);
-
-//     ctx.bezierCurveTo(this.x + this.w + this.x / 10, this.y, this.x + this.w + this.x / 10, this.y + this.h, this.x + this.w, this.y + this.h);
-
-//     ctx.bezierCurveTo(this.x + this.w / 10, this.y + this.y / 4, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y + this.h / 2);
-
-//     ctx.bezierCurveTo(this.x - this.w / 2, this.y + this.h / 2, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y);
-//     ctx.fill();
-//     ctx.stroke();
-//     ctx.closePath();
-
-//     ctx.lineWidth = 1;
-
-//     ctx.beginPath();
-//     ctx.fillStyle = 'black';
-//     ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
-//     ctx.stroke();
-//     ctx.closePath();
-
-//     ctx.beginPath();
-//     ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
-//     ctx.stroke();
-//     ctx.closePath();
-
-//     ctx.beginPath();
-//     ctx.moveTo(this.x + this.h / 8, this.y + this.h);
-//     ctx.bezierCurveTo(this.x + this.w / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h);
-//     ctx.stroke();
-//     ctx.closePath();
-// },
-
+// function enemeySpeed(){
+//     if(score >= 20 && score < 40)speed=1.2;
+//     if(score >= 40 && score < 80)speed=1.25;
+//     if(score >= 80 && score < 100)speed=1.5;
+//     if(score >= 100 && score < 200)speed=1.75;
+//     if(score >= 200 && score < 250)speed=2;
+//     if(score >= 250 && score < 300)speed=2.5;
+//     if(score >= 300)speed=3;
+// }
 // Button Definitions
-let b_start = new Button("25px Comic Sans MS", "START", '#ffd6cc', 'black')
-// let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
+// let b_options = new Button('20px Comic Sans MS', 'OPTIONS', 0, 0, '#ffd6cc', 'black')
 
-let Menu = {
-    draw(x1, y1, x2, y2) { 
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, G.w, y1) // top
-        ctx.fillRect(0, 0, x1, G.h) // left
-
-        ctx.fillRect(0, y2, G.w, G.h) // bottom
-        ctx.fillRect(x2, 0, G.w, G.h) // right
-
-        let w = x2 - x1
-        let h = y2 - y1
-
-        // ctx.fillStyle = `rgba(255, 255, 255, ${(duration - timer)/duration})`
-        // ctx.fillRect(x, y, w, h)
-        ctx.fillStyle = 'black'
-        ctx.font = '30px Comic Sans MS'
-
-        ctx.fillText("BLOB MOB",
-            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2) - 3,
-            y1 + (h*1/8) - 3)
-
-        ctx.fillStyle = '#ffd6cc'
-        ctx.fillText("BLOB MOB",
-            x1 + w/2 - (ctx.measureText("BLOB MOB").width/2),
-            y1 + (h*1/8))
-
-        // Big text = BLOB MOB
-        // Small text = Line 1-30px oninvalid
-        //     1, Start game -----> you start the game fke
-        //     2. How to play ----> tutorial or whatever fke
-        //     3. Options -----> take you to options fke
-    },
-
-    drawButtons(x, y, w, h) {
-        b_start.adjust(x + w/2, y + h*7/8)
-        b_start.draw()
-
-        // b_options.x = x + w*7/8
-        // b_options.y = y + h - 20
-        //     b_options.draw()
-    },
-
-    checkButtons() {
-        if (b_start.check(I)) {
-            window.requestAnimationFrame(MenuTrans);
-            mainTheme.play()
-            return true
-        }
-
-        //     if (b_options.check(I)) {
-        //         console.log("MONKE")
-        //     }
-    }
-
-
-}
 function menu() {
     ++G.frame
     G.resizeWindow()
@@ -1661,12 +1236,7 @@ function menu() {
     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
 
-
     if (G.frame == 1) {
-        titleTheme.play()
-
-        // Set coords of Buttons
-
         // Initalize Controll
         I.addKeyListeners()
         I.addMouseListener()
@@ -1679,12 +1249,53 @@ function menu() {
     Stage.draw(G.w, G.h)
     P.title(x, y, menuSize, menuSize) // update
 
-    Menu.draw(x, y, x + menuSize, y + menuSize)       
-    Menu.drawButtons(x, y, menuSize, menuSize)
+    Menu.drawBorder(x, y, x + menuSize, y + menuSize)
+
     P.draw()
 
-    if (Menu.checkButtons()) return // end loop
+    Menu.title.draw(x, y, menuSize, menuSize)       
+    Menu.title.buttons.draw(x, y, menuSize, menuSize)
+
+    if (Menu.title.buttons.start.check(I)) {
+        Menu.difficulty.buttons.generate(x, y, menuSize, menuSize)
+        if (G.getTutorial()) {
+            window.requestAnimationFrame(diffSelect)
+        } else {
+            G.updateDifficulty(P, Enemies, 3)
+            window.requestAnimationFrame(MenuTrans)
+        }
+        mainTheme.play()
+        return // end loop
+    }
     loop(menu)
+}
+
+function diffSelect() {
+    ++G.frame
+    G.resizeWindow()
+
+    // Calculate Menu Window
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+
+    Stage.draw(G.w, G.h)
+    P.title(x, y, menuSize, menuSize) // update
+
+    Menu.drawBorder(x, y, x + menuSize, y + menuSize)
+
+    P.draw()
+
+    Menu.difficulty.draw(x, y, menuSize, menuSize)       
+    Menu.difficulty.buttons.draw(x, y, menuSize, menuSize)
+
+    if (Menu.difficulty.buttons.check(I)) {
+        window.requestAnimationFrame(MenuTrans)
+        return
+    }
+
+    loop(diffSelect)
+
 }
 
 let transTimer = 0
@@ -1703,26 +1314,27 @@ function MenuTrans() {
 
     // Update
     P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
-    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
 
     // Draw
     Stage.draw(G.w, G.h)
 
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize
-    Menu.draw(x1*progress, y1*progress,         // x1 and y1
+    Menu.drawBorder(x1*progress, y1*progress,         // x1 and y1
         x2 + (G.w - x2)*(1 - progress),   // x2
         y2 + (G.h - y2)*(1 - progress))   // y1
 
-    b_start.draw()
-
+    // menu.buttons.draw(0, y1*progress, G.w, y2 + (G.h - y2)*(1 - progress) - y1*progress)
     P.draw()
 
     if (transTimer >= transDuration) {
-        // G.updateDifficulty(P, Enemies, 6)
-        window.requestAnimationFrame(main)
-        G.updateDifficulty(P, Enemies, 6)
-        // window.requestAnimationFrame(tutorial)
+        transTimer = 0
+        if (G.getTutorial()) {
+            window.requestAnimationFrame(main)
+        } else {
+            window.requestAnimationFrame(tutorial)
+        }
+
 
         return
     }
@@ -1730,6 +1342,112 @@ function MenuTrans() {
     loop(MenuTrans)
 }
 
+let Menu = {
+    drawBorder(x1, y1, x2, y2) {
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, G.w, y1) // top
+        ctx.fillRect(0, 0, x1, G.h) // left
+
+        ctx.fillRect(0, y2, G.w, G.h) // bottom
+        ctx.fillRect(x2, 0, G.w, G.h) // right
+    },
+
+    title: {
+        draw(x, y, w, h) { 
+            ctx.fillStyle = 'black'
+            ctx.font = '30px Comic Sans MS'
+
+            let text = 'BLOB MOB'
+            let xt= x + w/2 - (ctx.measureText('BLOB MOB').width/2)
+            let yt= y + (h*1/8)
+
+            ctx.fillText(text, xt, yt)
+
+            ctx.fillStyle = '#ffd6cc'
+            xt -= 3
+            yt -= 3
+            ctx.fillText(text, xt, yt)
+        },
+
+        buttons: {
+            start: new Button('25px Comic Sans MS', 'START', '#ffd6cc', 'black'),
+
+            draw(x, y, w, h) {
+                this.start.adjust(x + w/2, y + h*6/8 + 30)
+                this.start.draw()
+            }
+        }
+
+    },
+
+    difficulty: {
+        draw(x, y, w, h) {
+            ctx.fillStyle = 'black'
+            ctx.font = '30px Comic Sans MS'
+
+            let text = 'DIFFICULTY'
+            let xt = x + w/2 - (ctx.measureText('BLOB MOB').width/2)
+            let yt = y + (h*1/8)
+
+            ctx.fillText(text, xt, yt)
+
+            ctx.fillStyle = '#ffd6cc'
+            xt -= 3
+            yt -= 3
+            ctx.fillText(text, xt, yt)
+
+        },
+
+        buttons: {
+            diffs: new Array(),
+
+            generate(x, y, w, h) {
+                Object.keys(difficultyTable).forEach(diff => {
+                    let b = new Button('25px Comic Sans MS', diff, 'black', '#ffd6cc')
+                    this.diffs.push(b)
+                })
+            },
+
+
+            draw(x, y, w, h) {
+                text = '0'
+                let dnum = Object.keys(difficultyTable).length // Number of difficulties
+                let xgap = (w - dnum*ctx.measureText(text).width)/dnum
+
+                let yt = y + h*6/8 + 30
+                let xt = x 
+
+                this.diffs.forEach(b => {
+                    xt += xgap
+                    b.adjust(xt, yt)
+                    b.draw()
+                })
+            },
+
+            check(m) {
+                let d = null
+                this.diffs.forEach(b => {
+                    if (b.check(m)) {
+                        d = parseInt(b.text, 10)
+                    }
+                })
+
+                if (d != null) {
+                    G.updateDifficulty(P, Enemies, d)
+                    return true
+                }
+            }
+
+        }
+    }
+
+    // checkButtons() {
+    //     if (b_start.check(I)) {
+    //         window.requestAnimationFrame(diffSelect);
+    //         mainTheme.play()
+    //         return true
+    //     }
+}
 
 // function intro() {
 //     ++G.frame
@@ -1749,9 +1467,9 @@ function MenuTrans() {
 //         ctx.fillStyle = '#ffd6cc'
 //         ctx.fillRect(x, y, w, h)
 //         ctx.font = '30px Arial Bold'
-//         let tw = ctx.measureText("monke").width
+//         let tw = ctx.measureText('monke').width
 //         ctx.fillStyle = 'black'
-//         ctx.fillText("monke", x + w/2 - tw/2, y + h/2)
+//         ctx.fillText('monke', x + w/2 - tw/2, y + h/2)
 
 //     }
 // }
@@ -1764,11 +1482,6 @@ const I = new IO()
 const P = new Player(250, 250, 250, 250)
 const DP = new DPController()
 const Enemies = new EnemyController()
-
-let trans_gameover = {
-    timer: 0,
-    duration: 200,
-}
 
 function main() {
     ++G.frame
@@ -1808,9 +1521,9 @@ function draw() {
     Enemies.draw()
     DP.controller()    
 
+    Stage.HUD(G.w, G.h, P)
     if (G.paused) pauseMenu.draw(G.w, G.h)
 
-    Stage.HUD(G.w, G.h, P)
 }
 class Tutorial {
     constructor() {
@@ -2062,13 +1775,20 @@ function tutorial() {
     // T.debug()
 
     if (T.step == 'end') {
-        G.restart(P)
+        G.reset(P, Enemies, DP)
+        G.setTutorial()
+        window.requestAnimationFrame(main)
         return
     }
 
     loop(tutorial)
 }
-let b_gameover = new Button("30px Comic Sans MS", "RESTART", 'red', 'black')
+
+let trans_gameover = {
+    timer: 0,
+    duration: 200,
+}
+
 
 function GameoverTrans() {
     ++G.frame
@@ -2085,6 +1805,7 @@ function GameoverTrans() {
     Enemies.controller()
 
     if (trans_gameover.timer >= trans_gameover.duration) {
+        trans_gameover.timer = 0
         window.requestAnimationFrame(Gameover);
         return
     }
@@ -2097,10 +1818,21 @@ function Gameover() {
     G.resizeWindow()
 
     gameover.draw()
-    gameover.drawButtons(0, 0, G.w, G.h)
+    gameover.buttons.draw(0, 0, G.w, G.h)
 
-    if (gameover.checkButtons()) {
-        G.restart(P)
+    if (gameover.buttons.restart.check(I)) {
+        G.reset(P, Enemies, DP)
+
+        window.requestAnimationFrame(main)
+        if (!mainTheme.playing()) mainTheme.play()
+        return
+    }
+
+    if (gameover.buttons.change_diff.check(I)) {
+        G.reset(P, Enemies, DP)
+
+        window.requestAnimationFrame(diffSelect)
+        if (!mainTheme.playing()) mainTheme.play()
         return
     }
 
@@ -2110,24 +1842,45 @@ function Gameover() {
 let gameover = {
 
     draw() {
+        let text = ''
+        let x = 0
+        let y = 0
         ctx.fillStyle = 'red'
-        ctx.font = "30px Arial Bold"
-        ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
-        ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
 
-        ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
+        ctx.font = '30px Comic Sans MS'
+
+        text = 'GAMEOVER'
+        x = G.w/2 - ctx.measureText(text).width/2
+        y = G.h*3/8
+        ctx.fillText(text, x, y)
+
+        ctx.font = '25px Comic Sans MS'
+
+        text = `Score is ${G.score}`
+        x = G.w/2 - ctx.measureText(text).width/2
+        y += 60
+        ctx.fillText(text, x, y)
+
+        text = `Highscore is ${G.highscore}`
+        x = G.w/2 - ctx.measureText(text).width/2
+        y += 40
+        ctx.fillText(text, x, y)
     },
 
-    drawButtons(x, y, w, h) {
-        b_gameover.adjust(w/2, h/4)
-        b_gameover.draw()
-    },
+    buttons: {
+        restart: new Button('25px Comic Sans MS', 'RESTART', 'red', 'black'),
+        change_diff: new Button('25px Comic Sans MS', 'CHANGE DIFFICULTY', 'red', 'black'),
 
-    checkButtons() {
-        if (b_gameover.check(I)) {
-            return true
-        }
+        draw(x, y, w, h) {
+            let xt = w/2
+            let yt = h*6/8
+            this.restart.adjust(xt, yt)
+            this.restart.draw()
+
+            yt += 30
+            this.change_diff.adjust(xt, yt)
+            this.change_diff.draw()
+        },
     }
-
 }
 menu()

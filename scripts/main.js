@@ -8,11 +8,6 @@ const P = new Player(250, 250, 250, 250)
 const DP = new DPController()
 const Enemies = new EnemyController()
 
-let trans_gameover = {
-    timer: 0,
-    duration: 200,
-}
-
 function main() {
     ++G.frame
 
@@ -51,7 +46,7 @@ function draw() {
     Enemies.draw()
     DP.controller()    
 
+    Stage.HUD(G.w, G.h, P)
     if (G.paused) pauseMenu.draw(G.w, G.h)
 
-    Stage.HUD(G.w, G.h, P)
 }

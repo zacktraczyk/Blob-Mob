@@ -233,87 +233,12 @@ class Enemy {
 
 }
 
-
-function enemySpawn(){
-    if (Otime == 20)enemy1.state = 'spawn';
-
-    if (Otime == 100) enemy2.state = 'spawn';
-
-    if (Otime == 300) enemy3.state = 'spawn';
-
-    if (Otime == 500) enemy4.state = 'spawn';
-
-    if (Otime == 800) enemy5.state = 'spawn';
-
-    if (Otime == 1000) enemy6.state = 'spawn';
-
-    if (Otime == 1500) enemy7.state = 'spawn';
-
-    if (Otime == 1800) enemy8.state = 'spawn';
-
-    if (Otime == 2000) enemy9.state = 'spawn';
-
-    if (Otime == 2500) enemy10.state = 'spawn';
-
-    if (Otime == 3000) enemy11.state = 'spawn';
-
-    if (Otime == 3500) enemy12.state = 'spawn';
-
-    if (Otime == 4000){ 
-        enemy13.state = 'spawn';
-        enemy14.state = 'spawn';
-        enemy15.state = 'spawn';
-    }
-}
-
-function enemeySpeed(){
-    if(score >= 20 && score < 40)speed=1.2;
-    if(score >= 40 && score < 80)speed=1.25;
-    if(score >= 80 && score < 100)speed=1.5;
-    if(score >= 100 && score < 200)speed=1.75;
-    if(score >= 200 && score < 250)speed=2;
-    if(score >= 250 && score < 300)speed=2.5;
-    if(score >= 300)speed=3;
-}
-
-// this.drawBoss = function() {
-//     ctx.lineWidth = 1;
-//     randNum = Math.round(Math.random() * 2);
-//     var ebrandomColor = ebcolors[randNum];
-//     ctx.fillStyle = ebrandomColor;
-//     this.w = wx - 10;
-//     this.h = wy * 2 - 10;
-//     ctx.beginPath();
-
-//     ctx.moveTo(this.x - this.x / 20, this.y);
-//     ctx.bezierCurveTo(this.x - this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y - this.y / 20, this.x + this.w + this.x / 20, this.y);
-
-//     ctx.bezierCurveTo(this.x + this.w + this.x / 10, this.y, this.x + this.w + this.x / 10, this.y + this.h, this.x + this.w, this.y + this.h);
-
-//     ctx.bezierCurveTo(this.x + this.w / 10, this.y + this.y / 4, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y + this.h / 2);
-
-//     ctx.bezierCurveTo(this.x - this.w / 2, this.y + this.h / 2, this.x - this.w * 2, this.y + this.h / 4, this.x - this.x / 20, this.y);
-//     ctx.fill();
-//     ctx.stroke();
-//     ctx.closePath();
-
-//     ctx.lineWidth = 1;
-
-//     ctx.beginPath();
-//     ctx.fillStyle = 'black';
-//     ctx.arc(this.x + this.w / 6, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
-//     ctx.stroke();
-//     ctx.closePath();
-
-//     ctx.beginPath();
-//     ctx.arc(this.x + this.w - this.w / 8, this.y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
-//     ctx.stroke();
-//     ctx.closePath();
-
-//     ctx.beginPath();
-//     ctx.moveTo(this.x + this.h / 8, this.y + this.h);
-//     ctx.bezierCurveTo(this.x + this.w / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h - this.h / 3, this.x + this.w - this.h / 8, this.y + this.h);
-//     ctx.stroke();
-//     ctx.closePath();
-// },
-
+// function enemeySpeed(){
+//     if(score >= 20 && score < 40)speed=1.2;
+//     if(score >= 40 && score < 80)speed=1.25;
+//     if(score >= 80 && score < 100)speed=1.5;
+//     if(score >= 100 && score < 200)speed=1.75;
+//     if(score >= 200 && score < 250)speed=2;
+//     if(score >= 250 && score < 300)speed=2.5;
+//     if(score >= 300)speed=3;
+// }
