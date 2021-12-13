@@ -2,8 +2,7 @@ MAKEFLAGS += --silent
 # Combine .js into a single file
 COMPILED=script.js
 # ORDER=sound.js io.js player.js enemy.js game.js main.js
-ORDER=enum.js difficulty.js sound.js button.js game.js scenes.js io.js player.js Enemy.js menu.js main.js gameover.js
-
+ORDER=enum.js difficulty.js sound.js button.js game.js scenes.js io.js player.js Enemy.js menu.js main.js tutorial.js gameover.js run.js
 all: compile-order
 
 compile-order:

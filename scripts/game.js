@@ -28,17 +28,10 @@ class Game {
     }
 
     resizeWindow() {
-        // if (window.innerWidth != this.w && window.innerHeight != this.h) {
-            ctx.canvas.width = window.innerWidth;
-            ctx.canvas.height = window.innerHeight;
-            let xchange = innerWidth - this.w
-            let ychange = innerHeight - this.h
-            this.w = innerWidth
-            this.h = innerHeight
-
-            if (b_start != null) b_start.update(xchange, ychange)
-            if (b_options != null) b_options.update(xchange, ychange)
-        // }
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+        this.w = innerWidth
+        this.h = innerHeight
     }
 
     updateDifficulty(player, enemyController, d) {
@@ -67,7 +60,6 @@ class Game {
 
     setHighscore() {
         if (this.score > this.highscore)
-            console.log("new highscore")
             this.highscore = this.score
         localStorage.setItem("highscore", this.highscore);
     }
@@ -87,6 +79,19 @@ class Game {
         } else if (!p && !this.pauseKeyRelease) {
             this.pauseKeyRelease = true
         }
+    }
+
+    restart(p) {
+        // player
+        p.health = p.maxHealth
+        p.power = 0
+        p.state = en.state.alive
+
+        Enemies.instances = new Array()
+        DP.instances = new Array()
+
+        this.score = 0
+        window.requestAnimationFrame(main)
     }
 
     debug() {

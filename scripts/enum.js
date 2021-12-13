@@ -20,5 +20,5 @@ const en = {
         damage: 1,
         dying: 2,
         dead: 3
-    }
+    },
 }

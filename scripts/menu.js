@@ -1,81 +1,6 @@
 // Button Definitions
-let b_start = new Button("25px Comic Sans MS", "START", 0, 0, '#ffd6cc', 'black')
-let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
-
-function menu() {
-    ++G.frame
-    G.resizeWindow()
-
-    // Calculate Menu Window
-    menuSize = 500
-    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
-
-
-    if (G.frame == 1) {
-        titleTheme.play()
-
-        // Set coords of Buttons
-        Menu.placeButtons(x, y, menuSize, menuSize)
-
-        // Initalize Controll
-        I.addKeyListeners()
-        I.addMouseListener()
-
-        // Center Player
-        P.x = x + menuSize/2
-        P.y = y + menuSize/2
-    }
-
-    Stage.draw(G.w, G.h)
-    P.title(x, y, menuSize, menuSize) // update
-
-    Menu.draw(x, y, x + menuSize, y + menuSize)       
-    P.draw()
-
-    if (Menu.checkButtons()) return // end loop
-    loop(menu)
-}
-
-let transTimer = 0
-// let transDuration = 100
-let transDuration = 460
-function MenuTrans() {
-    ++G.frame
-    G.resizeWindow()
-    transTimer += 1
-
-    // Calculate Menu Window
-    menuSize = 500
-    let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
-    let progress = ((transDuration - transTimer)/transDuration)
-
-    // Update
-    P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
-    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
-
-    // Draw
-    Stage.draw(G.w, G.h)
-
-    let x2 = x1 + menuSize
-    let y2 = y1 + menuSize
-    Menu.draw(x1*progress, y1*progress,         // x1 and y1
-        x2 + (G.w - x2)*(1 - progress),   // x2
-        y2 + (G.h - y2)*(1 - progress))   // y1
-
-    b_start.draw()
-
-    P.draw()
-
-    if (transTimer >= transDuration) {
-        G.updateDifficulty(P, Enemies, 6)
-        window.requestAnimationFrame(main);
-        return
-    }
-
-    loop(MenuTrans)
-}
+let b_start = new Button("25px Comic Sans MS", "START", '#ffd6cc', 'black')
+// let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
 
 let Menu = {
     draw(x1, y1, x2, y2) { 
@@ -110,34 +35,107 @@ let Menu = {
         //     3. Options -----> take you to options fke
     },
 
-    placeButtons(x, y, w, h) {
-        b_start.x = x + w/2
-        b_start.y = y + h*7/8
+    drawButtons(x, y, w, h) {
+        b_start.adjust(x + w/2, y + h*7/8)
+        b_start.draw()
 
-        b_options.x = x + w*7/8
-        b_options.y = y + h - 20
+        // b_options.x = x + w*7/8
+        // b_options.y = y + h - 20
+        //     b_options.draw()
     },
 
     checkButtons() {
-        if (b_start != null) {
-            b_start.draw()
-            if (b_start.check(I)) {
-                window.requestAnimationFrame(MenuTrans);
-                mainTheme.play()
-                return true
-            }
+        if (b_start.check(I)) {
+            window.requestAnimationFrame(MenuTrans);
+            mainTheme.play()
+            return true
         }
 
-        if (b_options != null) {
-            b_options.draw()
-            if (b_options.check(I)) {
-                console.log("MONKE")
-            }
-        }
+        //     if (b_options.check(I)) {
+        //         console.log("MONKE")
+        //     }
     }
 
 
 }
+function menu() {
+    ++G.frame
+    G.resizeWindow()
+
+    // Calculate Menu Window
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+
+
+    if (G.frame == 1) {
+        titleTheme.play()
+
+        // Set coords of Buttons
+
+        // Initalize Controll
+        I.addKeyListeners()
+        I.addMouseListener()
+
+        // Center Player
+        P.x = x + menuSize/2
+        P.y = y + menuSize/2
+    }
+
+    Stage.draw(G.w, G.h)
+    P.title(x, y, menuSize, menuSize) // update
+
+    Menu.draw(x, y, x + menuSize, y + menuSize)       
+    Menu.drawButtons(x, y, menuSize, menuSize)
+    P.draw()
+
+    if (Menu.checkButtons()) return // end loop
+    loop(menu)
+}
+
+let transTimer = 0
+let transDuration = 100
+// let transDuration = 460
+function MenuTrans() {
+    ++G.frame
+    G.resizeWindow()
+    transTimer += 1
+
+    // Calculate Menu Window
+    menuSize = 500
+    let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    let progress = ((transDuration - transTimer)/transDuration)
+
+    // Update
+    P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
+    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
+
+    // Draw
+    Stage.draw(G.w, G.h)
+
+    let x2 = x1 + menuSize
+    let y2 = y1 + menuSize
+    Menu.draw(x1*progress, y1*progress,         // x1 and y1
+        x2 + (G.w - x2)*(1 - progress),   // x2
+        y2 + (G.h - y2)*(1 - progress))   // y1
+
+    b_start.draw()
+
+    P.draw()
+
+    if (transTimer >= transDuration) {
+        // G.updateDifficulty(P, Enemies, 6)
+        window.requestAnimationFrame(main)
+        G.updateDifficulty(P, Enemies, 6)
+        // window.requestAnimationFrame(tutorial)
+
+        return
+    }
+
+    loop(MenuTrans)
+}
+
 
 // function intro() {
 //     ++G.frame

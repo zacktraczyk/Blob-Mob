@@ -83,7 +83,7 @@ class Player {
         this.maxCool = 50
         this.cool = 0
         this.maxPower = 50
-        this.power = this.maxPower
+        this.power = 0
         this.maxHealth = 500
         this.health = this.maxHealth
 

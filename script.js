@@ -20,7 +20,7 @@ const en = {
         damage: 1,
         dying: 2,
         dead: 3
-    }
+    },
 }
 // DON'T CHANGE FORMAT (PARSED BY PYTHON)
 const difficultyTable = {
@@ -143,14 +143,14 @@ function muteSound() {
 }
 class Button {
 
-    constructor(font, text, x, y, c1, c2){
+    constructor(font, text, c1, c2){
         this.font = font
         this.text = text
         this.c1 = c1
         this.c2 = c2
 
-        this.x = x
-        this.y = y
+        this.x = 0
+        this.y = 0
         this.w = 100
         this.h = 100
     }
@@ -224,17 +224,10 @@ class Game {
     }
 
     resizeWindow() {
-        // if (window.innerWidth != this.w && window.innerHeight != this.h) {
-            ctx.canvas.width = window.innerWidth;
-            ctx.canvas.height = window.innerHeight;
-            let xchange = innerWidth - this.w
-            let ychange = innerHeight - this.h
-            this.w = innerWidth
-            this.h = innerHeight
-
-            if (b_start != null) b_start.update(xchange, ychange)
-            if (b_options != null) b_options.update(xchange, ychange)
-        // }
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+        this.w = innerWidth
+        this.h = innerHeight
     }
 
     updateDifficulty(player, enemyController, d) {
@@ -263,7 +256,6 @@ class Game {
 
     setHighscore() {
         if (this.score > this.highscore)
-            console.log("new highscore")
             this.highscore = this.score
         localStorage.setItem("highscore", this.highscore);
     }
@@ -283,6 +275,19 @@ class Game {
         } else if (!p && !this.pauseKeyRelease) {
             this.pauseKeyRelease = true
         }
+    }
+
+    restart(p) {
+        // player
+        p.health = p.maxHealth
+        p.power = 0
+        p.state = en.state.alive
+
+        Enemies.instances = new Array()
+        DP.instances = new Array()
+
+        this.score = 0
+        window.requestAnimationFrame(main)
     }
 
     debug() {
@@ -853,7 +858,7 @@ class Player {
         this.maxCool = 50
         this.cool = 0
         this.maxPower = 50
-        this.power = this.maxPower
+        this.power = 0
         this.maxHealth = 500
         this.health = this.maxHealth
 
@@ -1284,11 +1289,15 @@ class EnemyController {
     spawner(w, h, p) {
         --this.cool
         if (Enemies.instances.length < this.maxInst && this.cool <= 0) {
-            let e = new Enemy(this.speed)
-            e.spawn(w, h, p)
-            this.instances.push(e)
+            this.spawn(w, h, p)
             this.cool = this.spawnRate*G.fps
         }
+    }
+
+    spawn(w, h, p) {
+        let e = new Enemy(this.speed)
+        e.spawn(w, h, p)
+        this.instances.push(e)
     }
 
     draw() {
@@ -1584,83 +1593,8 @@ function enemeySpeed(){
 // },
 
 // Button Definitions
-let b_start = new Button("25px Comic Sans MS", "START", 0, 0, '#ffd6cc', 'black')
-let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
-
-function menu() {
-    ++G.frame
-    G.resizeWindow()
-
-    // Calculate Menu Window
-    menuSize = 500
-    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
-
-
-    if (G.frame == 1) {
-        titleTheme.play()
-
-        // Set coords of Buttons
-        Menu.placeButtons(x, y, menuSize, menuSize)
-
-        // Initalize Controll
-        I.addKeyListeners()
-        I.addMouseListener()
-
-        // Center Player
-        P.x = x + menuSize/2
-        P.y = y + menuSize/2
-    }
-
-    Stage.draw(G.w, G.h)
-    P.title(x, y, menuSize, menuSize) // update
-
-    Menu.draw(x, y, x + menuSize, y + menuSize)       
-    P.draw()
-
-    if (Menu.checkButtons()) return // end loop
-    loop(menu)
-}
-
-let transTimer = 0
-// let transDuration = 100
-let transDuration = 460
-function MenuTrans() {
-    ++G.frame
-    G.resizeWindow()
-    transTimer += 1
-
-    // Calculate Menu Window
-    menuSize = 500
-    let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
-    let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
-    let progress = ((transDuration - transTimer)/transDuration)
-
-    // Update
-    P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
-    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
-
-    // Draw
-    Stage.draw(G.w, G.h)
-
-    let x2 = x1 + menuSize
-    let y2 = y1 + menuSize
-    Menu.draw(x1*progress, y1*progress,         // x1 and y1
-        x2 + (G.w - x2)*(1 - progress),   // x2
-        y2 + (G.h - y2)*(1 - progress))   // y1
-
-    b_start.draw()
-
-    P.draw()
-
-    if (transTimer >= transDuration) {
-        G.updateDifficulty(P, Enemies, 6)
-        window.requestAnimationFrame(main);
-        return
-    }
-
-    loop(MenuTrans)
-}
+let b_start = new Button("25px Comic Sans MS", "START", '#ffd6cc', 'black')
+// let b_options = new Button("20px Comic Sans MS", "OPTIONS", 0, 0, '#ffd6cc', 'black')
 
 let Menu = {
     draw(x1, y1, x2, y2) { 
@@ -1695,34 +1629,107 @@ let Menu = {
         //     3. Options -----> take you to options fke
     },
 
-    placeButtons(x, y, w, h) {
-        b_start.x = x + w/2
-        b_start.y = y + h*7/8
+    drawButtons(x, y, w, h) {
+        b_start.adjust(x + w/2, y + h*7/8)
+        b_start.draw()
 
-        b_options.x = x + w*7/8
-        b_options.y = y + h - 20
+        // b_options.x = x + w*7/8
+        // b_options.y = y + h - 20
+        //     b_options.draw()
     },
 
     checkButtons() {
-        if (b_start != null) {
-            b_start.draw()
-            if (b_start.check(I)) {
-                window.requestAnimationFrame(MenuTrans);
-                mainTheme.play()
-                return true
-            }
+        if (b_start.check(I)) {
+            window.requestAnimationFrame(MenuTrans);
+            mainTheme.play()
+            return true
         }
 
-        if (b_options != null) {
-            b_options.draw()
-            if (b_options.check(I)) {
-                console.log("MONKE")
-            }
-        }
+        //     if (b_options.check(I)) {
+        //         console.log("MONKE")
+        //     }
     }
 
 
 }
+function menu() {
+    ++G.frame
+    G.resizeWindow()
+
+    // Calculate Menu Window
+    menuSize = 500
+    let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+
+
+    if (G.frame == 1) {
+        titleTheme.play()
+
+        // Set coords of Buttons
+
+        // Initalize Controll
+        I.addKeyListeners()
+        I.addMouseListener()
+
+        // Center Player
+        P.x = x + menuSize/2
+        P.y = y + menuSize/2
+    }
+
+    Stage.draw(G.w, G.h)
+    P.title(x, y, menuSize, menuSize) // update
+
+    Menu.draw(x, y, x + menuSize, y + menuSize)       
+    Menu.drawButtons(x, y, menuSize, menuSize)
+    P.draw()
+
+    if (Menu.checkButtons()) return // end loop
+    loop(menu)
+}
+
+let transTimer = 0
+let transDuration = 100
+// let transDuration = 460
+function MenuTrans() {
+    ++G.frame
+    G.resizeWindow()
+    transTimer += 1
+
+    // Calculate Menu Window
+    menuSize = 500
+    let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
+    let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
+    let progress = ((transDuration - transTimer)/transDuration)
+
+    // Update
+    P.shrink(0, 0, menuSize*progress, menuSize*progress) // update
+    b_start.adjust(x1 + menuSize/2, y1 + menuSize*7/8 + (G.h/4)*(1-progress))
+
+    // Draw
+    Stage.draw(G.w, G.h)
+
+    let x2 = x1 + menuSize
+    let y2 = y1 + menuSize
+    Menu.draw(x1*progress, y1*progress,         // x1 and y1
+        x2 + (G.w - x2)*(1 - progress),   // x2
+        y2 + (G.h - y2)*(1 - progress))   // y1
+
+    b_start.draw()
+
+    P.draw()
+
+    if (transTimer >= transDuration) {
+        // G.updateDifficulty(P, Enemies, 6)
+        window.requestAnimationFrame(main)
+        G.updateDifficulty(P, Enemies, 6)
+        // window.requestAnimationFrame(tutorial)
+
+        return
+    }
+
+    loop(MenuTrans)
+}
+
 
 // function intro() {
 //     ++G.frame
@@ -1749,7 +1756,6 @@ let Menu = {
 //     }
 // }
 // REQUIRES: player.js io.js
-
 const c = document.getElementById('canvas')
 const ctx = c.getContext('2d')
 
@@ -1758,6 +1764,11 @@ const I = new IO()
 const P = new Player(250, 250, 250, 250)
 const DP = new DPController()
 const Enemies = new EnemyController()
+
+let trans_gameover = {
+    timer: 0,
+    duration: 200,
+}
 
 function main() {
     ++G.frame
@@ -1783,15 +1794,14 @@ function main() {
 }
 
 function update() {
+    G.resizeWindow()
     if (P.state != en.state.dead) Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
     Enemies.controller()
 }
 
 function draw() {
-    G.resizeWindow()
     ctx.clearRect(0, 0, G.w, G.h)
-
     Stage.draw(G.w, G.h)
 
     P.draw()
@@ -1802,14 +1812,270 @@ function draw() {
 
     Stage.HUD(G.w, G.h, P)
 }
-let gtransTimer = 0
-let gtransDuration = 200
+class Tutorial {
+    constructor() {
+        this.timer = 0
+        this.order = ['move', 'enemy', 'push', 'bars', 'goodLuck', 'end']
+        this.i = 0
+        this.check = false
+
+        // Move
+        this.controlCheck = [0, 0, 0, 0]
+    }
+
+    get step() {
+        return this.order[this.i]
+    }
+
+    debug() {
+        ctx.font = "20px Arial Bold"
+        ctx.color = "black"
+
+        let x = 40
+        let y = G.h*6/8 + 100
+
+        ctx.fillText("Stage: " + this.step, x, y)
+        y += 20
+        ctx.fillText("Timer: " + this.timer, x, y)
+
+        switch (this.step) {
+            case 'enemy':
+                y += 30
+                ctx.fillText(`Enemy State: ${Enemies.instances[0].state}`, x, y)
+                // y += 20
+                // ctx.fillText(`Enemy Coords: (${Math.round(this.enemy1.x)}, ${Math.round(this.enemy1.y)})`, x, y)
+                break
+            case 'push':
+                break
+            case 'bars':
+                break
+            case 'goodLuck':
+                break
+        }
+    }
+
+    controller(w, h, keys) {
+        ++this.timer
+
+        if (this.check) {
+            this.i++
+            this.check = false
+        }
+
+        switch (this.step) {
+            case 'move':
+                // if every move direction hit &&
+                // if timer > 200
+                if (keys.right) this.controlCheck[0] = 1
+                if (keys.up) this.controlCheck[1] = 1
+                if (keys.left) this.controlCheck[2] = 1
+                if (keys.down) this.controlCheck[3] = 1
+
+                if (!this.controlCheck.includes(0) && this.timer > 200) {
+                    this.timer = 0
+                    this.check = true
+                }
+
+                break
+            case 'enemy':
+                if (Enemies.instances.length == 0) {
+                    Enemies.spawn(w, h, P)
+                }
+
+                if (G.score == 1) {
+                    this.timer = 0
+                    this.check = true
+                    P.power = P.maxPower
+                }
+                break
+            case 'push':
+                if (Enemies.instances.length <= 5) {
+                    Enemies.spawn(w, h, P)
+                }
+                if (P.action == en.act.push) {
+                    this.timer = 0
+                    this.check = true
+                }
+                break
+            case 'bars':
+                if (Enemies.instances.length == 0) {
+                    this.timer = 0
+                    this.check = true
+                }
+                break
+            case 'goodLuck':
+                if (this.timer > 300) {
+                    this.check = true
+                }
+                break
+        }
+    }
+
+    draw(w, h) {
+        let x = 0
+        let y = 0
+        let text = ''
+        ctx.font = "30px Comic Sans MS"
+        switch (this.step) {
+            case 'move':
+                text = 'Use WASD or Arrow Keys to Move'
+                x = w/2 - ctx.measureText(text).width/2
+                y = h*2/8
+
+        ctx.fillStyle = 'black'
+        ctx.fillText(text, x, y)
+                break
+            case 'enemy':
+                text = 'This is an enemy! Use space to kill him'
+                x = w/2 - ctx.measureText(text).width/2
+                y = h*2/8
+
+        ctx.fillStyle = 'black'
+        ctx.fillText(text, x, y)
+                break
+            case 'push':
+                text = 'More Homies! Push em away with Q'
+                x = w/2 - ctx.measureText(text).width/2
+                y = h*2/8
+
+        ctx.fillStyle = 'black'
+        ctx.fillText(text, x, y)
+                break
+            case 'bars':
+                ctx.lineWidth = 3
+
+                // COOLDOWN
+
+                // Arrow stem
+                ctx.beginPath();
+                ctx.moveTo(w*5/8 - 20, 145)
+                ctx.lineTo(w*5/8, 80)
+                ctx.stroke()
+                ctx.closePath()
+
+                // Arrow left tip
+                ctx.beginPath();
+                ctx.moveTo(w*5/8, 80)
+                ctx.lineTo(w*5/8 - 10, 85)
+                ctx.stroke()
+                ctx.closePath()
+
+                // Arrow right tip
+                ctx.beginPath();
+                ctx.moveTo(w*5/8, 80)
+                ctx.lineTo(w*5/8 + 5, 89)
+                ctx.stroke()
+                ctx.closePath()
+
+                // POWER
+
+                // Arrow stem
+                ctx.beginPath();
+                ctx.moveTo(w*7/8 - 20, 145)
+                ctx.lineTo(w*7/8, 80)
+                ctx.stroke()
+                ctx.closePath()
+
+                // Arrow left tip
+                ctx.beginPath();
+                ctx.moveTo(w*7/8, 80)
+                ctx.lineTo(w*7/8 - 10, 85)
+                ctx.stroke()
+                ctx.closePath()
+
+                // Arrow right tip
+                ctx.beginPath();
+                ctx.moveTo(w*7/8, 80)
+                ctx.lineTo(w*7/8 + 5, 89)
+                ctx.stroke()
+                ctx.closePath()
+
+                ctx.fillStyle = 'black'
+                ctx.font = "25px Comic Sans MS"
+
+                text = 'Cooldown'
+                x = w*5/8 - 20 - ctx.measureText(text).width/2
+                y = 170
+                ctx.fillText(text, x, y)
+
+                text = 'Power'
+                x = w*7/8 - 20 - ctx.measureText(text).width/2
+                y = 170
+                ctx.fillText(text, x, y)
+
+
+                ctx.font = "30px Comic Sans MS"
+                text = 'Attacks and specials have a Cooldown,'
+                x = w/2 - ctx.measureText(text).width/2
+                y = h*2/8
+                ctx.fillText(text, x, y)
+
+                ctx.font = "30px Comic Sans MS"
+                text = 'specials require full Power'
+                x = w/2 - ctx.measureText(text).width/2
+                y += 34
+                ctx.fillText(text, x, y)
+
+                break
+            case 'goodLuck':
+                text = 'Kill as many Blobs as you can,'
+                x = w/2 - ctx.measureText(text).width/2
+                y = h*2/8
+                ctx.fillStyle = 'black'
+                ctx.fillText(text, x, y)
+
+                text = 'Good luck!'
+                x = w/2 - ctx.measureText(text).width/2
+                y += 34
+                ctx.fillText(text, x, y)
+                break
+        }
+        
+    }
+
+}
+
+let T = new Tutorial()
+
+function tutorial() {
+    ++G.frame
+    G.resizeWindow()
+
+    // Update
+    P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
+    if (P.health <= 50) P.health = 50
+    T.controller(G.w, G.h, I.keyState)
+    Enemies.controller()
+
+    // Draw
+    ctx.clearRect(0, 0, G.w, G.h)
+    Stage.draw(G.w, G.h)
+    P.draw()
+    Enemies.draw()
+    DP.controller()    
+    T.draw(G.w, G.h)
+
+    if (T.step == 'bars' || T.step == 'goodLuck' || T.step == 'end')
+        Stage.HUD(G.w, G.h, P)
+
+    // Debug
+    // T.debug()
+
+    if (T.step == 'end') {
+        G.restart(P)
+        return
+    }
+
+    loop(tutorial)
+}
+let b_gameover = new Button("30px Comic Sans MS", "RESTART", 'red', 'black')
+
 function GameoverTrans() {
     ++G.frame
     G.resizeWindow()
-    gtransTimer += 1
+    trans_gameover.timer += 1
 
-    let progress = ((gtransDuration - gtransTimer)/gtransDuration)
+    // let progress = ((gtransDuration - gtransTimer)/gtransDuration)
 
     // Draw
     Stage.draw(G.w, G.h)
@@ -1818,7 +2084,7 @@ function GameoverTrans() {
     Enemies.draw()
     Enemies.controller()
 
-    if (gtransTimer >= gtransDuration) {
+    if (trans_gameover.timer >= trans_gameover.duration) {
         window.requestAnimationFrame(Gameover);
         return
     }
@@ -1830,13 +2096,38 @@ function Gameover() {
     ++G.frame
     G.resizeWindow()
 
-    ctx.fillStyle = 'red'
-    ctx.font = "30px Arial Bold"
-    ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
-    ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
-    console.log(G.highscore)
+    gameover.draw()
+    gameover.drawButtons(0, 0, G.w, G.h)
 
-    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
+    if (gameover.checkButtons()) {
+        G.restart(P)
+        return
+    }
 
     loop(Gameover)
 }
+
+let gameover = {
+
+    draw() {
+        ctx.fillStyle = 'red'
+        ctx.font = "30px Arial Bold"
+        ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
+        ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
+
+        ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
+    },
+
+    drawButtons(x, y, w, h) {
+        b_gameover.adjust(w/2, h/4)
+        b_gameover.draw()
+    },
+
+    checkButtons() {
+        if (b_gameover.check(I)) {
+            return true
+        }
+    }
+
+}
+menu()

@@ -1,5 +1,4 @@
 // REQUIRES: player.js io.js
-
 const c = document.getElementById('canvas')
 const ctx = c.getContext('2d')
 
@@ -8,6 +7,11 @@ const I = new IO()
 const P = new Player(250, 250, 250, 250)
 const DP = new DPController()
 const Enemies = new EnemyController()
+
+let trans_gameover = {
+    timer: 0,
+    duration: 200,
+}
 
 function main() {
     ++G.frame
@@ -33,15 +37,14 @@ function main() {
 }
 
 function update() {
+    G.resizeWindow()
     if (P.state != en.state.dead) Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
     Enemies.controller()
 }
 
 function draw() {
-    G.resizeWindow()
     ctx.clearRect(0, 0, G.w, G.h)
-
     Stage.draw(G.w, G.h)
 
     P.draw()

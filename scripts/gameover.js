@@ -1,11 +1,11 @@
-let gtransTimer = 0
-let gtransDuration = 200
+let b_gameover = new Button("30px Comic Sans MS", "RESTART", 'red', 'black')
+
 function GameoverTrans() {
     ++G.frame
     G.resizeWindow()
-    gtransTimer += 1
+    trans_gameover.timer += 1
 
-    let progress = ((gtransDuration - gtransTimer)/gtransDuration)
+    // let progress = ((gtransDuration - gtransTimer)/gtransDuration)
 
     // Draw
     Stage.draw(G.w, G.h)
@@ -14,7 +14,7 @@ function GameoverTrans() {
     Enemies.draw()
     Enemies.controller()
 
-    if (gtransTimer >= gtransDuration) {
+    if (trans_gameover.timer >= trans_gameover.duration) {
         window.requestAnimationFrame(Gameover);
         return
     }
@@ -26,13 +26,37 @@ function Gameover() {
     ++G.frame
     G.resizeWindow()
 
-    ctx.fillStyle = 'red'
-    ctx.font = "30px Arial Bold"
-    ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
-    ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
-    console.log(G.highscore)
+    gameover.draw()
+    gameover.drawButtons(0, 0, G.w, G.h)
 
-    ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
+    if (gameover.checkButtons()) {
+        G.restart(P)
+        return
+    }
 
     loop(Gameover)
+}
+
+let gameover = {
+
+    draw() {
+        ctx.fillStyle = 'red'
+        ctx.font = "30px Arial Bold"
+        ctx.fillText(`Score is ${G.score}`, G.w/2 - 20, G.h/2 - 20)
+        ctx.fillText(`Highscore is ${G.highscore}`, G.w/2 - 20, G.h/2 + 10)
+
+        ctx.fillText("GAMEOVER", G.w - 250, G.h - 30)
+    },
+
+    drawButtons(x, y, w, h) {
+        b_gameover.adjust(w/2, h/4)
+        b_gameover.draw()
+    },
+
+    checkButtons() {
+        if (b_gameover.check(I)) {
+            return true
+        }
+    }
+
 }

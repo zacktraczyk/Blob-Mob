@@ -1,13 +1,13 @@
 class Button {
 
-    constructor(font, text, x, y, c1, c2){
+    constructor(font, text, c1, c2){
         this.font = font
         this.text = text
         this.c1 = c1
         this.c2 = c2
 
-        this.x = x
-        this.y = y
+        this.x = 0
+        this.y = 0
         this.w = 100
         this.h = 100
     }
