@@ -13,25 +13,11 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
  
 # TODO
 
-* [o] Implement OOP:
-	* [.] Character
-		* [X] Push
-		* [ ] Regen
-		* [ ] Death
-	* [o] Enemy
-		* [ ] Controller
-			* [ ] add spawn settings
-		* [X] Death
-		* [X] Push
-	* [X] HUD
-	* [X] io
-		* [X] Mouse
-		* [X] Keyboard
-		* [X] Buttons
-	* [X] Game
-	* [ ] main
-		* [ ] Make single game loop?
-		* [ ] Menu
-		* [ ] Game Over
-		* [ ] Transitions
-
+* [ ] Character Regen
+* [ ] Tutorial Start Logic
+* [ ] Difficulty Select
+* [ ] Gameover screen
+* [ ] Sound
+	* [ ] Effects
+	* [ ] Themes
+	* [ ] Implementation
