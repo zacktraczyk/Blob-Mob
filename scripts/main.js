@@ -48,5 +48,4 @@ function draw() {
 
     Stage.HUD(G.w, G.h, P)
     if (G.paused) pauseMenu.draw(G.w, G.h)
-
 }

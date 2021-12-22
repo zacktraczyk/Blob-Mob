@@ -33,8 +33,8 @@ const difficultyTable = {
         },
         enemy: {
             speed:      0.8,
-            spawnWait:  2,
-            maxInst:    2,
+            spawnWait:  1,
+            maxInst:    10,
         }
     },
 
@@ -42,27 +42,41 @@ const difficultyTable = {
         player: {
             speed:      4,
             accel:      0.4,
-            cool:       25,
-            health:     500,
+            cool:       20,
+            health:     800,
         },
         enemy: {
             speed:      1,
-            spawnWait:  5,
-            maxInst:    150,
+            spawnWait:  0.8,
+            maxInst:    50,
+        }
+    },
+
+    4: {
+        player: {
+            speed:      4,
+            accel:      0.4,
+            cool:       40,
+            health:     500,
+        },
+        enemy: {
+            speed:      1.5,
+            spawnWait:  0.6,
+            maxInst:    100,
         }
     },
 
     5: {
         player: {
-            speed:      3,
+            speed:      4,
             accel:      0.4,
-            cool:       40,
+            cool:       50,
             health:     300,
         },
         enemy: {
-            speed:      2,
-            spawnWait:  5,
-            maxInst:    100,
+            speed:      1.7,
+            spawnWait:  0.6,
+            maxInst:    150,
         }
     },
 
@@ -1521,7 +1535,6 @@ function draw() {
 
     Stage.HUD(G.w, G.h, P)
     if (G.paused) pauseMenu.draw(G.w, G.h)
-
 }
 class Tutorial {
     constructor() {
