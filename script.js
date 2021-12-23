@@ -663,7 +663,7 @@ class Player {
         switch (this.action) {
             case en.act.attack:
                 this.color = '#adedff'
-                this.attack(20, enemies)
+                this.attack(10, enemies)
                 return // exit control loop
             case en.act.norm:
                 this.move(w, h, keys)
@@ -694,7 +694,7 @@ class Player {
         // Check for damage
         let damage = false
         enemies.forEach(enemy => {
-            if (this.collides(enemy)) damage = true
+            if (this.collides(enemy) && enemy.state == en.state.norm) damage = true
         })
         if (damage) {
             this.color = '#ff6d6d'
@@ -757,17 +757,17 @@ class Player {
         ++this.timer
         this.cool += this.maxCool/duration
 
-        if (this.timer < duration/2) {
-            this.x += this.xdir*7
-            this.y += this.ydir*7
+        if (this.timer < duration) {
+            this.x += this.xdir*9
+            this.y += this.ydir*9
         }
-        if (this.timer > duration/2) {
-            this.x -= this.xdir*7
-            this.y -= this.ydir*7
-        }
+        // if (this.timer > duration/2) {
+        //     this.x -= this.xdir*7
+        //     this.y -= this.ydir*7
+        // }
 
         // Check Collision
-        if (this.timer > duration/4 && this.timer < duration*3/4) {
+        // if (this.timer > duration/2) {
             enemies.forEach(enemy => {
                 if (this.collides(enemy)) {
                     if (enemy.state != en.state.dying
@@ -775,7 +775,7 @@ class Player {
                         enemy.state = en.state.dying
                 }
             })
-        }
+        // }
 
         // End attack
         if (this.timer >= duration) {
