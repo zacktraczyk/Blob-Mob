@@ -2,9 +2,9 @@
 
 // animation loop
 function loop(dest) {
-    setTimeout(() => 
-        window.requestAnimationFrame(dest),
-    1000 / G.fps);
+    // setTimeout(() => 
+        window.requestAnimationFrame(dest)
+    // 1000 / G.fps);
 }
 
 class Game {

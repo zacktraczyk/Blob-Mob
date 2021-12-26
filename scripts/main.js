@@ -1,12 +1,19 @@
 // REQUIRES: player.js io.js
-const c = document.getElementById('canvas')
-const ctx = c.getContext('2d')
+let c, ctx, G, I, P, DP, Enemies
 
-const G = new Game()
-const I = new IO()
-const P = new Player(250, 250, 250, 250)
-const DP = new DPController()
-const Enemies = new EnemyController()
+function Init() {
+    c = document.getElementById('canvas')
+    ctx = c.getContext('2d')
+
+    G = new Game()
+    I = new IO()
+    P = new Player(250, 250, 250, 250)
+    DP = new DPController()
+    Enemies = new EnemyController()
+
+    menu()
+
+}
 
 function main() {
     ++G.frame
@@ -49,3 +56,8 @@ function draw() {
     Stage.HUD(G.w, G.h, P)
     if (G.paused) pauseMenu.draw(G.w, G.h)
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+    Init()
+})
+

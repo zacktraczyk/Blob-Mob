@@ -91,7 +91,6 @@ function MenuTrans() {
 
     // Draw
     Stage.draw(G.w, G.h)
-    Stage.HUD(G.w, G.h, P)
 
     let x2 = x1 + menuSize
     let y2 = y1 + menuSize

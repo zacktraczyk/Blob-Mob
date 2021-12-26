@@ -1,14 +1,11 @@
 MAKEFLAGS += --silent
-# Combine .js into a single file
 COMPILED=script.js
-# ORDER=sound.js io.js player.js enemy.js game.js main.js
 ORDER=enum.js difficulty.js sound.js button.js game.js scenes.js io.js player.js Enemy.js menu.js main.js tutorial.js gameover.js run.js
-all: compile-order
 
-compile-order:
-	cd scripts; \
-		echo "$(ORDER)" | xargs cat > $(COMPILED); \
-		mv $(COMPILED) ../$(COMPILED)
+all: closure-white
+
+closure-white:
+	google-closure-compiler --js scripts/**.js -O WHITESPACE --js_output_file script.js
 
 diff-curves: all
 	cd analytics; \
@@ -22,6 +19,10 @@ diff-curves: all
 			python3 graph.py; \
 		fi; \
 		
+compile-order:
+	cd scripts; \
+		echo "$(ORDER)" | xargs cat > $(COMPILED); \
+		mv $(COMPILED) ../$(COMPILED)
 
 compile-lexi:
 	@find ./scripts -type f -name "*.js" | xargs cat > $(COMPILED)

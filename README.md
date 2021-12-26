@@ -7,17 +7,12 @@ Blobmob was originally designed on a chromebook webstie HTML compilier but was m
 
 ---
 
+# Compile
+
+Javascript needs to be minified/compiled into `scripts.js`. I used
+[Google Closure Compiler](https://github.com/fstrube/closure-auto-compiler) but
+any js minifier works
+
 ## Contributers
 
 * Zack Traczyk <zstraczyk324@gmail.com>
- 
-# TODO
-
-* [ ] Character Regen
-* [ ] Tutorial Start Logic
-* [ ] Difficulty Select
-* [ ] Gameover screen
-* [ ] Sound
-	* [ ] Effects
-	* [ ] Themes
-	* [ ] Implementation
