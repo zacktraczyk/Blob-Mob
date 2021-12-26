@@ -5,7 +5,7 @@ ORDER=enum.js difficulty.js sound.js button.js game.js scenes.js io.js player.js
 all: closure-white
 
 closure-white:
-	google-closure-compiler --js scripts/**.js -O WHITESPACE --js_output_file script.js
+	google-closure-compiler --js scripts/**.js -O SIMPLE --js_output_file script.js
 
 diff-curves: all
 	cd analytics; \

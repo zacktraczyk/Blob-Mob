@@ -1,12 +1,11 @@
 // Button Definitions
-// let b_options = new Button('20px Comic Sans MS', 'OPTIONS', 0, 0, '#ffd6cc', 'black')
 
 function menu() {
     ++G.frame
     G.resizeWindow()
 
     // Calculate Menu Window
-    menuSize = 500
+    let menuSize = 500
     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
 
@@ -49,7 +48,7 @@ function diffSelect() {
     G.resizeWindow()
 
     // Calculate Menu Window
-    menuSize = 500
+    let menuSize = 500
     let x = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
 
@@ -81,7 +80,7 @@ function MenuTrans() {
     transTimer += 1
 
     // Calculate Menu Window
-    menuSize = 500
+    let menuSize = 500
     let x1 = G.w > menuSize ? G.w/2 - (menuSize/2) : 0
     let y1 = G.h > menuSize ? G.h/2 - (menuSize/2) : 0
     let progress = ((transDuration - transTimer)/transDuration)
@@ -183,7 +182,7 @@ let Menu = {
 
 
             draw(x, y, w, h) {
-                text = '0'
+                let text = '0'
                 let dnum = Object.keys(difficultyTable).length // Number of difficulties
                 let xgap = (w - dnum*ctx.measureText(text).width)/dnum
 

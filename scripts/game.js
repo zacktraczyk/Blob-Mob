@@ -32,8 +32,8 @@ class Game {
     resizeWindow() {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        this.w = innerWidth
-        this.h = innerHeight
+        this.w = window.innerWidth
+        this.h = window.innerHeight
     }
 
     updateDifficulty(player, enemyController, d) {
@@ -61,11 +61,11 @@ class Game {
     }
 
     setTutorial() {
-        localStorage.setItem("tutorial", this.tutorial);
+        window.localStorage.setItem("tutorial", this.tutorial);
     }
 
     getTutorial() {
-        let t = localStorage.getItem("tutorial")
+        let t = window.localStorage.getItem("tutorial")
         if (t == null)
             return false
         return true
@@ -74,11 +74,11 @@ class Game {
     setHighscore() {
         if (this.score > this.highscore)
             this.highscore = this.score
-        localStorage.setItem("highscore", this.highscore);
+        window.localStorage.setItem("highscore", this.highscore);
     }
 
     getHighscore() {
-        let score = localStorage.getItem("highscore")
+        let score = window.localStorage.getItem("highscore")
         if (score == null)
             return 0
         return score

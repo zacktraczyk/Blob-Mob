@@ -64,11 +64,6 @@ class IO {
     }
 
     addMouseListener() {
-        canvas.addEventListener("click", this.mousePosition, false);
+        document.addEventListener("click", this.mousePosition, false);
     }
-
-    removeMouseListener() {
-        canvas.removeEventListener("click", this.mousePosition, false);
-    }
-    
 }

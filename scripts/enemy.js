@@ -5,10 +5,10 @@ class EnemyController {
     constructor(){
         this.instances = new Array()
         this.cool = 0
-        this.speed
+        this.speed = 0
 
-        this.maxInst
-        this.spawnWait
+        this.maxInst = 0
+        this.spawnWait = 0
     }
 
     spawner(w, h, p) {
@@ -53,8 +53,8 @@ class Enemy {
 
         this.pushMag = 17
         this.speed = speed
-        this.target //target needs a width, height, x, and y position
-        this.distance
+        this.target = null //target needs a width, height, x, and y position
+        this.distance = 0
 
         this.rcolors = ['#81ea25', '#6bba27', '#96e84e', '#abf966', '#b9f981']; //Enemy color strobe
         this.color = this.rcolors[0]
