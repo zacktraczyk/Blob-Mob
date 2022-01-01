@@ -170,7 +170,7 @@ class Player {
         switch (this.action) {
             case en.act.attack:
                 this.color = '#adedff'
-                this.attack(w, h, 10, enemies)
+                this.attack(w, h, 8, enemies)
                 return // exit control loop
             case en.act.norm:
                 this.move(w, h, keys)
@@ -257,8 +257,8 @@ class Player {
         ++this.timer
         this.cool += this.maxCool/duration
 
-        const xspeed = Math.max(9, Math.abs(this.xvel)*2)
-        const yspeed = Math.max(9, Math.abs(this.yvel)*2)
+        const xspeed = Math.max(10, Math.abs(this.xvel)*2)
+        const yspeed = Math.max(10, Math.abs(this.yvel)*2)
         this.x += this.xdir*xspeed
         this.y += this.ydir*yspeed
 
