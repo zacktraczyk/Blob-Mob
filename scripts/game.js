@@ -109,43 +109,39 @@ class Game {
         damagePoints.instances = new Array()
 
         this.score = 0
+        this.frame = 0
     }
 
-    debug() {
+    debug(p, ec) {
         ctx.font = "20px Arial Bold"
         ctx.color = "black"
         
         let x = 40
         let y = this.h*5/8 + 100
 
-        let pVals = difficultyTable[this.difficulty].player
-        let eVals = difficultyTable[this.difficulty].enemy
-
         ctx.fillText("difficulty: " + this.difficulty, x, y)
         y += 30
         ctx.fillText("player: ", x, y)
         x += 30
         y += 20
-        ctx.fillText("speed: " + pVals.speed, x, y)
+        ctx.fillText("speed: " + p.maxSpeed, x, y)
         y += 20
-        ctx.fillText("accel: " + pVals.accel, x, y)
+        ctx.fillText("accel: " + p.accel, x, y)
         y += 20
-        ctx.fillText("cool: " + pVals.cool, x, y)
+        ctx.fillText("cool: " + p.maxCool, x, y)
         y += 20
-        ctx.fillText("health: " + pVals.health, x, y)
+        ctx.fillText("health: " + p.maxHealth, x, y)
         y += 30
         x -= 30
         ctx.fillText("enemy: ", x, y)
         x += 30
         y += 20
-        ctx.fillText("speed: " + eVals.speed, x, y)
+        ctx.fillText("speed: " + ec.speed, x, y)
         y += 20
-        ctx.fillText("Spawn Rate: " + eVals.spawnWait + "s", x, y)
+        ctx.fillText("Spawn Rate: " + ec.spawnWait + "s", x, y)
         y += 20
-        ctx.fillText("Max Number: " + eVals.maxInst, x, y)
+        ctx.fillText("Max Number: " + ec.maxInst, x, y)
         y += 40
-        if (Enemies != null) ctx.fillText("Blobs: " + Enemies.instances.length, x, y)
-
+        if (Enemies != null) ctx.fillText("Blobs: " + ec.instances.length, x, y)
     }
-
 }

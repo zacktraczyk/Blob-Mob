@@ -6,6 +6,7 @@ class EnemyController {
         this.instances = new Array()
         this.cool = 0
         this.speed = 0
+        this._speedChangeCount = 0 // death count up to 50
 
         this.maxInst = 0
         this.spawnWait = 0
@@ -29,13 +30,30 @@ class EnemyController {
         this.instances.forEach(e => e.draw())
     }
 
-    controller(){
+    controller(p){
+        // Update speed
+        if (this._speedChangeCount > 50) {
+            this.changeSpeed(1.2)
+            this.speed *= 1.2
+            p.changeSpeed(1.2 / 2)
+            this._speedChangeCount = 0
+        }
+
+        // Update Enemy Instances
         for (let i = 0; i < this.instances.length; i++) { 
-            if (this.instances[i].state == en.state.dead) {
+            if (this.instances[i].state == en.state.dead) { // Free memory (kill)
+                this._speedChangeCount++;
                 this.instances.splice(i, 1)
-            }
-            else {
+            } else {
                 this.instances[i].controller()
+            }
+        }
+    }
+
+    changeSpeed(speed) {
+        for (let i = 0; i < this.instances.length; i++) { 
+            if (this.instances[i].state != en.state.dead) {
+                this.instances[i].changeSpeed(speed)
             }
         }
     }
@@ -177,7 +195,11 @@ class Enemy {
             this.ydir = ydiff/this.distance
         }
     }
-        
+
+    changeSpeed(delta) {
+        this.speed *= delta;
+    }
+
     move() {
         if (this.target == null) return 0
 

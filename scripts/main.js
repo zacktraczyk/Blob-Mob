@@ -26,7 +26,7 @@ function main() {
     draw()
 
     // Debug
-    // G.debug()
+    G.debug(P, Enemies)
 
     if (P.state == en.state.dead) {
         window.requestAnimationFrame(GameoverTrans)
@@ -40,9 +40,10 @@ function main() {
 
 function update() {
     G.resizeWindow()
+
     if (P.state != en.state.dead) Enemies.spawner(G.w, G.h, P)
     P.controller(G.w, G.h, I.keyState, Enemies.instances, DP)
-    Enemies.controller()
+    Enemies.controller(P)
 }
 
 function draw() {

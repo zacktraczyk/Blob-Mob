@@ -1,6 +1,6 @@
 MAKEFLAGS += --silent
 COMPILED=script.js
-ORDER=enum.js difficulty.js sound.js button.js game.js scenes.js io.js player.js Enemy.js menu.js main.js tutorial.js gameover.js run.js
+ORDER=enum.js difficulty.js sound.js button.js game.js scenes.js io.js player.js Enemy.js menu.js main.js tutorial.js gameover.js run.js DamagePoint.js
 
 all: closure-white
 
