@@ -5,14 +5,18 @@ html, body {
 	overflow-y: hidden;
 }
 
-/* a { */
-/*     color: #fffbf9; */
-/*     size: 3em; */
-/*     margin-right: 1em; */
-/*     font-family: Arial Bold; */
-/*     text-decoration: none; */
-/* } */
+a {
+    color: Black;
+	padding: 5px;
+	font-size: 1.2em;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+	background-color: #ffd6cc;
+    text-decoration: none;
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+}
 
-/* a:hover { */
-/*     color: #ffd6cc; */    
-/* } */
+a:hover {
+    color: red;    
+}

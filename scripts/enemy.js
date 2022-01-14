@@ -32,17 +32,17 @@ class EnemyController {
 
     controller(p){
         // Update speed
-        if (this._speedChangeCount > 50) {
-            this.changeSpeed(1.2)
-            this.speed *= 1.2
-            p.changeSpeed(1.2 / 2)
-            this._speedChangeCount = 0
-        }
+        // if (this._speedChangeCount > 50) {
+        //     this.changeSpeed(1.2)
+        //     this.speed *= 1.2
+        //     p.changeSpeed(1.2 / 2)
+        //     this._speedChangeCount = 0
+        // }
 
         // Update Enemy Instances
         for (let i = 0; i < this.instances.length; i++) { 
             if (this.instances[i].state == en.state.dead) { // Free memory (kill)
-                this._speedChangeCount++;
+                // this._speedChangeCount++;
                 this.instances.splice(i, 1)
             } else {
                 this.instances[i].controller()
@@ -50,13 +50,13 @@ class EnemyController {
         }
     }
 
-    changeSpeed(speed) {
-        for (let i = 0; i < this.instances.length; i++) { 
-            if (this.instances[i].state != en.state.dead) {
-                this.instances[i].changeSpeed(speed)
-            }
-        }
-    }
+    // changeSpeed(speed) {
+    //     for (let i = 0; i < this.instances.length; i++) { 
+    //         if (this.instances[i].state != en.state.dead) {
+    //             this.instances[i].changeSpeed(speed)
+    //         }
+    //     }
+    // }
 }
 
 class Enemy {
