@@ -26,7 +26,7 @@ function main() {
     draw()
 
     // Debug
-    G.debug(P, Enemies)
+    // G.debug(P, Enemies)
 
     if (P.state == en.state.dead) {
         window.requestAnimationFrame(GameoverTrans)
