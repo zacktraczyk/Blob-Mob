@@ -1,0 +1,43 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 25px;
+  height: 50vh;
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+  width: 500px;
+}
+
+.login label {
+  width: 100%;
+}
+
+.login input {
+  margin-bottom: 30px;
+  width: 100%;
+  font-size: 20px;
+}
+
+.login input[type=submit] {
+  font-size: inherit;
+  margin-left: 40%;
+  width: 20%;
+}
+
+.login .submit {
+  border: 3px solid gray;
+  border-radius: 10px;
+  margin-top: 40px;
+  padding: 10px;
+  background-color: white;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .login {
+    width: 200px;
+  }
+
+}
