@@ -17,12 +17,12 @@ const enemies = new EnemyController();
 
 export function Init(ctx: CanvasRenderingContext2D) {
   game.ctx = ctx;
-  Main();
+  if (!Main(ctx)) return {gameover: true, score: game.score}
+  return {gameover: false, score: game.score}
 }
 
-function Main() {
+function Main(ctx: CanvasRenderingContext2D) {
     ++game.frame;
-    console.log(player.x, player.y)
 
     if (!game.paused) {
       update();
@@ -37,8 +37,9 @@ function Main() {
         // window.requestAnimationFrame(GameoverTrans);
         // mainTheme.stop();
         game.setHighscore();
-        return;
+        return false;
     }
+    return true;
 }
 
 function update() {

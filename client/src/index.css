@@ -26,18 +26,3 @@ a {
 a:hover {
 	color: pink;
 }
-
-.main-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.title {
-  position: absolute;
-  top: 1vh;
-  left: 5vh;
-  color: #fff;
-  font-size: 4vh;
-}

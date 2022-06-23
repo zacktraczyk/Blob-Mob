@@ -1,0 +1,22 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.title {
+  position: absolute;
+  top: 1vh;
+  left: 5vh;
+  color: #fff;
+  font-size: 4vh;
+}
+
+.score {
+  position: absolute;
+  top: 1vh;
+  right: 5vh;
+  color: #fff;
+  font-size: 4vh;
+}

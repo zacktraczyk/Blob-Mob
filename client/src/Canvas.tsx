@@ -2,15 +2,17 @@ import { useRef, useEffect } from 'react'
 
 interface CanvasProps {
   draw: Function,
+  onGameover: Function
+  updateScore: Function
   width: number,
-  height: number
+  height: number,
 }
 
 const Canvas = (props: CanvasProps) => {
 
-  const { draw, ...rest } = props
+  const { draw, onGameover, updateScore, ...rest } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  
+
   useEffect(() => {
     const c = canvasRef.current
     if (c == null) throw new Error('Could not get canvas');
@@ -22,8 +24,11 @@ const Canvas = (props: CanvasProps) => {
     let animationFrameId = 0;
 
     const render = () => {
-      frameCount++
-      draw(ctx, frameCount)
+      const { gameover, score } = draw(ctx);
+      if (gameover) {
+        onGameover();
+      } 
+      if (typeof score == 'number')  updateScore(score);
       animationFrameId = window.requestAnimationFrame(render);
     }
     render()
