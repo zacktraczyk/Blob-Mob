@@ -1,13 +1,18 @@
 .login {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   background-color: #fff;
   padding: 50px;
   border-radius: 25px;
   height: 50vh;
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
   width: 500px;
+}
+
+.login h2 {
+  text-align: center;
+  font-size: 40px;
 }
 
 .login label {
@@ -18,6 +23,10 @@
   margin-bottom: 30px;
   width: 100%;
   font-size: 20px;
+}
+
+.login input:focus {
+
 }
 
 .login input[type=submit] {
@@ -37,7 +46,7 @@
 @media only screen and (max-width: 600px) {
 
   .login {
-    width: 200px;
+    width: 80vw;
+    padding: 30px;
   }
-
 }

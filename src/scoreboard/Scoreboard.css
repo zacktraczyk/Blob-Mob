@@ -1,0 +1,41 @@
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 25px;
+  height: 50vh;
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+  width: 500px;
+}
+
+.scoreboard h1 {
+  text-align: center;
+}
+
+.scoreboard ul {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.scoreboard li {
+  text-align: center;
+  list-style: none;
+}
+
+.scoreboard p {
+  display: inline-block;
+}
+
+.scoreboard .score {
+  float: right;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .scoreboard {
+    width: 200px;
+  }
+
+}

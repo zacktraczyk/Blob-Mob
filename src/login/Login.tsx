@@ -17,6 +17,7 @@ export default function Login(props) {
 
   return (
     <div onSubmit={handleSubmit} className="login">
+      <h2>Login</h2>
       <form>
         <label>
           Username
