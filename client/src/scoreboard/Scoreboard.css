@@ -15,6 +15,7 @@
 
 .scoreboard ul {
   padding: 0px 80px;
+  overflow: scroll;
 }
 
 .scoreboard li {

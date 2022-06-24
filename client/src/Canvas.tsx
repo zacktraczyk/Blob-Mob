@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { useRef, useEffect } from 'react'
 
 interface CanvasProps {
@@ -27,8 +28,8 @@ const Canvas = (props: CanvasProps) => {
       const { gameover, score } = draw(ctx);
       if (gameover) {
         onGameover();
-      } 
-      if (typeof score == 'number')  updateScore(score);
+      }
+      if (typeof score == 'number') updateScore(score);
       animationFrameId = window.requestAnimationFrame(render);
     }
     render()
@@ -38,7 +39,15 @@ const Canvas = (props: CanvasProps) => {
     }
   }, [draw])
 
-  return <canvas ref={canvasRef} {...rest} />
+  return (
+    <motion.div
+      initial={{ x: 300, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -300, opacity: 0 }}
+    >
+      <canvas ref={canvasRef} {...rest} />
+    </motion.div>
+  )
 }
 
 export default Canvas

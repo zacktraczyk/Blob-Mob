@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from 'framer-motion'
 import React, { useState } from 'react'
 import Canvas from './Canvas'
 import Login from './login/Login'
@@ -29,7 +30,6 @@ const App = () => {
   }
 
   const showScoreBoard = () => {
-    console.log("APP.tsx: showScoreBoard (onGameover) score:", score)
     setPage(scoreboard);
   }
 
@@ -38,15 +38,14 @@ const App = () => {
     setScore(score);
   }
 
-  console.log("APP.tsx: component render score:", score)
-
   return (
     <>
       <h1 className='title'>Blob Mob</h1>
-      {/* <h1 className='score'>Score: {score}</h1> */}
-      <h1 className='current-score'>{score}</h1>
+      <h1 className='current-score'>Score: {score}</h1>
       <div className='main-container'>
-        {page}
+        <AnimatePresence>
+            {page}
+        </AnimatePresence>
       </div>
     </>
   )
