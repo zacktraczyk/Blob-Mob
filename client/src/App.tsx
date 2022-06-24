@@ -6,8 +6,9 @@ import Scoreboard from './scoreboard/Scoreboard';
 
 import './App.css'
 
-function App() {
+const App = () => {
 
+  // Page Components
   const login = <Login onClick={() => handleClick()} />
   const canvas =
     <Canvas
@@ -22,24 +23,28 @@ function App() {
   const [page, setPage] = useState(login);
   const [score, setScore] = useState(0);
 
+  // Change Pages
   const handleClick = () => {
-    setPage(canvas);
+    setPage(canvas)
   }
 
   const showScoreBoard = () => {
+    console.log("APP.tsx: showScoreBoard (onGameover) score:", score)
     setPage(scoreboard);
   }
 
+  // Update Score
   const updateScore = (score: number) => {
     setScore(score);
   }
 
-    console.log(score);
+  console.log("APP.tsx: component render score:", score)
+
   return (
     <>
       <h1 className='title'>Blob Mob</h1>
       {/* <h1 className='score'>Score: {score}</h1> */}
-      <h1 className='score'>{score}</h1>
+      <h1 className='current-score'>{score}</h1>
       <div className='main-container'>
         {page}
       </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import './Scoreboard.css'
 
-export default function Scoreboard(props) {
+export default function Scoreboard() {
 
   return (
     <div className='scoreboard'>

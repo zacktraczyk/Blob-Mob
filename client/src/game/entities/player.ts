@@ -4,10 +4,7 @@ import { State, Action, Entity } from './entity';
 import { DamagePointController } from './damagePoints';
 
 // Clamp number between two values with the following line:
-const clamp = (num: number, min: number, max: number) => {
-    const clamped = Math.min(Math.max(num, min), max);
-    return clamped != NaN ? clamped : 250;
-};
+const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
 
 export class Player extends Entity {
 

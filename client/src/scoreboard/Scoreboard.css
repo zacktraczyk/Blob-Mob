@@ -14,21 +14,22 @@
 }
 
 .scoreboard ul {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
+  padding: 0px 80px;
 }
 
 .scoreboard li {
+  padding-bottom: 50px;
+  border-bottom: 1px solid #ddd;
+  /* width: 40%; */
   text-align: center;
   list-style: none;
 }
 
-.scoreboard p {
-  display: inline-block;
+.name {
+  float: left;
 }
 
-.scoreboard .score {
+.score {
   float: right;
 }
 

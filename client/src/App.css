@@ -13,7 +13,7 @@
   font-size: 4vh;
 }
 
-.score {
+.current-score {
   position: absolute;
   top: 1vh;
   right: 5vh;
