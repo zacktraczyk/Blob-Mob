@@ -2,35 +2,31 @@ import { motion, AnimatePresence } from 'framer-motion'
 import React, { useState } from 'react'
 import Canvas from './Canvas'
 import Login from './login/Login'
-import { Init } from './game/main'
+import { Main } from './game/main'
 import Scoreboard from './scoreboard/Scoreboard';
 
 import './App.css'
 
 const App = () => {
 
+  const [displayLogin, setDisplayLogin] = useState(true);
+  const [displayScoreboard, setDisplayScoreboard] = useState(false);
+  const [playGame, setPlayGame] = useState(false);
+
+  const [score, setScore] = useState(0);
   // Page Components
   const login = <Login onClick={() => handleClick()} />
-  const canvas =
-    <Canvas
-      draw={Init}
-      onGameover={() => showScoreBoard()}
-      updateScore={(score: number) => updateScore(score)}
-      width={800}
-      height={800}
-    />
   const scoreboard = <Scoreboard />
 
-  const [page, setPage] = useState(login);
-  const [score, setScore] = useState(0);
 
   // Change Pages
   const handleClick = () => {
-    setPage(canvas)
+    setDisplayLogin(false);
+    setPlayGame(true);
   }
 
   const showScoreBoard = () => {
-    setPage(scoreboard);
+    setDisplayScoreboard(true);
   }
 
   // Update Score
@@ -38,14 +34,25 @@ const App = () => {
     setScore(score);
   }
 
+  console.log('App.tsx: playGame state:', playGame);
+
   return (
     <>
-      <h1 className='title'>Blob Mob</h1>
-      <h1 className='current-score'>Score: {score}</h1>
+      {playGame && <h1 className='current-score'>Score: {score}</h1>}
       <div className='main-container'>
         <AnimatePresence>
-            {page}
+          {displayLogin && login}
+          {displayScoreboard && scoreboard}
         </AnimatePresence>
+
+        <Canvas
+          draw={Main}
+          playGame={playGame}
+          onGameover={() => showScoreBoard()}
+          updateScore={(score: number) => updateScore(score)}
+          width={800}
+          height={800}
+        />
       </div>
     </>
   )

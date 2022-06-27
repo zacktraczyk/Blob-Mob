@@ -16,8 +16,7 @@ export function drawStage(ctx: CanvasRenderingContext2D) {
     ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-export function drawHUD(game: Game, player: Player) {
-    const ctx = game.ctx;
+export function drawHUD(game: Game, player: Player, ctx: CanvasRenderingContext2D) {
     if (ctx == null) return;
 
     // Health
@@ -32,7 +31,6 @@ export function drawHUD(game: Game, player: Player) {
     ctx.fillStyle = 'black';
     ctx.fillRect(ctx.canvas.width * 3 / 4 + 5, 40, ctx.canvas.width / 4 - 15, 20);
     ctx.fillStyle = '#33cc33';
-    // ctx.fillText(player.power + "/" + player.maxPower, w*7/8, 53)
     if (player.power > 0) {
         ctx.fillRect(ctx.canvas.width * 3 / 4 + 6, 41, (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) - 2, 18);
     }
@@ -42,12 +40,6 @@ export function drawHUD(game: Game, player: Player) {
     ctx.fillRect(ctx.canvas.width / 2, 40, ctx.canvas.width / 4 - 5, 20);
     ctx.fillStyle = 'blue';
     ctx.fillRect(ctx.canvas.width / 2 + 1, 41, (1 - (player.cool / player.maxCool)) * (ctx.canvas.width / 4 - 5) - 2, 18);
-
-    // Score
-    ctx.fillStyle = 'black';
-    ctx.font = "20px monospace";
-    ctx.fillText("Score: " + game.score, 18, 28, ctx.canvas.width / 2);
-    ctx.fillText("High-Score: " + game.highscore, 18, 58, ctx.canvas.width / 2);
 
     // Difficulty
     ctx.fillStyle = 'black';

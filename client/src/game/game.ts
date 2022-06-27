@@ -2,10 +2,9 @@ import { Player } from './entities/player';
 import { DamagePointController } from './entities/damagePoints';
 import { EnemyController } from './entities/enemy';
 import { difficultyTable } from './difficulty';
+import { Scenes } from './scenes/scenes';
 
 export class Game {
-
-    public ctx: CanvasRenderingContext2D | null;
 
     public frame: number;
     public paused: boolean;
@@ -21,9 +20,9 @@ export class Game {
     private fxSound: number;
     private musSound: number;
 
-    constructor() {
-        this.ctx = null;
+    public scene: Scenes;
 
+    constructor() {
         this.difficulty = 5;
 
         this.tutorial = false;
@@ -37,18 +36,9 @@ export class Game {
 
         this.fxSound = 1;
         this.musSound = 0.5;
+
+        this.scene = Scenes.menu;
     }
-
-    // public updateDifficulty(player: Player, enemyController: EnemyController, d: number) {
-    //     if (!difficultyTable.hasOwnProperty(d)) return;
-    //     this.difficulty = d;
-
-    //     let pAtts = difficultyTable[this.difficulty].player;
-    //     player.updateAttributes(pAtts);
-
-    //     let eAtts = difficultyTable[this.difficulty].enemy;
-    //     enemyController.updateAttributes(eAtts);
-    // }
 
     public setTutorial() {
         window.localStorage.setItem('tutorial', 'COMPLETED');
@@ -61,6 +51,10 @@ export class Game {
         }
 
         return true;
+    }
+
+    public gameOver() {
+        this.scene = Scenes.gameOver;
     }
 
     public setHighscore() {

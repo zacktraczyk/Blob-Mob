@@ -22,9 +22,9 @@ export default function Login(props: LoginProps) {
 
   return (
     <motion.div
-      initial={{ x: -300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 300, opacity: 0 }}
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
     >
       <div onSubmit={handleSubmit} className="login">
         <h2>Login</h2>

@@ -1,8 +1,12 @@
-import { motion } from 'framer-motion'
-import { useRef, useEffect } from 'react'
+import { Game } from './game/game'
+import React, { useRef, useEffect } from 'react'
+import { Scenes } from './game/scenes/scenes'
+
+import './Canvas.css'
 
 interface CanvasProps {
   draw: Function,
+  playGame: boolean,
   onGameover: Function
   updateScore: Function
   width: number,
@@ -11,8 +15,10 @@ interface CanvasProps {
 
 const Canvas = (props: CanvasProps) => {
 
-  const { draw, onGameover, updateScore, ...rest } = props
+  const { draw, onGameover, updateScore, playGame, ...rest } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  console.log('Canvas.tsx: playGame state:', playGame);
 
   useEffect(() => {
     const c = canvasRef.current
@@ -25,8 +31,10 @@ const Canvas = (props: CanvasProps) => {
     let animationFrameId = 0;
 
     const render = () => {
-      const { gameover, score } = draw(ctx);
-      if (gameover) {
+      resizeCanvasToDisplaySize(c);
+      const { scene, score } = draw(playGame, ctx);
+
+      if (scene == Scenes.gameOver) {
         onGameover();
       }
       if (typeof score == 'number') updateScore(score);
@@ -37,17 +45,22 @@ const Canvas = (props: CanvasProps) => {
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     }
-  }, [draw])
+  }, [draw, playGame])
 
-  return (
-    <motion.div
-      initial={{ x: 300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -300, opacity: 0 }}
-    >
-      <canvas ref={canvasRef} {...rest} />
-    </motion.div>
-  )
+  return <canvas ref={canvasRef} {...rest} className="game-canvas"/>
+  
 }
 
 export default Canvas
+
+const resizeCanvasToDisplaySize = (canvas: HTMLCanvasElement) => {
+  const { width, height } = canvas.getBoundingClientRect()
+
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width
+    canvas.height = height
+    return true
+  }
+
+  return false
+}

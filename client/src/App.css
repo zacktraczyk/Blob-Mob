@@ -5,16 +5,16 @@
   height: 100vh;
 }
 
-.title {
+/* .title {
   position: absolute;
   left: 5vh;
   color: #fff;
   font-size: 4vh;
-}
+} */
 
 .current-score {
   position: absolute;
-  right: 5vh;
-  color: #fff;
+  left: 5vh;
+  color: #000;
   font-size: 4vh;
 }
