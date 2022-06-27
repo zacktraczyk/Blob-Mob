@@ -8,7 +8,6 @@ I decided to add a backend login and leaderboard to my javascript game [Blob Mob
 
 For development you need Node.js installed in your enviroment.
 
----
 ### Install
 
 ``` Bash
@@ -34,3 +33,11 @@ Open `vite.config.ts` to change the deployment url (called `base`).
 ### Requiremnts
 
 For development you need Node.js, the amazon CDK cli, and an AWS account.
+
+### Deploy
+
+``` Bash
+$ npm run build
+$ cdk synth
+$ cdk deploy
+```
