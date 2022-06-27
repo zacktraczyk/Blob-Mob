@@ -1,11 +1,15 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Canvas from './Canvas'
 import Login from './login/Login'
+import { Game } from './game/game'
+import { Scenes } from './game/scenes/scenes'
 import { Main } from './game/main'
 import Scoreboard from './scoreboard/Scoreboard';
 
 import './App.css'
+
+const game = new Game();
 
 const App = () => {
 
@@ -22,23 +26,26 @@ const App = () => {
   // Change Pages
   const handleClick = () => {
     setDisplayLogin(false);
-    setPlayGame(true);
+    game.scene = Scenes.battle;
   }
 
   const showScoreBoard = () => {
     setDisplayScoreboard(true);
   }
 
+  // useEffect(() => {
+  //   setScore(game.score);
+  //   console.log('Apps.tsx: useEffect setScore game.score:', game.score)
+  // }, [game.score]);
   // Update Score
-  const updateScore = (score: number) => {
-    setScore(score);
+  const updateScore = (newScore: number) => {
+    setScore(newScore);
   }
-
-  console.log('App.tsx: playGame state:', playGame);
 
   return (
     <>
-      {playGame && <h1 className='current-score'>Score: {score}</h1>}
+      {game.scene == Scenes.battle && <h1 className='current-score'>Score: {score}</h1>}
+
       <div className='main-container'>
         <AnimatePresence>
           {displayLogin && login}
@@ -47,7 +54,7 @@ const App = () => {
 
         <Canvas
           draw={Main}
-          playGame={playGame}
+          gameAttributes={game}
           onGameover={() => showScoreBoard()}
           updateScore={(score: number) => updateScore(score)}
           width={800}

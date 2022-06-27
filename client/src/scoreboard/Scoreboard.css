@@ -5,9 +5,9 @@
   margin: 20px;
   padding: 50px;
   border-radius: 25px;
-  height: 50vh;
+  height: 70vh;
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
-  width: 500px;
+  width: 300px;
 }
 
 .scoreboard h1 {
@@ -16,7 +16,7 @@
 
 .scoreboard ul {
   padding: 0px 80px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .scoreboard li {

@@ -6,7 +6,7 @@ import './Canvas.css'
 
 interface CanvasProps {
   draw: Function,
-  playGame: boolean,
+  gameAttributes: Game,
   onGameover: Function
   updateScore: Function
   width: number,
@@ -15,10 +15,8 @@ interface CanvasProps {
 
 const Canvas = (props: CanvasProps) => {
 
-  const { draw, onGameover, updateScore, playGame, ...rest } = props
+  const { draw, onGameover, updateScore, gameAttributes, ...rest } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  console.log('Canvas.tsx: playGame state:', playGame);
 
   useEffect(() => {
     const c = canvasRef.current
@@ -32,7 +30,7 @@ const Canvas = (props: CanvasProps) => {
 
     const render = () => {
       resizeCanvasToDisplaySize(c);
-      const { scene, score } = draw(playGame, ctx);
+      const { scene, score } = draw(gameAttributes, ctx);
 
       if (scene == Scenes.gameOver) {
         onGameover();
@@ -45,10 +43,10 @@ const Canvas = (props: CanvasProps) => {
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     }
-  }, [draw, playGame])
+  }, [draw])
 
-  return <canvas ref={canvasRef} {...rest} className="game-canvas"/>
-  
+  return <canvas ref={canvasRef} {...rest} className="game-canvas" />
+
 }
 
 export default Canvas

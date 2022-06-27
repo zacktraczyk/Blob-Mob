@@ -10,7 +10,20 @@ const player = new Player(250, 250, 250, 250);
 const enemies = new EnemyController();
 const damagePoints = new DamagePointController();;
 
+let transTimer = 0; // after death change scene timer
+let duration = 100;
+
 export function Battle(game: Game, input: Input, ctx: CanvasRenderingContext2D) {
+
+  // Pause after death before transition
+  if (player.state == State.Dead) {
+    transTimer++;
+    if (transTimer > duration) {
+      game.gameOver();
+      transTimer = 0;
+    }
+  }
+
   if (!game.paused) {
     update(game, input, ctx);
   }
@@ -20,9 +33,6 @@ export function Battle(game: Game, input: Input, ctx: CanvasRenderingContext2D) 
   // Draw
   draw(game, ctx);
 
-  if (player.state == State.Dead) {
-    game.gameOver();
-  }
 }
 
 function update(game: Game, input: Input, ctx: CanvasRenderingContext2D) {
