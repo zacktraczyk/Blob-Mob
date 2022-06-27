@@ -14,7 +14,7 @@ export class Game {
     public difficulty: number;
 
     private tutorial: boolean;
-    private highscore: number;
+    public highscore: number;
 
     private pauseKeyRelease: boolean;
 
@@ -39,19 +39,16 @@ export class Game {
         this.musSound = 0.5;
     }
 
-    public updateDifficulty(player: Player, enemyController: EnemyController, d: number) {
-        if (!difficultyTable.hasOwnProperty(d)) {
-            return;
-        }
+    // public updateDifficulty(player: Player, enemyController: EnemyController, d: number) {
+    //     if (!difficultyTable.hasOwnProperty(d)) return;
+    //     this.difficulty = d;
 
-        this.difficulty = d;
+    //     let pAtts = difficultyTable[this.difficulty].player;
+    //     player.updateAttributes(pAtts);
 
-        let pAtts = difficultyTable[this.difficulty].player;
-        player.updateAttributes(pAtts);
-
-        let eAtts = difficultyTable[this.difficulty].enemy;
-        enemyController.updateAttributes(eAtts);
-    }
+    //     let eAtts = difficultyTable[this.difficulty].enemy;
+    //     enemyController.updateAttributes(eAtts);
+    // }
 
     public setTutorial() {
         window.localStorage.setItem('tutorial', 'COMPLETED');

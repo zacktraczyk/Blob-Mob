@@ -17,12 +17,12 @@ export class Player extends Entity {
 
     private action: Action;
 
-    private maxCool: number;
-    private cool: number;
-    private maxPower: number;
-    private power: number;
-    private maxHealth: number;
-    private health: number;
+    public maxCool: number;
+    public cool: number;
+    public maxPower: number;
+    public power: number;
+    public maxHealth: number;
+    public health: number;
 
     private pushRadius: number;
     private pushR: number;

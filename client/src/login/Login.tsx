@@ -2,7 +2,11 @@ import { motion } from 'framer-motion'
 import React from 'react'
 import './Login.css'
 
-export default function Login(props) {
+interface LoginProps {
+  onClick: Function
+}
+
+export default function Login(props: LoginProps) {
   const usernameRef = React.useRef<HTMLInputElement>();
   const passwordRef = React.useRef<HTMLInputElement>();
 
