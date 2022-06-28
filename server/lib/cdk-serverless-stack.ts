@@ -4,8 +4,6 @@ import * as lambda from '@aws-cdk/aws-lambda'
 import * as apigw from '@aws-cdk/aws-apigateway'
 import * as dynamodb from "@aws-cdk/aws-dynamodb"
 import * as iam from "@aws-cdk/aws-iam"
-import { lambda_layer_awscli } from 'aws-cdk-lib';
-import { Lambda } from 'aws-cdk-lib/aws-ses-actions';
 import * as path from 'path';
 import { LambdaIntegration, RestApi } from '@aws-cdk/aws-apigateway';
 
@@ -29,9 +27,9 @@ export class CdkServerlessStack extends cdk.Stack {
   // Dynamodb table definition:
   private createUserTable = () => {
     this.userTable = new dynamodb.Table(this, `${this.appName}-Users-Table`, {
-      tableName: 'Users',
+      tableName: 'users',
       partitionKey: {
-        name: 'userid',
+        name: 'id',
         type: dynamodb.AttributeType.STRING
       },
     });
@@ -48,28 +46,6 @@ export class CdkServerlessStack extends cdk.Stack {
 
     //Required permissions for Lambda function to interact with Customer table
     this.userTable.grantReadWriteData(this.userApiLambda);
-
-    // const userTablePermissionPolicy = new iam.PolicyStatement({
-    //   actions: [
-    //     "dynamodb:BatchGetItem",
-    //     "dynamodb:GetItem",
-    //     "dynamodb:Scan",
-    //     "dynamodb:Query",
-    //     "dynamodb:BatchWriteItem",
-    //     "dynamodb:PutItem",
-    //     "dynamodb:UpdateItem",
-    //     "dynamodb:DeleteItem"
-    //   ],
-    //   resources: [this.userTable.tableArn]
-    // });
-
-    // //Attaching an inline policy to the role
-    // this.userApiLambda.role?.attachInlinePolicy(
-    //   new iam.Policy(this, `${this.appName}-UserTablePermissions`, {
-    //     statements: [userTablePermissionPolicy],
-    //   }),
-    // );
-
   }
 
   private createUserApi = () => {
@@ -79,15 +55,6 @@ export class CdkServerlessStack extends cdk.Stack {
         stageName: 'dev'
       },
       defaultCorsPreflightOptions: {
-        // allowHeaders: [
-        //   'Content-Type',
-        //   'X-Amz-Date',
-        //   'Authorization',
-        //   'X-Api-Key',
-        // ],
-        // allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-        // allowCredentials: true,
-        // allowOrigins: ['http://localhost:3000'],
         allowOrigins: apigw.Cors.ALL_ORIGINS
       },
     });

@@ -8,7 +8,9 @@ exports.handler = async (event: any, context: any) => { // <++> FIX: specify typ
     let statusCode = 200;
     const headers = {
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
     };
 
     let path = event.resource;
@@ -20,12 +22,12 @@ exports.handler = async (event: any, context: any) => { // <++> FIX: specify typ
             case "GET /users":
                 body = await userDB.scan({TableName: TABLE}).promise();
                 break;
-            case "GET /users/{userid}":
+            case "GET /users/{id}":
                 body = await userDB
                     .get({
                         TableName: TABLE,
                         Key: {
-                            userid: event.pathParameters.userid
+                            id: event.pathParameters.id
                         }
                     })
                     .promise();
@@ -36,26 +38,26 @@ exports.handler = async (event: any, context: any) => { // <++> FIX: specify typ
                     .put({
                         TableName: TABLE,
                         Item: {
-                            userid: Date.now(),
+                            id: '' + Date.now(),
                             username: requestJSON.username,
                             password: requestJSON.password,
-                            tutorial:requestJSON.tutorial,
-                            highscore:requestJSON.highscore,
+                            tutorial: requestJSON.tutorial,
+                            highscore: requestJSON.highscore,
                         }
                     })
                     .promise();
-                body = `Put item ${requestJSON.userid}`;
+                body = `Put item ${requestJSON.username}`;
                 break;
-            case "DELETE /users/{userid}":
+            case "DELETE /users/{id}":
                 await userDB
                     .delete({
                         TableName: TABLE,
                         Key: {
-                            userid: event.pathParameters.userid
+                            id: event.pathParameters.id
                         }
                     })
                     .promise();
-                body = `Deleted item ${event.pathParameters.userid}`;
+                body = `Deleted item ${event.pathParameters.id}`;
                 break;
 
             default:
