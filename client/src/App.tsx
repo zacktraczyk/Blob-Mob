@@ -2,42 +2,51 @@ import { motion, AnimatePresence } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import Canvas from './Canvas'
 import Login from './login/Login'
+import Difficulty from './difficulty/Difficulty'
 import { Game } from './game/game'
 import { Scenes } from './game/scenes/scenes'
 import { Main } from './game/main'
 import Scoreboard from './scoreboard/Scoreboard';
 
 import './App.css'
+import Tutorial from './tutorial/Tutorial'
 
 const game = new Game();
 
 const App = () => {
 
   const [displayLogin, setDisplayLogin] = useState(true);
+  const [displayTutorial, setDisplayTutorial] = useState(false);
   const [displayScoreboard, setDisplayScoreboard] = useState(false);
   const [playGame, setPlayGame] = useState(false);
 
   const [score, setScore] = useState(0);
+
   // Page Components
-  const login = <Login onClick={() => handleClick()} />
+  const login = <Login onClick={() => handleLoginClick()} />
+  const tutorial = <Tutorial onClick={(startTutorial: boolean) => handleTutorialClick(startTutorial)} />
+  // const difficulty = <Difficulty gameAttributes={game} />
   const scoreboard = <Scoreboard />
 
 
   // Change Pages
-  const handleClick = () => {
+  const handleLoginClick = () => {
     setDisplayLogin(false);
-    game.scene = Scenes.battle;
+    // if (userTutorialTrue or guest )
+    setDisplayTutorial(true);
+    // else
+    // game.scene = Scenes.battle;
+  }
+
+  const handleTutorialClick = (startTutorial: boolean) => {
+    game.scene = startTutorial ? Scenes.tutorial : Scenes.battle;
+    setDisplayTutorial(false);
   }
 
   const showScoreBoard = () => {
     setDisplayScoreboard(true);
   }
 
-  // useEffect(() => {
-  //   setScore(game.score);
-  //   console.log('Apps.tsx: useEffect setScore game.score:', game.score)
-  // }, [game.score]);
-  // Update Score
   const updateScore = (newScore: number) => {
     setScore(newScore);
   }
@@ -49,6 +58,7 @@ const App = () => {
       <div className='main-container'>
         <AnimatePresence>
           {displayLogin && login}
+          {displayTutorial && tutorial}
           {displayScoreboard && scoreboard}
         </AnimatePresence>
 

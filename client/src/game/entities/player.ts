@@ -15,7 +15,7 @@ export class Player extends Entity {
     private xvel: number;
     private yvel: number;
 
-    private action: Action;
+    public action: Action;
 
     public maxCool: number;
     public cool: number;
@@ -329,6 +329,8 @@ export class Player extends Entity {
         this.maxCool = attributes.cool;
         this.maxHealth = attributes.health;
         this.health = attributes.maxHealth;
+
+        this.health = this.maxHealth;
     }
 
     public updatePower() {

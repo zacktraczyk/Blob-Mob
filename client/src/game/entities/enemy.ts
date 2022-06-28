@@ -36,8 +36,8 @@ export class EnemyController {
     }
 
     public spawner(w: number, h: number, player: Player) {
-        --this.cool;
-        if (this.instances.length < this.maxInst && this.cool <= 0) {
+        this.cool -= 0.01;
+        if (this.instances.length < this.maxInst && this.cool * 1000 <= 0) {
             this.spawn(w, h, player);
             this.cool = this.spawnWait;
         }
@@ -54,7 +54,7 @@ export class EnemyController {
         this.cool = 0;
     }
 
-    private spawn(w: number, h: number, player: Player) {
+    public spawn(w: number, h: number, player: Player) {
         let enemy = new Enemy(w, h, player, this.speed);
         this.instances.push(enemy);
     }

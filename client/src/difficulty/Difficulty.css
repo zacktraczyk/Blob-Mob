@@ -1,0 +1,26 @@
+
+.difficulty {
+  position: relative;
+  height: 50vh;
+  width: 500px;
+  margin: 20px;
+  padding: 50px;
+  border-radius: 25px;
+  background-color: #fff;
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+}
+
+.difficulty h2 {
+  text-align: center;
+  font-size: 40px;
+}
+
+.difficulty label {
+  width: 100%;
+}
+
+.difficulty input {
+  margin-bottom: 30px;
+  width: 100%;
+  font-size: 20px;
+}

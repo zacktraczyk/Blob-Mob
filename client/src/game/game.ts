@@ -12,7 +12,7 @@ export class Game {
     public score: number;
     public difficulty: number;
 
-    private tutorial: boolean;
+    public tutorial: boolean;
     public highscore: number;
 
     private pauseKeyRelease: boolean;
@@ -82,7 +82,7 @@ export class Game {
         }
     }
 
-    reset(player: Player, enemies: EnemyController, damagePoints: DamagePointController) {
+    public reset(player: Player, enemies: EnemyController, damagePoints: DamagePointController) {
         player.reset();
         enemies.reset();
         damagePoints.reset();
@@ -91,48 +91,60 @@ export class Game {
         this.frame = 0;
     }
 
-    // public debug(player: Player, enemyController: EnemyController) {
-    //     ctx.font = '20px Arial Bold';
-    //     ctx.color = 'black';
+    public updateDifficulty(player: Player, enemies: EnemyController, d: number) {
+        if (!difficultyTable.hasOwnProperty(d)) return;
 
-    //     let x = 40;
-    //     let y = this.screen.h * 5 / 8 + 100;
+        this.difficulty = d;
 
-    //     ctx.fillText('difficulty: ' + this.difficulty, x, y);
+        let pVals = difficultyTable[this.difficulty].player
+        player.updateAttributes(pVals);
 
-    //     // y += 30;
-    //     // ctx.fillText('player: ', x, y);
+        let eVals = difficultyTable[this.difficulty].enemy
+        enemies.updateAttributes(eVals);
+    }
 
-    //     // x += 30;
-    //     // y += 20;
-    //     // ctx.fillText('speed: ' + player.maxSpeed, x, y);
+    public debug(player: Player, enemyController: EnemyController, ctx: CanvasRenderingContext2D) {
+        ctx.font = '20px Arial Bold';
+        ctx.fillStyle = 'black';
 
-    //     // y += 20;
-    //     // ctx.fillText('accel: ' + player.accel, x, y);
+        let x = 40;
+        let y = ctx.canvas.height * 5 / 8 + 100;
 
-    //     // y += 20;
-    //     // ctx.fillText('cool: ' + player.maxCool, x, y);
+        ctx.fillText('difficulty: ' + this.difficulty, x, y);
 
-    //     // y += 20;
-    //     // ctx.fillText('health: ' + player.maxHealth, x, y);
+        y += 30;
+        ctx.fillText('player: ', x, y);
 
-    //     // y += 30;
-    //     // x -= 30;
-    //     // ctx.fillText('enemy: ', x, y);
+        x += 30;
+        y += 20;
+        ctx.fillText('speed: ' + player.maxSpeed, x, y);
 
-    //     // x += 30;
-    //     // y += 20;
-    //     // ctx.fillText('speed: ' + enemyController.speed, x, y);
+        y += 20;
+        ctx.fillText('accel: ' + player.accel, x, y);
 
-    //     // y += 20;
-    //     // ctx.fillText('Spawn Rate: ' + enemyController.spawnWait + 's', x, y);
+        y += 20;
+        ctx.fillText('cool: ' + player.maxCool, x, y);
 
-    //     // y += 20;
-    //     // ctx.fillText('Max Number: ' + enemyController.maxInst, x, y);
+        y += 20;
+        ctx.fillText('health: ' + player.maxHealth, x, y);
 
-    //     // y += 40;
-    //     // if (enemyController.instances != null) {
-    //     //     ctx.fillText('Blobs: ' + enemyController.instances.length, x, y);
-    //     // }
-    // }
+        y += 30;
+        x -= 30;
+        ctx.fillText('enemy: ', x, y);
+
+        x += 30;
+        y += 20;
+        ctx.fillText('speed: ' + enemyController.speed, x, y);
+
+        y += 20;
+        ctx.fillText('Spawn Rate: ' + enemyController.spawnWait + 's', x, y);
+
+        y += 20;
+        ctx.fillText('Max Number: ' + enemyController.maxInst, x, y);
+
+        y += 40;
+        if (enemyController.instances != null) {
+            ctx.fillText('Blobs: ' + enemyController.instances.length, x, y);
+        }
+    }
 }
