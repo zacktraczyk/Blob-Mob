@@ -75,7 +75,7 @@ export default function Scoreboard(props: ScoreboardProps) {
             <p className='score'>12</p>
           </li>
         </ul>
-        <button onClick={props.onPlayAgain}>Play Again?</button>
+        <button onClick={() => props.onPlayAgain()}>Play Again?</button>
       </div>
     </motion.div>
   )

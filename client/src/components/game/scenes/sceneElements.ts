@@ -42,10 +42,10 @@ export function drawHUD(game: GameAttributes, player: Player, ctx: CanvasRenderi
     ctx.fillRect(ctx.canvas.width / 2 + 1, 41, (1 - (player.cool / player.maxCool)) * (ctx.canvas.width / 4 - 5) - 2, 18);
 
     // Difficulty
-    ctx.fillStyle = 'black';
-    ctx.font = "20px monospace";
-    let text = `Difficulty ${game.difficulty}`;
-    ctx.fillText(text, ctx.canvas.width - ctx.measureText(text).width - 20, ctx.canvas.height - 25);
+    // ctx.fillStyle = 'black';
+    // ctx.font = "20px monospace";
+    // let text = `Difficulty ${game.difficulty}`;
+    // ctx.fillText(text, ctx.canvas.width - ctx.measureText(text).width - 20, ctx.canvas.height - 25);
 }
 
 export function drawPauseMenu(ctx: CanvasRenderingContext2D) {
