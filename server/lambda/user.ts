@@ -22,6 +22,34 @@ exports.handler = async (event: any, context: any) => { // <++> FIX: specify typ
             case "GET /users":
                 body = await userDB.scan({TableName: TABLE}).promise();
                 break;
+            case "GET /users/scores":
+                body = {
+                    0: {
+                        name: "Best guy",
+                        highscore: 432,
+                    },
+                    1: {
+                        name: "Second Best guy",
+                        highscore: 100,
+                    },
+                    2: {
+                        name: "Worst guy132",
+                        highscore: 2,
+                    },
+                }
+                // body = await userDB
+                // .scan({TableName: TABLE}, 
+                //     (err, data) => {
+                //         if (err) {
+                //             console.log("Error retrieving scores", err)
+                //         } else {
+                //             console.log("Retrieving Scores", data);
+                //             data.Items?.forEach((element, index, array) => {
+                //             });
+                //         }
+                //     }
+                //     ).promise();
+                break;
             case "GET /users/{id}":
                 body = await userDB
                     .get({
