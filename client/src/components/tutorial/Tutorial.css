@@ -16,7 +16,7 @@
   text-align: center;
 }
 
-.tutorial .choice {
+.tutorial .choice-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -24,20 +24,8 @@
   width: 100%;
 }
 
-.tutorial .prefer {
+.tutorial .button-prefer {
   border: none;
   background-color: #E2AEDD;
   color: white;
-}
-
-.tutorial button {
-  font-weight: bold;
-  font-size: inherit;
-  width: 30%;
-  height: 4em;
-  border: 3px solid gray;
-  border-radius: 10px;
-  margin-bottom: 40px;
-  padding: 10px;
-  background-color: white;
 }

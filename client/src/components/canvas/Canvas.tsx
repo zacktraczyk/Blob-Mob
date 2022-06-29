@@ -1,12 +1,12 @@
-import { Game } from './game/game'
+import { GameAttributes } from '../game/gameAttributes'
 import React, { useRef, useEffect } from 'react'
-import { Scenes } from './game/scenes/scenes'
+import { Scenes } from '../game/scenes/scenes'
 
 import './Canvas.css'
 
 interface CanvasProps {
   draw: Function,
-  gameAttributes: Game,
+  gameAttributes: GameAttributes,
   onGameover: Function
   updateScore: Function
   width: number,

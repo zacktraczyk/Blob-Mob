@@ -1,17 +1,17 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
-import Canvas from './Canvas'
-import Login from './login/Login'
-import Difficulty from './difficulty/Difficulty'
-import { Game } from './game/game'
-import { Scenes } from './game/scenes/scenes'
-import { Main } from './game/main'
-import Scoreboard from './scoreboard/Scoreboard';
+
+import Canvas from './components/canvas/Canvas'
+import Login from './components/login/Login'
+import Tutorial from './components/tutorial/Tutorial'
+import { GameAttributes } from './components/game/gameAttributes'
+import { Scenes } from './components/game/scenes/scenes'
+import { Main } from './components/game/main'
+import Scoreboard from './components/scoreboard/Scoreboard';
 
 import './App.css'
-import Tutorial from './tutorial/Tutorial'
 
-const game = new Game();
+const game = new GameAttributes();
 
 const App = () => {
 
@@ -23,14 +23,15 @@ const App = () => {
   const [score, setScore] = useState(0);
 
   // Page Components
-  const login = <Login onClick={() => handleLoginClick()} />
+  const login = <Login onSubmission={(data: Object, newUser: boolean) => handleLoginClick(data, newUser)} />
   const tutorial = <Tutorial onClick={(startTutorial: boolean) => handleTutorialClick(startTutorial)} />
   // const difficulty = <Difficulty gameAttributes={game} />
-  const scoreboard = <Scoreboard />
+  const scoreboard = <Scoreboard onPlayAgain={() => playAgain()}/>
 
 
   // Change Pages
-  const handleLoginClick = () => {
+  const handleLoginClick = (data: Object, newUser: boolean) => {
+    console.log('App.tsx: handleLoginClick():', data);
     setDisplayLogin(false);
     // if (userTutorialTrue or guest )
     setDisplayTutorial(true);
@@ -49,6 +50,11 @@ const App = () => {
 
   const updateScore = (newScore: number) => {
     setScore(newScore);
+  }
+
+  const playAgain = () => {
+    setDisplayScoreboard(false);
+    game.scene = Scenes.battle;
   }
 
   return (

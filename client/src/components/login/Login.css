@@ -1,7 +1,4 @@
 .login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   position: relative;
   height: 50vh;
   width: 500px;
@@ -13,32 +10,59 @@
 }
 
 .login h2 {
+  cursor: pointer;
   text-align: center;
   font-size: 40px;
 }
 
-.login label {
-  width: 100%;
+.login button {
+  background-color: none;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  font-size: 40px;
+}
+
+.login ol {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 50px;
+}
+
+.login .field {
+  height: 100px;
+}
+
+.login ol li {
+  list-style: none;
+}
+
+.login .selected {
+  color: #E2AEDD;
+  text-decoration: underline;
 }
 
 .login input {
-  margin-bottom: 50px;
   width: 100%;
   font-size: 20px;
+  padding: 10px;
+}
+
+.login .errors {
+  color: #f57187;
 }
 
 .login input[type=submit] {
   font-size: inherit;
   margin-left: 40%;
   width: 20%;
-}
-
-.login .submit {
+  cursor: pointer;
   font-weight: bold;
   border: 3px solid gray;
   height: 4em;
   border-radius: 10px;
-  margin-top: 30px;
   padding: 10px;
   background-color: white;
 }

@@ -1,5 +1,5 @@
 import { State } from '../entities/entity';
-import { Game } from '../game';
+import { GameAttributes } from '../gameAttributes';
 import { Input } from '../input';
 import { Player } from '../entities/player';
 import { DamagePointController } from '../entities/damagePoints';
@@ -11,7 +11,7 @@ let sceneInit = true;
 let transTimer = 0; // after death change scene timer
 let duration = 100;
 
-export function Battle(game: Game, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
+export function Battle(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
   if (sceneInit) initalizeScene(game, entities);
   const { player } = entities;
 
@@ -29,11 +29,9 @@ export function Battle(game: Game, input: Input, entities: Entities, ctx: Canvas
       transTimer = 0;
     }
   }
-
-
 }
 
-function update(game: Game, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
+function update(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
   const { player, enemies, damagePoints } = entities;
 
   if (ctx == null) return;
@@ -46,7 +44,7 @@ function update(game: Game, input: Input, entities: Entities, ctx: CanvasRenderi
   damagePoints.controller();
 }
 
-function draw(game: Game, entities: Entities, ctx: CanvasRenderingContext2D) {
+function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingContext2D) {
   const { player, enemies, damagePoints } = entities;
 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -63,7 +61,7 @@ function draw(game: Game, entities: Entities, ctx: CanvasRenderingContext2D) {
   if (game.paused) drawPauseMenu(ctx);
 }
 
-function initalizeScene(game: Game, entities: Entities) {
+function initalizeScene(game: GameAttributes, entities: Entities) {
   const { player, enemies }  = entities;
   game.updateDifficulty(player, enemies, 3)
   sceneInit = false;

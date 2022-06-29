@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Game } from '../game/game'
+import { GameAttributes } from '../game/gameAttributes'
 import './Difficulty.css'
 
 export default function Difficulty(props: any) {

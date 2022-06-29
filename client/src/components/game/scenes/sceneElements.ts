@@ -1,5 +1,5 @@
 import { Player } from "../entities/player";
-import { Game } from "../game";
+import { GameAttributes } from "../gameAttributes";
 import { Input } from "../input";
 import paper from "../paper.jpg"
 
@@ -16,7 +16,7 @@ export function drawStage(ctx: CanvasRenderingContext2D) {
     ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-export function drawHUD(game: Game, player: Player, ctx: CanvasRenderingContext2D) {
+export function drawHUD(game: GameAttributes, player: Player, ctx: CanvasRenderingContext2D) {
     if (ctx == null) return;
 
     // Health

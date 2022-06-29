@@ -1,4 +1,4 @@
-import { Game } from './game';
+import { GameAttributes } from './gameAttributes';
 import { Input } from './input';
 import { entities } from './entities/entities';
 
@@ -12,7 +12,7 @@ import './style.css';
 
 const input = new Input()
 
-export function Main(game: Game, ctx: CanvasRenderingContext2D) {
+export function Main(game: GameAttributes, ctx: CanvasRenderingContext2D) {
   ++game.frame;
 
   switch (game.scene) {
@@ -27,6 +27,7 @@ export function Main(game: Game, ctx: CanvasRenderingContext2D) {
       break;
     case Scenes.gameOver:
       Gameover(game, input, ctx);
+      game.reset(entities);
       break;
   }
 

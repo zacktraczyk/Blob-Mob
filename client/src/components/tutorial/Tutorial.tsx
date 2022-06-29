@@ -11,7 +11,6 @@ export default function Tutorial(props: propsTutorial) {
 
   const handleSubmit = (event: React.BaseSyntheticEvent) => {
     const tutorial = event.target.id === 'play' ? true : false;
-    console.log('tutorial:', tutorial)
     props.onClick(tutorial);
   }
 
@@ -23,7 +22,7 @@ export default function Tutorial(props: propsTutorial) {
     >
       <div className='tutorial'>
         <h1>Tutorial?</h1>
-        <div className='choice'>
+        <div className='choice-container'>
           <button
             type='button'
             id='skip'
@@ -32,7 +31,7 @@ export default function Tutorial(props: propsTutorial) {
             Skip Tutorial
           </button>
           <button
-            className='prefer'
+            className='button-prefer'
             type='button'
             id='play'
             onClick={handleSubmit}

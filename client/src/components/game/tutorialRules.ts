@@ -2,7 +2,7 @@ import { EnemyController } from "./entities/enemy";
 import { Input } from "./input";
 import { Action } from "./entities/entity";
 import { Player } from "./entities/player";
-import { Game } from "./game";
+import { GameAttributes } from "./gameAttributes";
 
 export class TurtorialRules {
 
@@ -27,7 +27,7 @@ export class TurtorialRules {
     return this.order[this.i]
   }
 
-  debug(game: Game, enemies: EnemyController, ctx: CanvasRenderingContext2D) {
+  debug(game: GameAttributes, enemies: EnemyController, ctx: CanvasRenderingContext2D) {
     ctx.font = "20px Arial Bold"
     ctx.strokeStyle = "black"
 
@@ -42,8 +42,6 @@ export class TurtorialRules {
       case 'enemy':
         y += 30
         ctx.fillText(`Enemy State: ${enemies.instances[0].state}`, x, y)
-        y += 20
-        ctx.fillText(`Enemy Coords: (${Math.round(this.enemy1.x)}, ${Math.round(this.enemy1.y)})`, x, y)
         break
       case 'push':
         break
@@ -54,7 +52,7 @@ export class TurtorialRules {
     }
   }
 
-  controller(game: Game, w: number, h: number, keys: Input['keyState'], enemies: EnemyController, player: Player) {
+  controller(game: GameAttributes, w: number, h: number, keys: Input['keyState'], enemies: EnemyController, player: Player) {
     ++this.timer
 
     if (this.check) {

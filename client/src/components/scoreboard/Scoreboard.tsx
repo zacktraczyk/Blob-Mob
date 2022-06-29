@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
 import './Scoreboard.css'
 
-export default function Scoreboard() {
-
+interface ScoreboardProps {
+  onPlayAgain: Function;
+}
+export default function Scoreboard(props: ScoreboardProps) {
   return (
     <motion.div
       initial={{ y: 300, opacity: 0 }}
@@ -73,6 +75,7 @@ export default function Scoreboard() {
             <p className='score'>12</p>
           </li>
         </ul>
+        <button onClick={props.onPlayAgain}>Play Again?</button>
       </div>
     </motion.div>
   )

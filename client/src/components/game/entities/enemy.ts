@@ -1,4 +1,4 @@
-import { Game } from '../game';
+import { GameAttributes } from '../gameAttributes';
 import { State, Entity } from './entity';
 import { Player } from './player';
 
@@ -25,7 +25,7 @@ export class EnemyController {
         this.instances.forEach(e => e.draw(ctx));
     }
 
-    public controller(game: Game){
+    public controller(game: GameAttributes){
         for (let i = 0; i < this.instances.length; i++) { 
             if (this.instances[i].state == State.Dead) {
                 this.instances.splice(i, 1);
@@ -173,7 +173,7 @@ export class Enemy extends Entity{
         // ctx.strokeRect(this.x - this.w/2, this.y - this.w/2, this.w, this.h)
     }
 
-    public controller(game: Game) {
+    public controller(game: GameAttributes) {
         switch (this.state) {
             case State.Normal:
                 this.move();
@@ -225,7 +225,7 @@ export class Enemy extends Entity{
         this.y = this.y + rand*2;
     }
 
-    private death(game: Game, player: Player | null) {
+    private death(game: GameAttributes, player: Player | null) {
         // Shrink
         this.w = Math.max(0, this.w - 2);
         this.h = Math.max(0, this.h - 3.9);
