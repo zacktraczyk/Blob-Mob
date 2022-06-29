@@ -67,7 +67,7 @@ const App = () => {
 
   const playAgain = () => {
     setDisplayScoreboard(false);
-    game.scene = Scenes.battle;
+    game.scene = Scenes.reset;
   }
 
   return (

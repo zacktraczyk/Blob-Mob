@@ -12,6 +12,8 @@ let transTimer = 0; // after death change scene timer
 let duration = 100;
 
 export function Battle(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
+  if (ctx == null) return;
+
   if (sceneInit) initalizeScene(game, entities);
   const { player } = entities;
 
@@ -33,8 +35,6 @@ export function Battle(game: GameAttributes, input: Input, entities: Entities, c
 
 function update(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
   const { player, enemies, damagePoints } = entities;
-
-  if (ctx == null) return;
 
   if (player.state != State.Dead) {
     enemies.spawner(ctx.canvas.width, ctx.canvas.height, player);

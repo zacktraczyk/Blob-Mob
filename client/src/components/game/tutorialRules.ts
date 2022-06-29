@@ -233,4 +233,11 @@ export class TurtorialRules {
         break
     }
   }
+
+  public reset() {
+    this.timer = 0
+    this.i = 0
+    this.check = false
+    this.controlCheck = [0, 0, 0, 0]
+  }
 }

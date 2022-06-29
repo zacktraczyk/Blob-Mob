@@ -10,6 +10,8 @@ import { drawStage, drawHUD } from "./sceneElements";
 
 const t = new TurtorialRules();
 
+// <++> TODO: Use game.tutorial boolean to fix interupted and revisited glitch
+
 export function Tutorial(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
 
   update(game, input, entities, ctx);
@@ -17,6 +19,7 @@ export function Tutorial(game: GameAttributes, input: Input, entities: Entities,
 
   if (t.step == 'end') {
     game.reset(entities)
+    t.reset();
     game.scene = Scenes.battle;
   }
 }
