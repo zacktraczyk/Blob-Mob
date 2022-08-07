@@ -1,7 +1,7 @@
 export enum Scenes {
     menu,
     tutorial,
-    reset,
+    play,
     battle,
     gameOver
 }

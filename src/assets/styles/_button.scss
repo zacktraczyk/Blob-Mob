@@ -1,0 +1,10 @@
+@import "./variables";
+
+button {
+  padding: 15px 20px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: $color-text-alt;
+}

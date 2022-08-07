@@ -1,0 +1,54 @@
+@import "../../assets/styles/card";
+@import "../../assets/styles/button";
+
+.login {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+
+  height: 400px;
+  width: 300px;
+  padding: 50px;
+
+  @include card-background;
+
+  h2 {
+    text-align: center;
+    text-shadow: 2px 2px 0px $color-main;
+    font-size: 2em;
+    padding: 0px;
+  }
+
+  .play-button {
+    background-color: $color-main;
+  }
+
+  &__auth-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    .google-button {
+      width: 100%;
+      background-color: $color-google;
+    }
+
+    .facebook-button {
+      width: 100%;
+      background-color: $color-facebook;
+    }
+  }
+
+  &__tutorial-blurb {
+    text-align: center;
+    color: $color-text-secondary;
+    font-size: 1.2em;
+    padding: 1em 0.5em;
+  }
+
+  .tutorial-button {
+    background-color: $color-tutorial;
+  }
+}

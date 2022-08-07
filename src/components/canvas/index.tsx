@@ -1,7 +1,4 @@
-import { GameAttributes } from "../game/gameAttributes";
 import React, { useRef, useEffect } from "react";
-import { Scenes } from "../game/scenes/scenes";
-
 import "./index.scss";
 
 interface CanvasProps {
@@ -9,24 +6,23 @@ interface CanvasProps {
 }
 
 const Canvas = (props: CanvasProps) => {
-  const { draw, ...rest } = props
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { draw, ...rest } = props;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const c = canvasRef.current
+    const c = canvasRef.current;
     if (c == null) {
-      throw new Error("Could not get canvas")
+      throw new Error("Could not get canvas");
     }
 
     const ctx = c.getContext("2d");
     if (ctx == null) throw new Error("Could not get context");
 
-    let frameCount = 0
-    let animationFrameId = 0
+    let animationFrameId = 0;
 
     const render = () => {
-      resizeCanvasToDisplaySize(c)
-      draw(ctx)
+      resizeCanvasToDisplaySize(c);
+      draw(ctx);
 
       animationFrameId = window.requestAnimationFrame(render);
     };
@@ -37,7 +33,7 @@ const Canvas = (props: CanvasProps) => {
     };
   }, [draw]);
 
-  return <canvas ref={canvasRef} {...rest} className="game-canvas" />;
+  return <canvas ref={canvasRef} {...rest} className="canvas" />;
 };
 
 export default Canvas;

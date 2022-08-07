@@ -1,11 +1,20 @@
-import "./index.scss"
+import Login from "../../components/login";
+import "./index.scss";
 
-const Home: React.FC = () => {
-
-  return (
-    <h1>Home</h1>
-  )
-
+interface Props {
+  navPlay: Function;
+  navTutorial: Function;
+  navShop: Function;
 }
 
-export default Home
+const Home: React.FC<Props> = (props: Props) => {
+  const { navPlay, navTutorial, navShop } = props;
+
+  return (
+    <div className="home">
+      <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
+    </div>
+  );
+};
+
+export default Home;

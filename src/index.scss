@@ -3,10 +3,19 @@
 :root {
   margin: 0;
 	padding: 0;
+
+	// Paper Background
   background-image: url("./assets/images/paper.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	font-family: $text-font;
 }

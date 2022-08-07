@@ -8,11 +8,9 @@ import { Tutorial } from "./scenes/tutorial";
 import { Battle } from "./scenes/battle";
 import { Gameover } from "./scenes/gameover";
 
-import "./style.css";
-
 const input = new Input();
 
-export function Main(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
   ++game.frame;
 
   switch (game.scene) {
@@ -25,7 +23,7 @@ export function Main(game: GameAttributes, ctx: CanvasRenderingContext2D) {
       Tutorial(game, input, entities, ctx);
       break;
 
-    case Scenes.reset:
+    case Scenes.play:
       game.reset(entities);
     case Scenes.battle:
       game.scene = Scenes.battle;

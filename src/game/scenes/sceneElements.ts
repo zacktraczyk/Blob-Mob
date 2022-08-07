@@ -1,17 +1,9 @@
 import { Player } from "../entities/player";
 import { GameAttributes } from "../gameAttributes";
 import { Input } from "../input";
-import paper from "../paper.jpg"
 
-const background = new Image();
-background.src = paper
 
 export function drawStage(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = '#fffbf9';
-
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.drawImage(background, 0, 0, ctx.canvas.width, ctx.canvas.height);
-
     ctx.lineWidth = 10;
     ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
