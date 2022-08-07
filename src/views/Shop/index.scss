@@ -1,8 +1,39 @@
 @import "../../assets/styles/card";
+@import "../../assets/styles/button";
 
 .shop {
-  width: 600px;
-  height: 600px;
+  display: flex;
+  flex-direction: row;
 
-  @include card-background;
+  &__left {
+    position: relative;
+    width: 50vw;
+    height: 500px;
+
+    button {
+      position: absolute;
+      bottom: 0px;
+    }
+  }
+
+  &__right {
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+
+    width: 500px;
+    height: 500px;
+    @include card-background;
+
+    h2 {
+      padding: 0px;
+      margin: 0px;
+      text-align: center;
+      font-size: 2em;
+    }
+  }
+
 }

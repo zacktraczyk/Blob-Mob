@@ -2,6 +2,7 @@
 
 @mixin card-background {
   background-color: $color-card-background;
-  box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 20px 20px 20px #0000004d;
   border-radius: 25px;
+  padding: 20px 30px;
 }

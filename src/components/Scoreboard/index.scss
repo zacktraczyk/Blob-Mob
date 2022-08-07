@@ -4,8 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  justify-content: center;
   gap: 10px;
-  padding: 20px 50px;
 
   @include card-background;
 
@@ -19,7 +19,7 @@
   ul {
     overflow-y: scroll;
     margin: 0px;
-    padding: 0px;
+    padding: 0px 20px;
 
     li {
       display: flex;

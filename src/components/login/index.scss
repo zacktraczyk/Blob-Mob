@@ -6,9 +6,7 @@
   flex-direction: column;
   align-items: space-evenly;
   justify-content: space-evenly;
-  gap: 10px;
-
-  padding: 20px 50px;
+  gap: 5px;
 
   @include card-background;
 
@@ -20,24 +18,32 @@
     font-size: 2em;
   }
 
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   .play-button {
     background-color: $color-main;
+    height: 3em;
   }
 
-  &__auth-buttons {
+  &-auth {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 5px;
 
     .google-button {
       width: 100%;
       background-color: $color-google;
+      height: auto;
     }
 
     .facebook-button {
       width: 100%;
       background-color: $color-facebook;
+      height: auto;
     }
+  }
   }
 
   &__tutorial-blurb {

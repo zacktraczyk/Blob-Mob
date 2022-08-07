@@ -1,20 +1,24 @@
 import Login from "../../components/Login";
 import Scoreboard from "../../components/Scoreboard";
-import Shop from "../../components/Shop";
 import "./index.scss";
 
 interface Props {
   navHome: Function;
 }
 
-const Home: React.FC<Props> = (props: Props) => {
+const Shop: React.FC<Props> = (props: Props) => {
   const { navHome } = props;
 
   return (
     <div className="shop">
-      <h1>SHOP</h1>
+      <div className="shop__left">
+        <button onClick={() => console.log("SPAWN ENEMY")}>Spawn Enemy</button>
+      </div>
+      <div className="shop__right">
+        <h2>Shop</h2>
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default Shop;

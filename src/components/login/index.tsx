@@ -14,12 +14,14 @@ const Login: React.FC<Props> = (props: Props) => {
     <div className="login">
       <h2>BLOB MOB</h2>
 
+      <div className="login__buttons">
       <button className="play-button" onClick={() => navPlay()}>
         Play
       </button>
-      <div className="login__auth-buttons">
+      <div className="login__buttons-auth">
         <button className="google-button">Google</button>
         <button className="facebook-button">Facebook</button>
+      </div>
       </div>
 
       <div className="login__tutorial-blurb">

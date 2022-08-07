@@ -63,6 +63,6 @@ function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingCont
 
 function initalizeScene(game: GameAttributes, entities: Entities) {
   const { player, enemies }  = entities;
-  game.updateDifficulty(player, enemies, 3)
+  game.updateDifficulty(player, enemies, 5)
   sceneInit = false;
 }

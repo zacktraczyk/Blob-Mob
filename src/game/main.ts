@@ -7,16 +7,21 @@ import { Menu } from "./scenes/menu";
 import { Tutorial } from "./scenes/tutorial";
 import { Battle } from "./scenes/battle";
 import { Gameover } from "./scenes/gameover";
+import { Shop } from "./scenes/shop";
 
 const input = new Input();
 
 export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
   ++game.frame;
+  console.log(game.scene);
 
   switch (game.scene) {
     case Scenes.menu:
       Menu(game, input, ctx);
-      game.reset(entities);
+      break;
+
+    case Scenes.shop:
+      Shop(game, input, entities, ctx);
       break;
 
     case Scenes.tutorial:
@@ -36,4 +41,4 @@ export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
   }
 
   return game;
-}
+};

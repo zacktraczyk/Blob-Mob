@@ -4,8 +4,9 @@ import Navbar from "./components/Navbar";
 import { GameAttributes } from "./Game/gameAttributes";
 import Home from "./views/Home";
 import { Main } from "./Game/main";
-import { Scenes } from "./game/scenes/scenes";
+import { Scenes } from "./Game/scenes/scenes";
 import Score from "./components/Score";
+import Shop from "./views/Shop";
 
 enum Pages {
   Home,
@@ -31,27 +32,37 @@ const App = () => {
   return (
     <>
       <Canvas draw={(ctx: CanvasRenderingContext2D) => Main(game, ctx)} />
-      <Score score={game.score} highscore={0}/>
-      {page == Pages.Home ? (
-        <Home
-          navPlay={() => setPage(Pages.Play)}
-          navTutorial={() => setPage(Pages.Tutorial)}
-          navShop={() => setPage(Pages.Shop)}
+      <Score score={game.score} highscore={0} />
+      <div className="app">
+        {page == Pages.Home ? (
+          <Home
+            navPlay={() => setPage(Pages.Play)}
+            navTutorial={() => setPage(Pages.Tutorial)}
+            navShop={() => {
+              setPage(Pages.Shop);
+              game.scene = Scenes.shop;
+            }}
+          />
+        ) : page == Pages.Shop ? (
+          <Shop
+            navHome={() => {
+              setPage(Pages.Home);
+              game.scene = Scenes.menu;
+            }}
+          ></Shop>
+        ) : (
+          <></>
+        )}
+      </div>
+        <Navbar
+          navHome={() => {
+            setPage(Pages.Home);
+            game.scene = Scenes.menu;
+          }}
+          loggedin={login}
+          logout={() => setLogin(false)}
+          coins={coins}
         />
-      ) : page == Pages.Shop ? (
-        <p>SHOP</p>
-      ) : (
-        <></>
-      )}
-      <Navbar
-        navHome={() => {
-          setPage(Pages.Home);
-          game.scene = Scenes.menu;
-        }}
-        loggedin={login}
-        logout={() => setLogin(false)}
-        coins={coins}
-      />
     </>
   );
 };

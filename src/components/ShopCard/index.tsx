@@ -5,11 +5,11 @@ interface Props {
   navShop: Function;
 }
 
-const Shop: React.FC<Props> = (props: Props) => {
+const ShopCard: React.FC<Props> = (props: Props) => {
   const { navShop } = props;
 
   return (
-      <div className="shop">
+      <div className="shopCard">
         <h2>Shop</h2>
         <button className="upgrade-button" onClick={() => navShop()}>
           Upgrade Stats
@@ -18,4 +18,4 @@ const Shop: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default Shop;
+export default ShopCard;

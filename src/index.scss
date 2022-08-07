@@ -1,11 +1,6 @@
 @import "./assets/styles/variables.scss";
 
 :root {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -19,4 +14,16 @@
 	background-position: center;
 
 	font-family: $text-font;
+}
+
+.app {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
 }
