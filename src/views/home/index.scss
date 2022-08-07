@@ -1,3 +1,29 @@
 .home {
-  
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+
+  width: 600px;
+  height: 600px;
+
+  font-size: 0.8em;
+  // border: 3px solid red;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 50%;
+    height: 100%;
+    // border: 3px solid green;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 50%;
+    height: 100%;
+    // border: 3px solid green;
+  }
 }

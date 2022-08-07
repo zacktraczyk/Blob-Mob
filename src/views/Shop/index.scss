@@ -1,0 +1,8 @@
+@import "../../assets/styles/card";
+
+.shop {
+  width: 600px;
+  height: 600px;
+
+  @include card-background;
+}

@@ -1,4 +1,6 @@
-import Login from "../../components/login";
+import Login from "../../components/Login";
+import Scoreboard from "../../components/Scoreboard";
+import Shop from "../../components/Shop";
 import "./index.scss";
 
 interface Props {
@@ -12,7 +14,13 @@ const Home: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="home">
-      <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
+      <div className="home__left">
+        <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
+        <Shop navShop={() => navShop()} />
+      </div>
+      <div className="home__right">
+        <Scoreboard />
+      </div>
     </div>
   );
 };

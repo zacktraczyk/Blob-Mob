@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Canvas from "./components/canvas";
-import Navbar from "./components/navbar";
-import { GameAttributes } from "./game/gameAttributes";
-import Home from "./views/home";
-import { Main } from "./game/main";
+import Canvas from "./components/Canvas";
+import Navbar from "./components/Navbar";
+import { GameAttributes } from "./Game/gameAttributes";
+import Home from "./views/Home";
+import { Main } from "./Game/main";
 import { Scenes } from "./game/scenes/scenes";
 
 enum Pages {
@@ -19,6 +19,7 @@ const game = new GameAttributes();
 const App = () => {
   const [page, setPage] = useState(Pages.Home);
   const [login, setLogin] = useState(false);
+  const [coins, setCoins] = useState(0)
 
   if (page == Pages.Play) {
     game.scene = Scenes.play;
@@ -47,6 +48,7 @@ const App = () => {
         }}
         loggedin={login}
         logout={() => setLogin(false)}
+        coins={coins}
       />
     </>
   );

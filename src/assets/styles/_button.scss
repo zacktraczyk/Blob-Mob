@@ -1,10 +1,11 @@
 @import "./variables";
 
 button {
-  padding: 15px 20px;
+  padding: 0.5em 1em;
   border: 0;
   border-radius: 10px;
   font-weight: bold;
   font-size: 1.2em;
   color: $color-text-alt;
+  background-color: $color-main;
 }

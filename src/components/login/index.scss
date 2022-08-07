@@ -2,23 +2,23 @@
 @import "../../assets/styles/button";
 
 .login {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
 
-  height: 400px;
-  width: 300px;
-  padding: 50px;
+  padding: 20px 50px;
+  width: calc(100% - 100px);
+  height: calc(100% - 40px);
 
   @include card-background;
 
   h2 {
+    padding: 0px;
+    margin: 0px;
     text-align: center;
     text-shadow: 2px 2px 0px $color-main;
     font-size: 2em;
-    padding: 0px;
   }
 
   .play-button {
@@ -45,7 +45,7 @@
     text-align: center;
     color: $color-text-secondary;
     font-size: 1.2em;
-    padding: 1em 0.5em;
+    padding: 0.5em 0.5em;
   }
 
   .tutorial-button {

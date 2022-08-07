@@ -1,0 +1,36 @@
+@import "../../assets/styles/card";
+
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 20px 50px;
+  width: calc(100% - 100px);
+  height: 398px;
+
+  @include card-background;
+
+  h2 {
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  ul {
+    overflow-y: scroll;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: center;
+
+      border-bottom: 1px solid #ddd;
+      list-style: none;
+    }
+  }
+}
