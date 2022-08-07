@@ -1,57 +1,32 @@
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import "./index.scss";
 
 const Scoreboard: React.FC = () => {
-  const [highscores, setHighScores] = useState([]);
+  const [highscores, setHighScores] = useState([
+    { name: "oopsie", highscore: "250" },
+    { name: "myGUY", highscore: "242" },
+    { name: "xxzbuckxx", highscore: "223" },
+    { name: "munch", highscore: "211" },
+    { name: "ham_bam_tam", highscore: "196" },
+    { name: "chicken", highscore: "150" },
+    { name: "monkey0.o", highscore: "82" },
+    { name: "cham", highscore: "12" },
+    { name: "borger", highscore: "5" },
+  ]);
 
   return (
-    <motion.div
-      initial={{ x: 300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 300, opacity: 0 }}
-    >
-      <div className="scoreboard">
-        <h2>Top Scores</h2>
-        <ul>
-          {/* {highscores.map((item) => (
-            <li>
-              <p className="name">{item.name}</p>
-              <p className="score">{item.highscore}</p>
-            </li>
-          ))} */}
+    <div className="scoreboard">
+      <h2>Top Scores</h2>
+      <ul>
+        {highscores.map((item) => (
           <li>
-            <p className="name">Bob</p>
-            <p className="score">134</p>
+            <p>{item.name}</p>
+            <p>{item.highscore}</p>
           </li>
-          <li>
-            <p className="name">Sal</p>
-            <p className="score">127</p>
-          </li>
-          <li>
-            <p className="name">John</p>
-            <p className="score">12</p>
-          </li>
-          <li>
-            <p className="name">Bob</p>
-            <p className="score">134</p>
-          </li>
-          <li>
-            <p className="name">Sal</p>
-            <p className="score">127</p>
-          </li>
-          <li>
-            <p className="name">John</p>
-            <p className="score">12</p>
-          </li>
-          <li>
-            <p className="name">Bob</p>
-            <p className="score">134</p>
-          </li>
-        </ul>
-      </div>
-    </motion.div>
+        ))}
+      </ul>
+    </div>
   );
-}
+};
 
 export default Scoreboard;

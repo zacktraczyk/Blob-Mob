@@ -1,29 +1,27 @@
 .home {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 12em;
+  grid-template-areas:
+    "login scoreboard"
+    "shop scoreboard"
+  ;
+  gap: 40px;
 
+  height: 500px;
   width: 600px;
-  height: 600px;
 
   font-size: 0.8em;
-  // border: 3px solid red;
 
-  &__left {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    width: 50%;
-    height: 100%;
-    // border: 3px solid green;
+  .login {
+    grid-area: login;
   }
 
-  &__right {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    width: 50%;
-    height: 100%;
-    // border: 3px solid green;
+  .shop {
+    grid-area: shop;
+  }
+
+  .scoreboard {
+    grid-area: scoreboard;
   }
 }

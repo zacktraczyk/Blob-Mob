@@ -4,12 +4,11 @@
 .login {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: space-evenly;
+  justify-content: space-evenly;
   gap: 10px;
 
   padding: 20px 50px;
-  width: calc(100% - 100px);
-  height: calc(100% - 40px);
 
   @include card-background;
 

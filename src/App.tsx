@@ -5,6 +5,7 @@ import { GameAttributes } from "./Game/gameAttributes";
 import Home from "./views/Home";
 import { Main } from "./Game/main";
 import { Scenes } from "./game/scenes/scenes";
+import Score from "./components/Score";
 
 enum Pages {
   Home,
@@ -19,7 +20,7 @@ const game = new GameAttributes();
 const App = () => {
   const [page, setPage] = useState(Pages.Home);
   const [login, setLogin] = useState(false);
-  const [coins, setCoins] = useState(0)
+  const [coins, setCoins] = useState(0);
 
   if (page == Pages.Play) {
     game.scene = Scenes.play;
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <>
       <Canvas draw={(ctx: CanvasRenderingContext2D) => Main(game, ctx)} />
+      <Score score={game.score} highscore={0}/>
       {page == Pages.Home ? (
         <Home
           navPlay={() => setPage(Pages.Play)}

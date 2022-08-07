@@ -14,13 +14,9 @@ const Home: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="home">
-      <div className="home__left">
         <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
         <Shop navShop={() => navShop()} />
-      </div>
-      <div className="home__right">
         <Scoreboard />
-      </div>
     </div>
   );
 };
