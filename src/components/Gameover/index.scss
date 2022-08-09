@@ -1,0 +1,53 @@
+@import "../../assets/styles/variables";
+@import "../../assets/styles/card";
+
+.gameover {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+
+  @include card-background;
+  width: min(80vw, 400px);
+
+  h2 {
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-size: 4em;
+    text-shadow: 4px 4px 0px $color-signout;
+  }
+
+  ul {
+    margin: 0px;
+    padding: 0px 20px;
+
+    li {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: center;
+
+      border-bottom: 1px solid #ddd;
+      list-style: none;
+    }
+  }
+
+  &__buttons {
+    padding-top: 1em;
+    display: flex;
+    flex-direction: row;
+    
+    gap: 10px;
+
+    .play-button {
+      width: 100%;
+    }
+
+    .upgrade-button {
+      width: 100%;
+      background-color: $color-upgrade;
+    }
+  }
+}

@@ -33,6 +33,13 @@
       text-align: center;
       font-size: 2em;
     }
+
+    .stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
   }
 
 }

@@ -7,6 +7,12 @@ import { DamagePointController } from "./damagePoints";
 const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
 
+const frownCountMax = 30;
+const colorNorm = "#ffd6cc";
+const colorCool = "#adedff";
+const colorDamage = "#ff6d6d";
+
+
 export class Player extends Entity {
   private maxSpeed: number;
   private accel: number;
@@ -23,6 +29,7 @@ export class Player extends Entity {
   public power: number;
   public maxHealth: number;
   public health: number;
+  private frownCount: number;
 
   private pushRadius: number;
   private pushR: number;
@@ -30,7 +37,7 @@ export class Player extends Entity {
 
   constructor(x: number, y: number, w: number, h: number) {
     super(x, y, w, h);
-    this.color = "#ffd6cc";
+    this.color = colorNorm;
     this.state = State.Normal;
 
     this.maxSpeed = 7;
@@ -48,6 +55,7 @@ export class Player extends Entity {
     this.power = 0;
     this.maxHealth = 500;
     this.health = this.maxHealth;
+    this.frownCount = 0;
 
     this.pushRadius = 240;
     this.pushR = 0;
@@ -70,8 +78,8 @@ export class Player extends Entity {
     ctx.beginPath();
     ctx.fillStyle = "black";
     ctx.arc(
-      x + this.w / 4 + this.xvel/2,
-      y + this.h / 4 + this.yvel/2,
+      x + this.w / 4 + this.xvel / 2,
+      y + this.h / 4 + this.yvel / 2,
       (this.w / 4 + this.h / 4) / 4,
       0,
       2 * Math.PI
@@ -92,16 +100,19 @@ export class Player extends Entity {
     ctx.closePath();
 
     //Draws Mouth
+    // SMILE
     ctx.beginPath();
-    ctx.moveTo(x + this.w / 8, y + this.h - this.h / 3);
+    const frownDelta = this.frownCount / frownCountMax * 10;
+    ctx.moveTo(x + this.w / 8, y + this.h * 2/3 + frownDelta);
     ctx.bezierCurveTo(
       x + this.h / 8,
-      y + this.h,
+      y + this.h - frownDelta*2,
       x + this.w - this.h / 8 + this.xvel,
-      y + this.h,
+      y + this.h - frownDelta*2,
       x + this.w - this.h / 8,
-      y + this.h - this.h / 3
+      y + this.h * 2/3 + frownDelta
     );
+    // FROWN
     ctx.stroke();
     ctx.closePath();
 
@@ -134,9 +145,10 @@ export class Player extends Entity {
     if (this.action != Action.Push) {
       if (this.cool > 0) {
         --this.cool;
-        this.color = "#adedff";
+        this.color = colorCool;
+        if (this.frownCount < frownCountMax * 0.65)this.frownCount++;
       } else {
-        this.color = "#ffd6cc";
+        this.color = colorNorm;
       }
     }
 
@@ -195,12 +207,17 @@ export class Player extends Entity {
     });
 
     if (damage) {
-      this.color = "#ff6d6d";
+      this.color = colorDamage;
       this.health--;
+      this.frownCount++;
       if (damagePoints != null) {
         damagePoints.spawn(this);
       }
+    } else {
+      if (this.cool <= 0) this.frownCount--;
     }
+
+    this.frownCount = clamp(this.frownCount, 0, frownCountMax);
   }
 
   public shrink(dx: number, dy: number, s: number) {
@@ -354,6 +371,8 @@ export class Player extends Entity {
 
     this.xvel = 0;
     this.yvel = 0;
+
+    this.frownCount = frownCountMax * 0.6;
   }
 
   public updateAttributes(attributes: any) {

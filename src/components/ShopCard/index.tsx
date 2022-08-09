@@ -12,7 +12,7 @@ const ShopCard: React.FC<Props> = (props: Props) => {
       <div className="shopCard">
         <h2>Shop</h2>
         <button className="upgrade-button" onClick={() => navShop()}>
-          Upgrade Stats
+          Upgrade
         </button>
       </div>
   );

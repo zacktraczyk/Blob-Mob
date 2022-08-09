@@ -15,7 +15,20 @@ export function Shop(game: GameAttributes, input: Input, entities: Entities, ctx
   if (player.state == State.Dead) {
     game.reset(entities);
   }
+}
 
+function update(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
+  const { player, enemies, damagePoints } = entities;
+
+  // Confine to half of screen
+  player.controller(ctx.canvas.width / 2, ctx.canvas.height, input.keyState, enemies.instances, damagePoints);
+  // if (player.cool <= 0) {
+  //   player.power = player.maxPower; // So Player can test powerups
+  // }
+  enemies.controller(game);
+  damagePoints.controller();
+
+  // Spawn when button pressed
   if (spawnCool > 0) {
     spawnCool--;
   }
@@ -24,16 +37,6 @@ export function Shop(game: GameAttributes, input: Input, entities: Entities, ctx
     spawnCool = 50;
     enemies.spawn(ctx.canvas.width, ctx.canvas.height, player) ;
   }
-}
-
-function update(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
-  const { player, enemies, damagePoints } = entities;
-
-  // Confine to half of screen
-  player.controller(ctx.canvas.width / 2, ctx.canvas.height, input.keyState, enemies.instances, damagePoints);
-  enemies.controller(game);
-  damagePoints.controller();
-
 }
 
 function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingContext2D) {

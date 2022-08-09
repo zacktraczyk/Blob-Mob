@@ -30,10 +30,10 @@ const Shop: React.FC<Props> = (props: Props) => {
       <div className="shop__right">
         <h2>{displayName}</h2>
         <div className="stats">
-          <PlayerStat />
-          <PlayerStat />
-          <PlayerStat />
-          <PlayerStat />
+          <PlayerStat name={"Speed"} value={5} cost={15}/>
+          <PlayerStat name={"Health"} value={50} cost={5}/>
+          <PlayerStat name={"Power"} value={15} cost={10}/>
+          <PlayerStat name={"Cool"} value={20} cost={20}/>
         </div>
         <div className="powerups"></div>
       </div>
