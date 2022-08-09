@@ -115,7 +115,7 @@ export class Enemy extends Entity{
         let x = this.x - this.w/2; // draw corner
         let y = this.y - this.h/2; // draw corner
 
-        ctx.lineWidth = 1;
+        // ctx.lineWidth = 1;
         let rand = Math.round(Math.random() * 2);
         this.color = this.rcolors[rand];
         ctx.fillStyle = this.color;
@@ -137,27 +137,27 @@ export class Enemy extends Entity{
 
         ctx.bezierCurveTo(x + this.w - this.w / 8, y + this.h * 1.75,
             x - this.w * 2, y + this.h / 4,
-            x, y + this.h / 2);
+            x - 10, y + this.h / 2 - 10);
 
-        ctx.bezierCurveTo(x - this.w, y + this.h / 2,
-            x - this.w / 2, y,
+        ctx.bezierCurveTo(x - this.w - 5, y + this.h / 2,
+            x - this.w / 4, y,
             x - this.w / 8, y);
         ctx.fill();
-        ctx.stroke();
+        // ctx.stroke();
         ctx.closePath();
 
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 3;
 
         //Draws Left Eye
         ctx.beginPath();
         ctx.fillStyle = 'black';
-        ctx.arc(x + this.w / 6 + this.xdir*5, y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
+        ctx.arc(x + this.w / 6 + this.xdir*5, y + this.h / 6 + this.ydir*5, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 
         //Draws Right Eye
         ctx.beginPath();
-        ctx.arc(x + this.w - this.w / 8, y + this.h / 6, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
+        ctx.arc(x + this.w - this.w / 8 + this.xdir*5, y + this.h / 6 + this.ydir*5, (this.w / 4 + this.h / 4) / 6, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 

@@ -9,8 +9,9 @@ import { Battle } from "./scenes/battle";
 import { Gameover } from "./scenes/gameover";
 import { Shop } from "./scenes/shop";
 import { tutorialRules } from "./tutorialRules";
+import { Pages } from "../pages";
 
-export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
+export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D, setPage: React.Dispatch<React.SetStateAction<Pages>>) => {
   if (ctx == null) return;
   ++game.frame;
 
@@ -44,6 +45,7 @@ export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
       break;
 
     case Scenes.gameOver:
+      setPage(Pages.Gameover);
       Gameover(game, input, entities, ctx);
       break;
   }

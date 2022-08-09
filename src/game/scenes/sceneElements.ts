@@ -2,13 +2,13 @@ import { Player } from "../entities/player";
 import { GameAttributes } from "../gameAttributes";
 import { Input } from "../input";
 
+const borderWidth = 3;
+
 export function drawHUD(
   game: GameAttributes,
   player: Player,
   ctx: CanvasRenderingContext2D
 ) {
-  if (ctx == null) return;
-
   // Health
   ctx.fillStyle = "black";
   ctx.fillRect(ctx.canvas.width / 2, 10, ctx.canvas.width / 2 - 10, 20);
@@ -20,13 +20,14 @@ export function drawHUD(
     23
   );
   ctx.fillRect(
-    ctx.canvas.width / 2 + 1,
-    11,
+    ctx.canvas.width / 2 + borderWidth,
+    10 + borderWidth,
     Math.max(
       0,
-      (player.health / player.maxHealth) * (ctx.canvas.width / 2 - 10) - 2
+      (player.health / player.maxHealth) * (ctx.canvas.width / 2 - 10) -
+        borderWidth * 2
     ),
-    18
+    20 - borderWidth * 2
   );
 
   // Power
@@ -40,10 +41,11 @@ export function drawHUD(
   ctx.fillStyle = "#33cc33";
   if (player.power > 0) {
     ctx.fillRect(
-      (ctx.canvas.width * 3) / 4 + 6,
-      41,
-      (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) - 2,
-      18
+      (ctx.canvas.width * 3) / 4 + 5 + borderWidth,
+      40 + borderWidth,
+      (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) -
+        borderWidth * 2,
+      20 - borderWidth * 2
     );
   }
 
@@ -52,10 +54,11 @@ export function drawHUD(
   ctx.fillRect(ctx.canvas.width / 2, 40, ctx.canvas.width / 4 - 5, 20);
   ctx.fillStyle = "blue";
   ctx.fillRect(
-    ctx.canvas.width / 2 + 1,
-    41,
-    (1 - player.cool / player.maxCool) * (ctx.canvas.width / 4 - 5) - 2,
-    18
+    ctx.canvas.width / 2 + borderWidth,
+    40 + borderWidth,
+    (1 - player.cool / player.maxCool) * (ctx.canvas.width / 4 - 5) -
+      borderWidth * 2,
+    20 - borderWidth * 2
   );
 
   // Difficulty

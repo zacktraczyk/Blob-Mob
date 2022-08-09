@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Canvas from "./components/Canvas";
 import Navbar from "./components/Navbar";
 import { GameAttributes } from "./Game/gameAttributes";
@@ -7,14 +7,7 @@ import { Main } from "./Game/main";
 import { Scenes } from "./Game/scenes/scenes";
 import Score from "./components/Score";
 import Shop from "./views/Shop";
-
-enum Pages {
-  Home,
-  Tutorial,
-  Play,
-  Gameover,
-  Shop,
-}
+import { Pages } from "./pages";
 
 const game = new GameAttributes();
 
@@ -30,7 +23,7 @@ const App = () => {
 
   return (
     <>
-      <Canvas draw={(ctx: CanvasRenderingContext2D) => Main(game, ctx)} />
+      <Canvas draw={(ctx: CanvasRenderingContext2D) => Main(game, ctx, setPage)} />
       {/* <Score score={game.score} highscore={0} /> */}
       <div className="app">
         {page == Pages.Home ? (
@@ -49,17 +42,19 @@ const App = () => {
               game.scene = Scenes.menu;
             }}
           ></Shop>
+        ) : page == Pages.Gameover ? (
+          <h1>GAMEOVER</h1>
         ) : (
           <></>
         )}
       </div>
-        <Navbar
-          navHome={() => {
-            setPage(Pages.Home);
-            game.scene = Scenes.menu;
-          }}
-          coins={coins}
-        />
+      <Navbar
+        navHome={() => {
+          setPage(Pages.Home);
+          game.scene = Scenes.menu;
+        }}
+        coins={coins}
+      />
     </>
   );
 };
