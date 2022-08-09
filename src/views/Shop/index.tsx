@@ -1,4 +1,8 @@
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { app } from "../../apis/firebase";
 import Login from "../../components/Login";
+import PlayerStat from "../../components/PlayerStat";
 import Scoreboard from "../../components/Scoreboard";
 import "./index.scss";
 
@@ -9,13 +13,29 @@ interface Props {
 const Shop: React.FC<Props> = (props: Props) => {
   const { navHome } = props;
 
+  const auth = getAuth(app);
+  const [user] = useAuthState(auth);
+
+  let displayName = "Gerald"
+  if (user && user.displayName) {
+    displayName = user.displayName;
+  }
+
+
   return (
     <div className="shop">
       <div className="shop__left">
-        <button onClick={() => console.log("SPAWN ENEMY")}>Spawn Enemy</button>
+        <p>Press R to spawn enemy</p>
       </div>
       <div className="shop__right">
-        <h2>Shop</h2>
+        <h2>{displayName}</h2>
+        <div className="stats">
+          <PlayerStat />
+          <PlayerStat />
+          <PlayerStat />
+          <PlayerStat />
+        </div>
+        <div className="powerups"></div>
       </div>
     </div>
   );

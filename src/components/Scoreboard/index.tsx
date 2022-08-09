@@ -18,8 +18,8 @@ const Scoreboard: React.FC = () => {
     <div className="scoreboard">
       <h2>Top Scores</h2>
       <ul>
-        {highscores.map((item) => (
-          <li>
+        {highscores.map((item, key) => (
+          <li key={key}>
             <p>{item.name}</p>
             <p>{item.highscore}</p>
           </li>

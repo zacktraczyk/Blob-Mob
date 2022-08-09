@@ -4,21 +4,22 @@ import { Input } from '../input';
 import { Player } from '../entities/player';
 import { DamagePointController } from '../entities/damagePoints';
 import { EnemyController } from '../entities/enemy';
-import { drawStage, drawHUD, drawPauseMenu } from './sceneElements';
+import { drawHUD, drawPauseMenu } from './sceneElements';
 import { Entities } from '../entities/entities';
 
 let sceneInit = true;
 let transTimer = 0; // after death change scene timer
 let duration = 100;
 
-export function Battle(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
-  if (ctx == null) return;
+function initalizeScene(game: GameAttributes, entities: Entities) {
+  const { player, enemies }  = entities;
+  sceneInit = false;
+}
 
-  if (sceneInit) initalizeScene(game, entities);
+export function Battle(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
   const { player } = entities;
 
   if (!game.paused) update(game, input, entities, ctx);
-
   game.pause(input.keyState.pause);
 
   draw(game, entities, ctx);
@@ -46,9 +47,7 @@ function update(game: GameAttributes, input: Input, entities: Entities, ctx: Can
 
 function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingContext2D) {
   const { player, enemies, damagePoints } = entities;
-
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  drawStage(ctx);
 
   player.draw(ctx);
   enemies.draw(ctx);
@@ -59,10 +58,4 @@ function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingCont
   // game.debug(player, enemies, ctx);
 
   if (game.paused) drawPauseMenu(ctx);
-}
-
-function initalizeScene(game: GameAttributes, entities: Entities) {
-  const { player, enemies }  = entities;
-  game.updateDifficulty(player, enemies, 5)
-  sceneInit = false;
 }

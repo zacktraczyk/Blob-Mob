@@ -1,5 +1,5 @@
 import { GameAttributes } from "./gameAttributes";
-import { Input } from "./input";
+import { Input, input } from "./input";
 import { entities } from "./entities/entities";
 
 import { Scenes } from "./scenes/scenes";
@@ -8,12 +8,11 @@ import { Tutorial } from "./scenes/tutorial";
 import { Battle } from "./scenes/battle";
 import { Gameover } from "./scenes/gameover";
 import { Shop } from "./scenes/shop";
-
-const input = new Input();
+import { tutorialRules } from "./tutorialRules";
 
 export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
+  if (ctx == null) return;
   ++game.frame;
-  console.log(game.scene);
 
   switch (game.scene) {
     case Scenes.menu:
@@ -21,17 +20,26 @@ export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D) => {
       break;
 
     case Scenes.shop:
+      game.reset(entities);
+      game.scene = Scenes.shopMain;
+    case Scenes.shopMain:
       Shop(game, input, entities, ctx);
       break;
 
     case Scenes.tutorial:
+      game.reset(entities);
+      tutorialRules.reset();
+      game.scene = Scenes.tutorialMain;
+    case Scenes.tutorialMain:
       Tutorial(game, input, entities, ctx);
       break;
 
     case Scenes.play:
+      const { player, enemies } = entities;
       game.reset(entities);
-    case Scenes.battle:
+      game.updateDifficulty(player, enemies, 5);
       game.scene = Scenes.battle;
+    case Scenes.battle:
       Battle(game, input, entities, ctx);
       break;
 

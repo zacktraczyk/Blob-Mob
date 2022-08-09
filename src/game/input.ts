@@ -23,6 +23,9 @@ export class Input {
             push: false,
 
             pause: false,
+            
+            // Shop
+            enemySpawn: false,
         }
 
         this.keyMap = {
@@ -43,6 +46,8 @@ export class Input {
             'q': 'push',
 
             'p': 'pause',
+
+            'r': 'enemySpawn',
         }
 
         this.addKeyListeners();
@@ -75,3 +80,5 @@ export class Input {
         document.addEventListener("click", event => this.mousePosition(event), false);
     }
 }
+
+export const input = new Input();

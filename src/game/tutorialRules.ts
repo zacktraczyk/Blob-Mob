@@ -241,3 +241,5 @@ export class TurtorialRules {
     this.controlCheck = [0, 0, 0, 0]
   }
 }
+
+export const tutorialRules = new TurtorialRules();

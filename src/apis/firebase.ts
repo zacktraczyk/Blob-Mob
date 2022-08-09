@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const {
   VITE_API_KEY,
@@ -19,4 +20,21 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
+export const signInGoogle = () => {
+  console.log("sign in attempt");
+  const provider = new GoogleAuthProvider();
+
+  signInWithPopup(auth, provider).then((result) => {
+    const user = result.user;
+    console.log(user);
+  });
+};
+
+export const signOut = () => {
+  auth.signOut();
+  window.location.reload();  
+}

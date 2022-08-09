@@ -151,7 +151,7 @@ export class Enemy extends Entity{
         //Draws Left Eye
         ctx.beginPath();
         ctx.fillStyle = 'black';
-        ctx.arc(x + this.w / 6, y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
+        ctx.arc(x + this.w / 6 + this.xdir*5, y + this.h / 6, (this.w / 4 + this.h / 4) / 4, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.closePath();
 
@@ -258,3 +258,5 @@ export class Enemy extends Entity{
 //     if(score >= 250 && score < 300)speed=2.5;
 //     if(score >= 300)speed=3;
 // }
+
+export const enemies = new EnemyController();

@@ -20,7 +20,6 @@ const game = new GameAttributes();
 
 const App = () => {
   const [page, setPage] = useState(Pages.Home);
-  const [login, setLogin] = useState(false);
   const [coins, setCoins] = useState(0);
 
   if (page == Pages.Play) {
@@ -32,7 +31,7 @@ const App = () => {
   return (
     <>
       <Canvas draw={(ctx: CanvasRenderingContext2D) => Main(game, ctx)} />
-      <Score score={game.score} highscore={0} />
+      {/* <Score score={game.score} highscore={0} /> */}
       <div className="app">
         {page == Pages.Home ? (
           <Home
@@ -59,8 +58,6 @@ const App = () => {
             setPage(Pages.Home);
             game.scene = Scenes.menu;
           }}
-          loggedin={login}
-          logout={() => setLogin(false)}
           coins={coins}
         />
     </>
