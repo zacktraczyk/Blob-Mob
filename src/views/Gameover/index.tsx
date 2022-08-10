@@ -1,8 +1,8 @@
+import { game } from "../../App";
 import "./index.scss";
 
 interface Props {
   blobsKilled: number;
-  highscore: number;
   coins: number;
 
   navPlay: Function;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Gameover: React.FC<Props> = (props: Props) => {
-  const { blobsKilled, highscore, coins, navPlay, navShop } = props;
+  const { blobsKilled, coins, navPlay, navShop } = props;
   return (
     <div className="gameover">
       <h2>GAMEOVER</h2>
@@ -21,7 +21,7 @@ const Gameover: React.FC<Props> = (props: Props) => {
         </li>
         <li>
           <p>Highscore is still</p>
-          <p>{highscore}</p>
+          <p>{game.highscore}</p>
         </li>
         <li>
           <p>Coins Aquired</p>

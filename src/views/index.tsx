@@ -4,7 +4,7 @@ import { game } from "../App";
 import Home from "./Home";
 import Score from "../components/Score";
 import Shop from "./Shop";
-import Gameover from "../components/Gameover";
+import Gameover from "./Gameover";
 import { browserLocalPersistence } from "firebase/auth";
 
 export enum View {
@@ -60,7 +60,6 @@ const Views: React.FC<Props> = (props: Props) => {
       return (
         <Gameover
           blobsKilled={game.score}
-          highscore={0}
           coins={0}
           navPlay={() => setPage(View.Play)}
           navShop={() => {

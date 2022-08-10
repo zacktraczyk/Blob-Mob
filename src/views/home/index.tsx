@@ -1,3 +1,4 @@
+import { saveHighscore } from "../../apis/firebase";
 import Login from "../../components/Login";
 import Scoreboard from "../../components/Scoreboard";
 import ShopCard from "../../components/ShopCard";

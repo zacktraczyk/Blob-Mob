@@ -1,4 +1,7 @@
+import { doc } from "firebase/firestore";
 import { useState } from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { auth, db } from "./apis/firebase";
 import Canvas from "./components/Canvas";
 import Navbar from "./components/Navbar";
 import { GameAttributes } from "./Game/gameAttributes";
@@ -11,6 +14,14 @@ export const game = new GameAttributes();
 const App = () => {
   const [page, setPage] = useState<View>(View.Home);
   const [coins, setCoins] = useState<number>(0);
+
+  const uid = "" + auth?.currentUser?.uid;
+  const docRef = doc(db, "highscores", uid);
+  const [highscore] = useDocumentData(docRef);
+
+  if (highscore && highscore.score) {
+    game.highscore = highscore.score;
+  }
 
   return (
     <>

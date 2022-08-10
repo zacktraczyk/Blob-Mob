@@ -10,6 +10,7 @@ import { Gameover } from "./scenes/gameover";
 import { Shop } from "./scenes/shop";
 import { tutorialRules } from "./tutorialRules";
 import { View } from "../Views";
+import { saveHighscore } from "../apis/firebase";
 
 export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D, setPage: React.Dispatch<React.SetStateAction<View>>) => {
   if (ctx == null) return;
@@ -45,7 +46,10 @@ export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D, setPag
       break;
 
     case Scenes.gameOver:
+      saveHighscore(game.score);
       setPage(View.Gameover);
+      game.scene = Scenes.gameOverMain;
+    case Scenes.gameOverMain:
       Gameover(game, input, entities, ctx);
       break;
   }

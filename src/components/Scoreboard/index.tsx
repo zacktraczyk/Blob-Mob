@@ -1,27 +1,43 @@
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useEffect, useState } from "react";
+import { auth, db } from "../../apis/firebase";
 import "./index.scss";
+import { collection, limit, orderBy, query } from "firebase/firestore";
 
 const Scoreboard: React.FC = () => {
-  const [highscores, setHighScores] = useState([
-    { name: "oopsie", highscore: "250" },
-    { name: "myGUY", highscore: "242" },
-    { name: "xxzbuckxx", highscore: "223" },
-    { name: "munch", highscore: "211" },
-    { name: "ham_bam_tam", highscore: "196" },
-    { name: "chicken", highscore: "150" },
-    { name: "monkey0.o", highscore: "82" },
-    { name: "cham", highscore: "12" },
-    { name: "borger", highscore: "5" },
-  ]);
+  const highscoresRef = collection(db, "highscores");
+  const q = query(highscoresRef, orderBy("score", "desc"), limit(10));
+
+  const getScoreClass = (uid: string) => {
+    return auth?.currentUser?.uid === `${uid}` ? "featured" : "norm";
+  };
+
+  const [highscores, loading, error] = useCollectionData(q);
+
+  if (loading) {
+    return (
+      <div className="scoreboard">
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="scoreboard">
+        <h2>Error: {"" + error}</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="scoreboard">
       <h2>Top Scores</h2>
       <ul>
-        {highscores.map((item, key) => (
+        {highscores?.map((highscore, key) => (
           <li key={key}>
-            <p>{item.name}</p>
-            <p>{item.highscore}</p>
+            <p className={getScoreClass(highscore.uid)}>{highscore.username}</p>
+            <p className={getScoreClass(highscore.uid)}>{highscore.score}</p>
           </li>
         ))}
       </ul>

@@ -19,7 +19,7 @@
   ul {
     overflow-y: scroll;
     margin: 0px;
-    padding: 0px 20px;
+    padding: 0px 10px;
 
     li {
       display: flex;
@@ -29,6 +29,12 @@
 
       border-bottom: 1px solid #ddd;
       list-style: none;
+
+      .featured {
+        // padding: 0px 10px;
+        background-color: $color-main;
+        font-weight: bold;
+      }
     }
   }
 }

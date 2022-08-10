@@ -29,7 +29,7 @@ export class GameAttributes {
         this.tutorial = false;
 
         this.score = 0;
-        this.highscore = this.getHighscore();
+        this.highscore = 0;
 
         this.frame = 0;
         this.paused = false;
@@ -56,21 +56,6 @@ export class GameAttributes {
 
     public gameOver() {
         this.scene = Scenes.gameOver;
-    }
-
-    public setHighscore() {
-        if (this.score > this.highscore) {
-            this.highscore = this.score;
-        }
-        window.localStorage.setItem('highscore', '' + this.highscore);
-    }
-
-    public getHighscore() {
-        let score = window.localStorage.getItem('highscore');
-        if (score == null) {
-            return 0
-        }
-        return parseInt(score);
     }
 
     public pause(player: Player | null) {

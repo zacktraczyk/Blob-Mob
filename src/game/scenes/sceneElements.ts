@@ -71,7 +71,9 @@ export function drawHUD(
   ctx.fillStyle = "black";
   ctx.font = "30px futura";
   let text = `Score ${game.score}`;
-  ctx.fillText(text, 20, 50);
+  ctx.fillText(text, 20, 30);
+  text = `Highscore ${game.highscore}`;
+  ctx.fillText(text, 20, 60);
 }
 
 export function drawPauseMenu(ctx: CanvasRenderingContext2D) {

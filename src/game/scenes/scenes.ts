@@ -6,5 +6,6 @@ export enum Scenes {
     tutorialMain,
     play,
     battle,
-    gameOver
+    gameOver,
+    gameOverMain
 }

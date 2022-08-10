@@ -1,5 +1,23 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  limit,
+  orderBy,
+  query,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateCurrentUser,
+} from "firebase/auth";
 
 const {
   VITE_API_KEY,
@@ -16,13 +34,41 @@ const firebaseConfig = {
   projectId: VITE_PROJECT_ID,
   storageBucket: VITE_STORAGE_BUCKET,
   messagingSenderId: VITE_MESSAGING_SENDER_ID,
-  appId: VITE_APP_ID
+  appId: VITE_APP_ID,
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
+export const saveHighscore = async (score: Number) => {
+  try {
+    const uid = "" + auth?.currentUser?.uid;
+    const docRef = doc(db, "highscores", uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Highscore exists");
+      if (score > docSnap.data().score) {
+        await updateDoc(docRef, {
+          score: score,
+        });
+      } else {
+        console.log("not a new highscore :/")
+      }
+    } else {
+      const highscoresRef = collection(db, "highscores");
+      const newDocRef = await setDoc(doc(highscoresRef, uid), {
+        uid: uid,
+        username: auth?.currentUser?.displayName,
+        score: score,
+      });
+      console.log("Document written");
+    }
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
 
 export const signInGoogle = () => {
   console.log("sign in attempt");
@@ -36,5 +82,5 @@ export const signInGoogle = () => {
 
 export const signOut = () => {
   auth.signOut();
-  window.location.reload();  
-}
+  window.location.reload();
+};
