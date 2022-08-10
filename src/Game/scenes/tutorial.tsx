@@ -1,45 +1,40 @@
 import { Scenes } from "./scenes";
 import { drawHUD } from "./sceneElements";
-import { Entities } from "../entities/entities";
-import { Player } from "../entities/player";
-import { EnemyController } from "../entities/enemy";
-import { Input } from "../input";
+import { player } from "../entities/player";
+import { enemies } from "../entities/enemy";
+import { input } from "../input";
 import { GameAttributes } from "../gameAttributes";
-import { tutorialRules } from "../tutorialRules";
+import { Stage, tutorialRules } from "../tutorialRules";
+import { damagePoints } from "../entities/damagePoints";
 
-// <++> TODO: Use game.tutorial boolean to fix interupted and revisited glitch
+export function Tutorial(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+  update(game, ctx);
+  draw(game, ctx);
 
-export function Tutorial(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
-  update(game, input, entities, ctx);
-  draw(game, entities, ctx);
-
-  if (tutorialRules.step == 'end') {
-    game.reset(entities)
+  if (tutorialRules.stage == Stage.end) {
+    game.reset()
     tutorialRules.reset();
     game.scene = Scenes.battle;
   }
 }
 
-function update(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
-  const { player, enemies, damagePoints } = entities;
-
-  player.controller(ctx.canvas.width, ctx.canvas.height, input.keyState, enemies.instances, damagePoints)
+function update(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+  player.controller(ctx.canvas.width, ctx.canvas.height);
   damagePoints.controller();
   enemies.controller(game);
 
   if (player.health <= 50) player.health = 50
-  tutorialRules.controller(game, ctx.canvas.width, ctx.canvas.height, input.keyState, enemies,player);
+  tutorialRules.controller(game, ctx.canvas.width, ctx.canvas.height);
 
 }
 
-function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingContext2D) {
-  const { player, enemies, damagePoints } = entities;
+function draw(game: GameAttributes, ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
   player.draw(ctx);
   enemies.draw(ctx);
   tutorialRules.draw(ctx);
 
-  if (tutorialRules.step == 'bars' || tutorialRules.step == 'goodLuck' || tutorialRules.step == 'end')
-    drawHUD(game, player, ctx);
+  if (tutorialRules.stage >= Stage.bars)
+    drawHUD(game, ctx);
 }

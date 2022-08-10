@@ -1,84 +1,93 @@
 export class Input {
+  private mouse: { x: number; y: number };
+  public mouseDown: boolean;
 
-    private mouse: {x: number, y: number};
-    public mouseDown: boolean;
+  public keyState: any;
+  private keyMap: any;
 
-    public keyState: any;
-    private keyMap: any;
+  constructor() {
+    this.mouse = {
+      x: 0,
+      y: 0,
+    };
+    this.mouseDown = false;
 
-    constructor() {
-        this.mouse = {
-            x: 0,
-            y: 0
-        }
-        this.mouseDown = false;
+    this.keyState = {
+      right: false,
+      up: false,
+      left: false,
+      down: false,
 
-        this.keyState = {
-            right: false,
-            up: false,
-            left: false,
-            down: false,
+      attack: false,
+      push: false,
 
-            attack: false,
-            push: false,
+      pause: false,
 
-            pause: false,
-            
-            // Shop
-            enemySpawn: false,
-        }
+      // Shop
+      enemySpawn: false,
+    };
 
-        this.keyMap = {
-            'ArrowRight': 'right',
-            'd': 'right',
+    this.keyMap = {
+      ArrowRight: "right",
+      d: "right",
 
-            'ArrowUp': 'up',
-            'w': 'up',
+      ArrowUp: "up",
+      w: "up",
 
-            'ArrowLeft': 'left',
-            'a': 'left',
+      ArrowLeft: "left",
+      a: "left",
 
-            'ArrowDown': 'down',
-            's': 'down',
+      ArrowDown: "down",
+      s: "down",
 
+      " ": "attack",
+      q: "push",
 
-            ' ': 'attack',
-            'q': 'push',
+      p: "pause",
 
-            'p': 'pause',
+      r: "enemySpawn",
+    };
 
-            'r': 'enemySpawn',
-        }
+    this.addKeyListeners();
+    this.addMouseListener();
+  }
 
-        this.addKeyListeners();
-        this.addMouseListener();
-    }
+  public addKeyListeners() {
+    document.addEventListener(
+      "keydown",
+      (event) => this.keyDownHandler(event),
+      false
+    );
+    document.addEventListener(
+      "keyup",
+      (event) => this.keyUpHandler(event),
+      false
+    );
+  }
 
+  public keyDownHandler(e: KeyboardEvent) {
+    let key = this.keyMap[e.key];
+    this.keyState[key] = true;
+  }
 
-    public addKeyListeners() {
-        document.addEventListener("keydown", event => this.keyDownHandler(event), false);
-        document.addEventListener("keyup", event => this.keyUpHandler(event), false);
-    }
+  public keyUpHandler(e: KeyboardEvent) {
+    let key = this.keyMap[e.key];
+    this.keyState[key] = false;
+  }
 
-    public keyDownHandler(e: KeyboardEvent) {
-        let key = this.keyMap[e.key];
-        this.keyState[key] = true;
-    }
+  public mousePosition(event: MouseEvent) {
+    this.mouse.x = event.x;
+    this.mouse.y = event.y;
+    this.mouseDown = true;
+  }
 
-    public keyUpHandler(e: KeyboardEvent) {
-        let key = this.keyMap[e.key];
-        this.keyState[key] = false;
-    }
-
-    public mousePosition(event: MouseEvent) {
-        this.mouse.x = event.x;
-        this.mouse.y = event.y;
-        this.mouseDown = true;
-    }
-
-    public addMouseListener() {
-        document.addEventListener("click", event => this.mousePosition(event), false);
-    }
+  public addMouseListener() {
+    document.addEventListener(
+      "click",
+      (event) => this.mousePosition(event),
+      false
+    );
+  }
 }
 
 export const input = new Input();

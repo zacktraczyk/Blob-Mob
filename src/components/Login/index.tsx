@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { app, signInGoogle, signOut } from "../../apis/firebase";
+import { app, signInGoogle, signInFacebook, signOut } from "../../apis/firebase";
 
 import "./index.scss";
 
@@ -36,7 +36,7 @@ const Login: React.FC<Props> = (props: Props) => {
                 Google
                 <i className="fa-brands fa-google"></i>
               </button>
-              <button className="facebook-button">
+              <button className="facebook-button" onClick={() => signInFacebook()}>
                 Facebook
                 <i className="fa-brands fa-square-facebook"></i>
               </button>

@@ -13,6 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import {
+  FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
@@ -73,6 +74,16 @@ export const saveHighscore = async (score: Number) => {
 export const signInGoogle = () => {
   console.log("sign in attempt");
   const provider = new GoogleAuthProvider();
+
+  signInWithPopup(auth, provider).then((result) => {
+    const user = result.user;
+    console.log(user);
+  });
+};
+
+export const signInFacebook = () => {
+  console.log("sign in attempt");
+  const provider = new FacebookAuthProvider();
 
   signInWithPopup(auth, provider).then((result) => {
     const user = result.user;

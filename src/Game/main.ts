@@ -1,56 +1,63 @@
 import { GameAttributes } from "./gameAttributes";
-import { Input, input } from "./input";
-import { entities } from "./entities/entities";
-
 import { Scenes } from "./scenes/scenes";
 import { Menu } from "./scenes/menu";
+import { Shop } from "./scenes/shop";
 import { Tutorial } from "./scenes/tutorial";
+import { tutorialRules } from "./tutorialRules";
 import { Battle } from "./scenes/battle";
 import { Gameover } from "./scenes/gameover";
-import { Shop } from "./scenes/shop";
-import { tutorialRules } from "./tutorialRules";
+import { input } from "./input";
+
 import { View } from "../Views";
 import { saveHighscore } from "../apis/firebase";
 
-export const Main = (game: GameAttributes, ctx: CanvasRenderingContext2D, setPage: React.Dispatch<React.SetStateAction<View>>) => {
+export const Main = (
+  game: GameAttributes,
+  ctx: CanvasRenderingContext2D,
+  setPage: React.Dispatch<React.SetStateAction<View>>
+) => {
   if (ctx == null) return;
   ++game.frame;
 
   switch (game.scene) {
+    // ------------------> MENU
     case Scenes.menu:
-      Menu(game, input, ctx);
+      Menu(game, ctx);
       break;
 
-    case Scenes.shop:
-      game.reset(entities);
+    // ------------------> SHOP
+    case Scenes.shop: // INIT
+      game.reset();
       game.scene = Scenes.shopMain;
     case Scenes.shopMain:
-      Shop(game, input, entities, ctx);
+      Shop(game, ctx);
       break;
 
-    case Scenes.tutorial:
-      game.reset(entities);
+    // ------------------> TUTORIAL
+    case Scenes.tutorial: // INIT
+      game.reset();
       tutorialRules.reset();
       game.scene = Scenes.tutorialMain;
     case Scenes.tutorialMain:
-      Tutorial(game, input, entities, ctx);
+      Tutorial(game, ctx);
       break;
 
-    case Scenes.play:
-      const { player, enemies } = entities;
-      game.reset(entities);
-      game.updateDifficulty(player, enemies, 5);
+    // ------------------> PLAY
+    case Scenes.play: // INIT
+      game.reset();
+      game.updateDifficulty(5);
       game.scene = Scenes.battle;
     case Scenes.battle:
-      Battle(game, input, entities, ctx);
+      Battle(game, ctx);
       break;
 
-    case Scenes.gameOver:
+    // ------------------> GAMEOVER
+    case Scenes.gameOver: // INIT
       saveHighscore(game.score);
       setPage(View.Gameover);
       game.scene = Scenes.gameOverMain;
     case Scenes.gameOverMain:
-      Gameover(game, input, entities, ctx);
+      Gameover(game, ctx);
       break;
   }
 

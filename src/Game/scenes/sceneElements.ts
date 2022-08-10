@@ -1,4 +1,4 @@
-import { Player } from "../entities/player";
+import { player } from "../entities/player";
 import { GameAttributes } from "../gameAttributes";
 import { Input } from "../input";
 
@@ -6,7 +6,6 @@ const borderWidth = 3;
 
 export function drawHUD(
   game: GameAttributes,
-  player: Player,
   ctx: CanvasRenderingContext2D
 ) {
   // Health
@@ -43,7 +42,7 @@ export function drawHUD(
     ctx.fillRect(
       (ctx.canvas.width * 3) / 4 + 5 + borderWidth,
       40 + borderWidth,
-      (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) -
+      (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) + 5 -
         borderWidth * 2,
       20 - borderWidth * 2
     );

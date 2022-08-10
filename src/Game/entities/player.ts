@@ -1,7 +1,7 @@
-import { Enemy } from "./enemy";
-import { Input } from "../input";
 import { State, Action, Entity } from "./entity";
-import { DamagePointController } from "./damagePoints";
+import { input, Input } from "../input";
+import { damagePoints } from "./damagePoints";
+import { enemies } from "./enemy";
 
 // Clamp number between two values with the following line:
 const clamp = (num: number, min: number, max: number) =>
@@ -12,6 +12,12 @@ const colorNorm = "#ffd6cc";
 const colorCool = "#adedff";
 const colorDamage = "#ff6d6d";
 
+export interface PlayerAttributes {
+  maxSpeed: number;
+  maxCool: number;
+  maxPower: number;
+  maxHealth: number;
+}
 
 export class Player extends Entity {
   private maxSpeed: number;
@@ -102,15 +108,15 @@ export class Player extends Entity {
     //Draws Mouth
     // SMILE
     ctx.beginPath();
-    const frownDelta = this.frownCount / frownCountMax * 10;
-    ctx.moveTo(x + this.w / 8, y + this.h * 2/3 + frownDelta);
+    const frownDelta = (this.frownCount / frownCountMax) * 10;
+    ctx.moveTo(x + this.w / 8, y + (this.h * 2) / 3 + frownDelta);
     ctx.bezierCurveTo(
       x + this.h / 8,
-      y + this.h - frownDelta*2,
+      y + this.h - frownDelta * 2,
       x + this.w - this.h / 8 + this.xvel,
-      y + this.h - frownDelta*2,
+      y + this.h - frownDelta * 2,
       x + this.w - this.h / 8,
-      y + this.h * 2/3 + frownDelta
+      y + (this.h * 2) / 3 + frownDelta
     );
     // FROWN
     ctx.stroke();
@@ -124,18 +130,12 @@ export class Player extends Entity {
     }
   }
 
-  public controller(
-    w: number,
-    h: number,
-    keys: Input["keyState"],
-    enemies: Array<Enemy>,
-    damagePoints: DamagePointController
-  ) {
+  public controller(w: number, h: number) {
     if (this.state == State.Dead) {
       return;
     }
 
-    this.actionController(w, h, keys, enemies);
+    this.actionController(w, h, input.keyState);
 
     // Update Position
     this.x += this.xvel;
@@ -146,13 +146,13 @@ export class Player extends Entity {
       if (this.cool > 0) {
         --this.cool;
         this.color = colorCool;
-        if (this.frownCount < frownCountMax * 0.65)this.frownCount++;
+        if (this.frownCount < frownCountMax * 0.65) this.frownCount++;
       } else {
         this.color = colorNorm;
       }
     }
 
-    this.healthController(enemies, damagePoints);
+    this.healthController();
 
     // Check for death
     if (this.health <= 0) {
@@ -160,12 +160,7 @@ export class Player extends Entity {
     }
   }
 
-  private actionController(
-    w: number,
-    h: number,
-    keys: Input["keyState"],
-    enemies: Array<Enemy>
-  ) {
+  private actionController(w: number, h: number, keys: Input["keyState"]) {
     if (this.cool <= 0) {
       this.cool = 0;
       if (keys.attack) {
@@ -179,7 +174,7 @@ export class Player extends Entity {
     switch (this.action) {
       case Action.Attack:
         this.color = "#adedff";
-        this.attack(w, h, 8, enemies);
+        this.attack(w, h, 8);
         return; // exit control loop
 
       case Action.Normal:
@@ -189,17 +184,18 @@ export class Player extends Entity {
       case Action.Push:
         this.move(w, h, keys);
         this.color = "#adedff";
-        this.pushField(600, enemies);
+        this.pushField(600);
         break;
     }
   }
 
-  private healthController(
-    enemies: Array<Enemy>,
-    damagePoints: DamagePointController
-  ) {
+  private healthController() {
+    if (this.action == Action.Attack) {
+      return;
+    }
+
     let damage = false;
-    enemies.forEach((enemy) => {
+    enemies.instances.forEach((enemy) => {
       if (this.collides(enemy) && enemy.state == State.Normal) {
         damage = true;
         return;
@@ -263,12 +259,7 @@ export class Player extends Entity {
     }
   }
 
-  private attack(
-    w: number,
-    h: number,
-    duration: number,
-    enemies: Array<Enemy>
-  ) {
+  private attack(w: number, h: number, duration: number) {
     ++this.timer;
     this.cool += this.maxCool / duration;
 
@@ -278,7 +269,7 @@ export class Player extends Entity {
     this.y += this.ydir * yspeed;
 
     // Collision test
-    enemies.forEach((enemy) => {
+    enemies.instances.forEach((enemy) => {
       if (
         this.collides(enemy) &&
         enemy.state != State.Dying &&
@@ -299,12 +290,12 @@ export class Player extends Entity {
     }
   }
 
-  private pushField(duration: number, enemies: Array<Enemy>) {
+  private pushField(duration: number) {
     ++this.timer;
     this.power -= this.maxPower / duration;
     this.cool += this.maxCool / duration;
 
-    enemies.forEach((enemy) => {
+    enemies.instances.forEach((enemy) => {
       if (enemy.state != State.Dying && enemy.state != State.Dead) {
         this.pushR = Math.min(this.timer / (duration / 4), 1) * this.pushRadius;
 
@@ -375,15 +366,20 @@ export class Player extends Entity {
     this.frownCount = frownCountMax * 0.6;
   }
 
-  public updateAttributes(attributes: any) {
-    this.maxSpeed = attributes.speed;
-    this.accel = attributes.accel;
-
-    this.maxCool = attributes.cool;
-    this.maxHealth = attributes.health;
-    this.health = attributes.maxHealth;
-
+  public updateAttributes(attributes: PlayerAttributes) {
+    this.maxSpeed = attributes.maxSpeed;
+    this.maxCool = attributes.maxCool;
+    this.maxHealth = attributes.maxHealth;
     this.health = this.maxHealth;
+  }
+
+  public getAttributes(): PlayerAttributes {
+    return {
+      maxSpeed: this.maxSpeed,
+      maxCool: this.maxCool,
+      maxHealth: this.maxHealth,
+      maxPower: this.maxPower,
+    };
   }
 
   public updatePower() {
@@ -394,3 +390,5 @@ export class Player extends Entity {
     }
   }
 }
+
+export const player = new Player(250, 250, 250, 250);

@@ -4,6 +4,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { auth, db } from "./apis/firebase";
 import Canvas from "./components/Canvas";
 import Navbar from "./components/Navbar";
+import { player, PlayerAttributes } from "./Game/entities/player";
 import { GameAttributes } from "./Game/gameAttributes";
 import { Main } from "./Game/main";
 import { Scenes } from "./Game/scenes/scenes";

@@ -1,9 +1,11 @@
 import { getAuth } from "firebase/auth";
+import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { app } from "../../apis/firebase";
 import Login from "../../components/Login";
 import PlayerStat from "../../components/PlayerStat";
 import Scoreboard from "../../components/Scoreboard";
+import { player, PlayerAttributes } from "../../Game/entities/player";
 import "./index.scss";
 
 interface Props {
@@ -12,6 +14,8 @@ interface Props {
 
 const Shop: React.FC<Props> = (props: Props) => {
   const { navHome } = props;
+  const [playerStats, setPlayerStats] = useState<PlayerAttributes>(player.getAttributes())
+  const {maxHealth, maxCool, maxSpeed, maxPower} = playerStats;
 
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
@@ -21,7 +25,6 @@ const Shop: React.FC<Props> = (props: Props) => {
     displayName = user.displayName;
   }
 
-
   return (
     <div className="shop">
       <div className="shop__left">
@@ -30,10 +33,10 @@ const Shop: React.FC<Props> = (props: Props) => {
       <div className="shop__right">
         <h2>{displayName}</h2>
         <div className="stats">
-          <PlayerStat name={"Speed"} value={5} cost={15}/>
-          <PlayerStat name={"Health"} value={50} cost={5}/>
-          <PlayerStat name={"Power"} value={15} cost={10}/>
-          <PlayerStat name={"Cool"} value={20} cost={20}/>
+          <PlayerStat name={"Speed"} value={maxSpeed} cost={15}/>
+          <PlayerStat name={"Health"} value={maxHealth} cost={5}/>
+          <PlayerStat name={"Power"} value={maxPower} cost={10}/>
+          <PlayerStat name={"Cool"} value={maxCool} cost={20}/>
         </div>
         <div className="powerups"></div>
       </div>

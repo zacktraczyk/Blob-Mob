@@ -1,27 +1,26 @@
-import { Entities } from "../entities/entities";
 import { GameAttributes } from "../gameAttributes";
-import { Input } from "../input";
+import { input } from "../input";
 import { drawHUD } from "./sceneElements";
 import { State } from "../entities/entity";
+import { player } from "../entities/player";
+import { enemies } from "../entities/enemy";
+import { damagePoints } from "../entities/damagePoints";
 
 let spawnCool = 0;
 
-export function Shop(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
-  const {player, enemies} = entities;
-
-  draw(game, entities, ctx);
-  update(game, input, entities, ctx);
+export function Shop(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+  draw(game, ctx);
+  update(game, ctx);
 
   if (player.state == State.Dead) {
-    game.reset(entities);
+    game.reset();
   }
 }
 
-function update(game: GameAttributes, input: Input, entities: Entities, ctx: CanvasRenderingContext2D) {
-  const { player, enemies, damagePoints } = entities;
+function update(game: GameAttributes, ctx: CanvasRenderingContext2D) {
 
   // Confine to half of screen
-  player.controller(ctx.canvas.width / 2, ctx.canvas.height, input.keyState, enemies.instances, damagePoints);
+  player.controller(ctx.canvas.width / 2, ctx.canvas.height);
   // if (player.cool <= 0) {
   //   player.power = player.maxPower; // So Player can test powerups
   // }
@@ -39,13 +38,12 @@ function update(game: GameAttributes, input: Input, entities: Entities, ctx: Can
   }
 }
 
-function draw(game: GameAttributes, entities: Entities, ctx: CanvasRenderingContext2D) {
-  const { player, enemies, damagePoints } = entities;
+function draw(game: GameAttributes, ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   player.draw(ctx);
   enemies.draw(ctx);
   damagePoints.draw(ctx);
 
-  drawHUD(game, player, ctx);
+  drawHUD(game, ctx);
 }
