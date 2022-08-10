@@ -20,8 +20,8 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    // justify-content: center;
-    gap: 10px;
+    // justify-content: space-evenly;
+    // gap: 2em;
 
     width: min(30vw, 500px);
     height: 500px;
@@ -37,7 +37,9 @@
     .stats {
       display: flex;
       flex-direction: column;
-      gap: 1em;
+      justify-content: space-evenly;
+      height: 100%;
+      // gap: 1em;
     }
 
   }
