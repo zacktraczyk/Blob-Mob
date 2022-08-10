@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn && yarn run build && ./.github/workflows/deploy.sh
+      - run: yarn && yarn run build && sh .github/workflows/deploy.sh
