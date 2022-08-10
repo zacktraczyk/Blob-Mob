@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { app, signInGoogle, signInFacebook, signOut } from "../../apis/firebase";
+import { signInGoogle, signInFacebook, signOut, auth } from "../../apis/firebase";
 
 import "./index.scss";
 
@@ -14,7 +12,6 @@ interface Props {
 const Login: React.FC<Props> = (props: Props) => {
   const { navPlay, navTutorial } = props;
 
-  const auth = getAuth(app);
   const [user] = useAuthState(auth);
 
   return (

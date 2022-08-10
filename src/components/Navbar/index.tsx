@@ -1,8 +1,6 @@
-import { getAuth } from "firebase/auth";
-import { LayoutGroupContext } from "framer-motion";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { app, signOut } from "../../apis/firebase";
+import { auth, signOut } from "../../apis/firebase";
 import "./index.scss";
 
 interface Props {
@@ -13,7 +11,6 @@ interface Props {
 const Navbar: React.FC<Props> = (props: Props) => {
   const { navHome, coins } = props;
 
-  const auth = getAuth(app);
   const [user] = useAuthState(auth);
 
   return (
