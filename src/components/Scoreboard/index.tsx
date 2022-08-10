@@ -8,10 +8,6 @@ const Scoreboard: React.FC = () => {
   const highscoresRef = collection(db, "highscores");
   const q = query(highscoresRef, orderBy("score", "desc"), limit(10));
 
-  const getScoreClass = (uid: string) => {
-    return auth?.currentUser?.uid === `${uid}` ? "featured" : "norm";
-  };
-
   const [highscores, loading, error] = useCollectionData(q);
 
   if (loading) {
@@ -43,6 +39,10 @@ const Scoreboard: React.FC = () => {
       </ul>
     </div>
   );
+};
+
+const getScoreClass = (uid: string) => {
+  return auth?.currentUser?.uid === `${uid}` ? "featured" : "norm";
 };
 
 export default Scoreboard;

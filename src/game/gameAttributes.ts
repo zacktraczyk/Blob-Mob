@@ -79,14 +79,16 @@ export class GameAttributes {
     }
 
     public updateDifficulty(player: Player, enemies: EnemyController, d: number) {
-        if (!difficultyTable.hasOwnProperty(d)) return;
+        // if (!difficultyTable.hasOwnProperty(d)) return;
 
         this.difficulty = d;
 
-        const pVals = difficultyTable[this.difficulty].player
+        // const pVals = difficultyTable[this.difficulty].player
+        const pVals = difficultyTable[5].player
         player.updateAttributes(pVals);
 
-        const eVals = difficultyTable[this.difficulty].enemy
+        // const eVals = difficultyTable?[this.difficulty].enemy
+        const eVals = difficultyTable[5].enemy
         enemies.updateAttributes(eVals);
     }
 
