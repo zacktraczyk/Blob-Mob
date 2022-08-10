@@ -23,7 +23,7 @@ const Login: React.FC<Props> = (props: Props) => {
 
       <div className="login__buttons">
         <button className="play-button" onClick={() => navPlay()}>
-          Play
+          {user ? ("Play") : ("Play as Guest")}
         </button>
         <div className="login__buttons-auth">
           {user ? (
@@ -34,8 +34,12 @@ const Login: React.FC<Props> = (props: Props) => {
             <>
               <button className="google-button" onClick={() => signInGoogle()}>
                 Google
+                <i className="fa-brands fa-google"></i>
               </button>
-              <button className="facebook-button">Facebook</button>
+              <button className="facebook-button">
+                Facebook
+                <i className="fa-brands fa-square-facebook"></i>
+              </button>
             </>
           )}
         </div>

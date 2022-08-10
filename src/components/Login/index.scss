@@ -43,12 +43,22 @@
         width: 100%;
         background-color: $color-google;
         height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 1ch;
       }
 
       .facebook-button {
         width: 100%;
         background-color: $color-facebook;
         height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 1ch;
       }
     }
   }
