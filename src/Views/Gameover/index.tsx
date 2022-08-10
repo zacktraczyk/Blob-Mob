@@ -20,13 +20,13 @@ const Gameover: React.FC<Props> = (props: Props) => {
           <p>{blobsKilled}</p>
         </li>
         <li>
-          <p>Highscore is still</p>
+          <p>Highscore</p>
           <p>{game.highscore}</p>
         </li>
-        <li>
+        {/* <li>
           <p>Coins Aquired</p>
           <p>{coins}</p>
-        </li>
+        </li> */}
       </ul>
       <div className="gameover__buttons">
         <button className="play-button" onClick={() => navPlay()}>Play Again</button>
