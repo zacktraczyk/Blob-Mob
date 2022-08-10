@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "blob-mob"
-  }
+  },
+  "targets": {
+    "blob-mob-cfe57": {
+      "hosting": {
+        "app": [
+          "blob-mob"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
