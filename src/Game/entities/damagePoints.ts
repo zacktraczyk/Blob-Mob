@@ -50,10 +50,15 @@ class DamagePoint extends Entity {
   constructor(player: Entity) {
     super(player.x, player.y, 0, 0);
 
+    this.life = 100;
+
+    this.spawn(player);
+  }
+
+  private spawn(player: Entity) {
     let w = player.w;
     let h = player.h;
 
-    // Spawn
     let rand = Math.random();
     if (rand < 0.5) {
       // side
@@ -66,7 +71,6 @@ class DamagePoint extends Entity {
       rand = Math.random();
       this.y += rand < 0.5 ? -h / 2 - 1 : h / 2 + 1;
     }
-    this.life = 100;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {

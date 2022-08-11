@@ -10,6 +10,7 @@ import { input } from "./input";
 
 import { View } from "../Views";
 import { saveHighscore } from "../apis/firebase";
+import { coins } from "./entities/coin";
 
 export const Main = (
   game: GameAttributes,
@@ -22,7 +23,7 @@ export const Main = (
   switch (game.scene) {
     // ------------------> MENU
     case Scenes.menu:
-      Menu(game, ctx);
+      Menu(ctx);
       break;
 
     // ------------------> SHOP
@@ -30,7 +31,7 @@ export const Main = (
       game.reset();
       game.scene = Scenes.shopMain;
     case Scenes.shopMain:
-      Shop(game, ctx);
+      Shop(ctx);
       break;
 
     // ------------------> TUTORIAL
@@ -39,16 +40,15 @@ export const Main = (
       tutorialRules.reset();
       game.scene = Scenes.tutorialMain;
     case Scenes.tutorialMain:
-      Tutorial(game, ctx);
+      Tutorial(ctx);
       break;
 
     // ------------------> PLAY
     case Scenes.play: // INIT
       game.reset();
-      game.updateDifficulty(5);
       game.scene = Scenes.battle;
     case Scenes.battle:
-      Battle(game, ctx);
+      Battle(ctx);
       break;
 
     // ------------------> GAMEOVER
@@ -57,7 +57,7 @@ export const Main = (
       setPage(View.Gameover);
       game.scene = Scenes.gameOverMain;
     case Scenes.gameOverMain:
-      Gameover(game, ctx);
+      Gameover(ctx);
       break;
   }
 

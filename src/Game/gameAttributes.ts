@@ -1,18 +1,22 @@
 import { Scenes } from "./scenes/scenes";
-import { difficultyTable } from "./difficulty";
 import { player } from "./entities/player";
 import { damagePoints } from "./entities/damagePoints";
 import { enemies } from "./entities/enemy";
+import { coins } from "./entities/coin";
+import { input } from "./input";
 
 export class GameAttributes {
   public frame: number;
   public paused: boolean;
 
-  public score: number;
+  private scoreVal: number;
+  public setScore: React.Dispatch<React.SetStateAction<number>> | undefined;
+  public highscore: number;
   public difficulty: number;
 
   public tutorial: boolean;
-  public highscore: number;
+  private coinVal: number;
+  public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined;
 
   private pauseKeyRelease: boolean;
 
@@ -26,8 +30,9 @@ export class GameAttributes {
 
     this.tutorial = false;
 
-    this.score = 0;
+    this.scoreVal = 0;
     this.highscore = 0;
+    this.coinVal = 0;
 
     this.frame = 0;
     this.paused = false;
@@ -52,44 +57,77 @@ export class GameAttributes {
     return true;
   }
 
+  public set score(val: number) {
+    this.scoreVal = val;
+    this.syncReactScore();
+  }
+
+  public set coins(val: number) {
+    this.coinVal = val;
+    this.syncReactCoins();
+  }
+
+  public get coins() {
+    return this.coinVal;
+  }
+
+  public get score() {
+    return this.scoreVal;
+  }
+
+  public syncReactCoins() {
+    if (!this.setCoins) {
+      console.error(
+        "gameAttributes: syncReactCoins: setCoins hook not passed to GameAttributes Object"
+      );
+      return;
+    }
+
+    this.setCoins(this.coins);
+  }
+
+  public syncReactScore() {
+    if (!this.setScore) {
+      console.error(
+        "gameAttributes: syncReactScore: setScore hook not passed to GameAttributes Object"
+      );
+      return;
+    }
+
+    this.setScore(this.score);
+  }
+
   public gameOver() {
     this.scene = Scenes.gameOver;
   }
 
   public pause() {
-    // effects.play('btn')
-    // if (player && this.pauseKeyRelease) {
-    //     this.pauseKeyRelease = false;
-    //     this.paused = !this.paused;
-    // } else if (!player && !this.pauseKeyRelease) {
-    //     this.pauseKeyRelease = true;
-    // }
+    if (this.scene != Scenes.battle) {
+      return;
+    }
+
+    if (input.keyState.pause) {
+      if (this.pauseKeyRelease) {
+        this.paused = !this.paused;
+      }
+      this.pauseKeyRelease = false;
+    } else {
+      this.pauseKeyRelease = true;
+    }
   }
 
   public reset() {
     player.reset();
     enemies.reset();
     damagePoints.reset();
+    coins.reset();
 
+    this.paused = false;
     this.score = 0;
     this.frame = 0;
   }
 
-  public updateDifficulty(d: number) {
-    // if (!difficultyTable.hasOwnProperty(d)) return;
-
-    this.difficulty = d;
-
-    // const pVals = difficultyTable[this.difficulty].player
-    // const pVals = difficultyTable[5].player
-    // player.updateAttributes(pVals);
-
-    // const eVals = difficultyTable?[this.difficulty].enemy
-    const eVals = difficultyTable[5].enemy;
-    enemies.updateAttributes(eVals);
-  }
-
-  // public debug(player: Player, enemyController: EnemyController, ctx: CanvasRenderingContext2D) {
+  // public debug(ctx: CanvasRenderingContext2D) {
   //     ctx.font = '20px Arial Bold';
   //     ctx.fillStyle = 'black';
 

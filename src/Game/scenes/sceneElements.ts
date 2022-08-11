@@ -1,11 +1,8 @@
 import { player } from "../entities/player";
-import { GameAttributes } from "../gameAttributes";
-import { Input } from "../input";
 
 const borderWidth = 3;
 
 export function drawHUD(
-  game: GameAttributes,
   ctx: CanvasRenderingContext2D
 ) {
   // Health
@@ -67,12 +64,12 @@ export function drawHUD(
   // ctx.fillText(text, ctx.canvas.width - ctx.measureText(text).width - 20, ctx.canvas.height - 25);
 
   // Score
-  ctx.fillStyle = "black";
-  ctx.font = "30px futura";
-  let text = `Score ${game.score}`;
-  ctx.fillText(text, 20, 30);
-  text = `Highscore ${game.highscore}`;
-  ctx.fillText(text, 20, 60);
+  // ctx.fillStyle = "black";
+  // ctx.font = "30px futura";
+  // let text = `Score ${game.score}`;
+  // ctx.fillText(text, 20, 30);
+  // text = `Highscore ${game.highscore}`;
+  // ctx.fillText(text, 20, 60);
 }
 
 export function drawPauseMenu(ctx: CanvasRenderingContext2D) {

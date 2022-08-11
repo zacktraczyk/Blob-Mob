@@ -3,6 +3,7 @@ import { Action } from "./entities/entity";
 import { enemies } from "./entities/enemy";
 import { input } from "./input";
 import { player } from "./entities/player";
+import { game } from "../App";
 
 export enum Stage {
   move,
@@ -29,7 +30,7 @@ class TurtorialRules {
     this.controlCheck = [0, 0, 0, 0];
   }
 
-  debug(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+  debug(ctx: CanvasRenderingContext2D) {
     ctx.font = "20px Arial Bold";
     ctx.strokeStyle = "black";
 
@@ -54,7 +55,7 @@ class TurtorialRules {
     }
   }
 
-  controller(game: GameAttributes, w: number, h: number) {
+  controller(w: number, h: number) {
     ++this.timer;
     const keys = input.keyState;
 

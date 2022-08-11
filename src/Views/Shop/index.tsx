@@ -14,16 +14,46 @@ interface Props {
 
 const Shop: React.FC<Props> = (props: Props) => {
   const { navHome } = props;
-  const [playerStats, setPlayerStats] = useState<PlayerAttributes>(player.getAttributes())
-  const {maxHealth, maxCool, maxSpeed, maxPower} = playerStats;
+  const [playerStats, setPlayerStats] = useState<PlayerAttributes>(
+    player.getAttributes()
+  );
+  const { maxHealth, maxCool, maxSpeed, maxPower } = playerStats;
 
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
 
-  let displayName = "Gerald"
+  let displayName = "Gerald";
   if (user && user.displayName) {
     displayName = user.displayName;
   }
+
+  const updateSpeed = (val: number) => {
+    if (!val) return;
+
+    player.increaseAttrSpeed(val);
+    setPlayerStats(player.getAttributes());
+  };
+
+  const updateHealth = (val: number) => {
+    if (!val) return;
+
+    player.increaseAttrHealth(val);
+    setPlayerStats(player.getAttributes());
+  };
+
+  const updatePower = (val: number) => {
+    if (!val) return;
+
+    player.increaseAttrPower(val);
+    setPlayerStats(player.getAttributes());
+  };
+
+  const updateCool = (val: number) => {
+    if (!val) return;
+
+    player.increaseAttrCool(val);
+    setPlayerStats(player.getAttributes());
+  };
 
   return (
     <div className="shop">
@@ -33,10 +63,34 @@ const Shop: React.FC<Props> = (props: Props) => {
       <div className="shop__right">
         <h2>{displayName}</h2>
         <div className="stats">
-          <PlayerStat name={"Speed"} value={maxSpeed} cost={15}/>
-          <PlayerStat name={"Health"} value={maxHealth} cost={5}/>
-          <PlayerStat name={"Power"} value={maxPower} cost={10}/>
-          <PlayerStat name={"Cool"} value={maxCool} cost={20}/>
+          <PlayerStat
+            arrowUp={true}
+            name={"Speed"}
+            value={maxSpeed}
+            updateValue={() => updateSpeed(1)}
+            cost={15}
+          />
+          <PlayerStat
+            arrowUp={true}
+            name={"Health"}
+            value={maxHealth}
+            updateValue={() => updateHealth(20)}
+            cost={5}
+          />
+          <PlayerStat
+            arrowUp={true}
+            name={"Power"}
+            value={maxPower}
+            cost={10}
+            updateValue={() => updatePower(10)}
+          />
+          <PlayerStat
+            arrowUp={false}
+            name={"Cool"}
+            value={maxCool}
+            cost={20}
+            updateValue={() => updateCool(-10)}
+          />
         </div>
         <div className="powerups"></div>
       </div>

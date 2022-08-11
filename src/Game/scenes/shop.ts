@@ -5,45 +5,53 @@ import { State } from "../entities/entity";
 import { player } from "../entities/player";
 import { enemies } from "../entities/enemy";
 import { damagePoints } from "../entities/damagePoints";
+import { game } from "../../App";
 
-let spawnCool = 0;
+let playerDeathCool = 200;
 
-export function Shop(game: GameAttributes, ctx: CanvasRenderingContext2D) {
-  draw(game, ctx);
-  update(game, ctx);
+export function Shop(ctx: CanvasRenderingContext2D) {
+  draw(ctx);
+  update(ctx);
 
+  // Pause before reset
   if (player.state == State.Dead) {
-    game.reset();
+    if (playerDeathCool < 0) {
+      playerDeathCool = 200;
+      game.reset();
+    } else {
+      playerDeathCool--;
+    }
   }
 }
 
-function update(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+let spawnEnemyRelease = true;
+
+function update(ctx: CanvasRenderingContext2D) {
 
   // Confine to half of screen
   player.controller(ctx.canvas.width / 2, ctx.canvas.height);
   // if (player.cool <= 0) {
   //   player.power = player.maxPower; // So Player can test powerups
   // }
-  enemies.controller(game);
+  enemies.controller();
   damagePoints.controller();
 
-  // Spawn when button pressed
-  if (spawnCool > 0) {
-    spawnCool--;
-  }
-
-  if (input.keyState.enemySpawn && spawnCool <= 0) {
-    spawnCool = 50;
-    enemies.spawn(ctx.canvas.width, ctx.canvas.height, player) ;
+  if (input.keyState.enemySpawn) {
+    if (spawnEnemyRelease) {
+      enemies.spawn(ctx.canvas.width, ctx.canvas.height, player) ;
+    }
+    spawnEnemyRelease = false;
+  } else {
+    spawnEnemyRelease = true;
   }
 }
 
-function draw(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+function draw(ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   player.draw(ctx);
   enemies.draw(ctx);
   damagePoints.draw(ctx);
 
-  drawHUD(game, ctx);
+  drawHUD(ctx);
 }

@@ -1,4 +1,7 @@
+import { game } from "../../App";
 import { GameAttributes } from "../gameAttributes";
+import { Scenes } from "../scenes/scenes";
+import { coins } from "./coin";
 import { State, Entity } from "./entity";
 import { Player } from "./player";
 
@@ -6,10 +9,10 @@ class EnemyController {
   public instances: Array<Enemy>;
 
   private cool: number;
-  private speed: number;
+  public speed: number;
 
-  private maxInst: number;
-  private spawnWait: number;
+  public maxInst: number;
+  public spawnWait: number;
 
   constructor() {
     this.instances = new Array();
@@ -17,19 +20,19 @@ class EnemyController {
     this.speed = 1;
 
     this.maxInst = 10;
-    this.spawnWait = 300;
+    this.spawnWait = 1;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
     this.instances.forEach((e) => e.draw(ctx));
   }
 
-  public controller(game: GameAttributes) {
+  public controller() {
     for (let i = 0; i < this.instances.length; i++) {
       if (this.instances[i].state == State.Dead) {
         this.instances.splice(i, 1);
       } else {
-        this.instances[i].controller(game);
+        this.instances[i].controller();
       }
     }
   }
@@ -67,6 +70,7 @@ export class Enemy extends Entity {
   private ydir: number;
 
   private target: Player | null;
+  private triedCoinSpawn: boolean;
 
   private distance: number;
   private pushMagnitude: number;
@@ -82,6 +86,7 @@ export class Enemy extends Entity {
     this.ydir = 0;
 
     this.target = null;
+    this.triedCoinSpawn = false;
 
     this.distance = 0;
     this.pushMagnitude = 17;
@@ -117,8 +122,10 @@ export class Enemy extends Entity {
     let y = this.y - this.h / 2; // draw corner
 
     // ctx.lineWidth = 1;
-    let rand = Math.round(Math.random() * 2);
-    this.color = this.rcolors[rand];
+    if(game.frame % 3 == 0) {
+      let rand = Math.round(Math.random() * 2);
+      this.color = this.rcolors[rand];
+    }
     ctx.fillStyle = this.color;
     if (this.target != null && this.state == State.Normal) {
       this.w = this.target.w / 2 - 10;
@@ -213,14 +220,14 @@ export class Enemy extends Entity {
     // ctx.strokeRect(this.x - this.w/2, this.y - this.w/2, this.w, this.h)
   }
 
-  public controller(game: GameAttributes) {
+  public controller() {
     switch (this.state) {
       case State.Normal:
         this.move();
         break;
 
       case State.Dying:
-        this.death(game, this.target);
+        this.death(this.target);
         break;
     }
   }
@@ -254,7 +261,7 @@ export class Enemy extends Entity {
     this.x += this.xdir * this.speed;
     this.y += this.ydir * this.speed;
 
-    this.wiggle();
+    if (game.frame % 3 == 0) this.wiggle();
   }
 
   private wiggle() {
@@ -265,10 +272,19 @@ export class Enemy extends Entity {
     this.y = this.y + rand * 2;
   }
 
-  private death(game: GameAttributes, player: Player | null) {
+  private death(player: Player | null) {
     // Shrink
     this.w = Math.max(0, this.w - 2);
     this.h = Math.max(0, this.h - 3.9);
+
+    // 80% change of spawning a coin
+    if (
+      (game.scene == Scenes.battle,
+      !this.triedCoinSpawn && Math.random() <= 0.8)
+    ) {
+      coins.spawn(this.x, this.y);
+    }
+    this.triedCoinSpawn = true;
 
     if (this.w == 0 || this.h == 0) {
       // effects.stop(ah);
@@ -276,7 +292,9 @@ export class Enemy extends Entity {
       if (player != null) {
         player.updatePower();
       }
-      game.score++;
+      if (game.scene == Scenes.battle) {
+        game.score++;
+      }
       this.state = State.Dead;
     }
   }

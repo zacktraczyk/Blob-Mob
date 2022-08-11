@@ -1,19 +1,21 @@
+import { game } from "../../App";
 import { State } from "../entities/entity";
-import { GameAttributes } from "../gameAttributes";
-import { Input } from "../input";
+import { difficultyScalar } from "../difficulty";
+import { input } from "../input";
 import { player } from "../entities/player";
 import { damagePoints } from "../entities/damagePoints";
 import { enemies } from "../entities/enemy";
+import { coins } from "../entities/coin";
 import { drawHUD, drawPauseMenu } from "./sceneElements";
 
 let transTimer = 0; // after death change scene timer
 let duration = 100;
 
-export function Battle(game: GameAttributes, ctx: CanvasRenderingContext2D) {
-  if (!game.paused) update(game, ctx);
+export function Battle(ctx: CanvasRenderingContext2D) {
+  if (!game.paused) update(ctx);
   game.pause();
 
-  draw(game, ctx);
+  draw(ctx);
 
   // Pause after death before transition
   if (player.state == State.Dead) {
@@ -25,27 +27,28 @@ export function Battle(game: GameAttributes, ctx: CanvasRenderingContext2D) {
   }
 }
 
-function update(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+function update(ctx: CanvasRenderingContext2D) {
   if (player.state != State.Dead) {
     enemies.spawner(ctx.canvas.width, ctx.canvas.height, player);
   }
 
-  player.controller(ctx.canvas.width, ctx.canvas.height);
+  difficultyScalar.controller();
 
-  enemies.controller(game);
+  coins.controller(game, ctx.canvas.width, ctx.canvas.height);
+  player.controller(ctx.canvas.width, ctx.canvas.height);
   damagePoints.controller();
+  enemies.controller();
 }
 
-function draw(game: GameAttributes, ctx: CanvasRenderingContext2D) {
+function draw(ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+  coins.draw(ctx);
   player.draw(ctx);
-  enemies.draw(ctx);
   damagePoints.draw(ctx);
+  enemies.draw(ctx);
 
-  drawHUD(game, ctx);
-
-  // game.debug(player, enemies, ctx);
+  drawHUD(ctx);
 
   if (game.paused) drawPauseMenu(ctx);
 }

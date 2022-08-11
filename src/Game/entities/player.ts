@@ -2,6 +2,8 @@ import { State, Action, Entity } from "./entity";
 import { input, Input } from "../input";
 import { damagePoints } from "./damagePoints";
 import { enemies } from "./enemy";
+import { coins } from "./coin";
+import { game } from "../../App";
 
 // Clamp number between two values with the following line:
 const clamp = (num: number, min: number, max: number) =>
@@ -46,7 +48,7 @@ export class Player extends Entity {
     this.color = colorNorm;
     this.state = State.Normal;
 
-    this.maxSpeed = 7;
+    this.maxSpeed = 4;
     this.accel = 0.4;
     this.xdir = 1;
     this.ydir = 0;
@@ -55,11 +57,11 @@ export class Player extends Entity {
 
     this.action = Action.Normal;
 
-    this.maxCool = 50;
+    this.maxCool = 150;
     this.cool = 0;
     this.maxPower = 50;
     this.power = 0;
-    this.maxHealth = 500;
+    this.maxHealth = 50;
     this.health = this.maxHealth;
     this.frownCount = 0;
 
@@ -154,6 +156,15 @@ export class Player extends Entity {
 
     this.healthController();
 
+    // Check Coin Collisions
+    if (coins) {
+      coins.instances.forEach((coin) => {
+        if (this.collides(coin) && coin.state == State.Normal) {
+          coin.state = State.Dying;
+        }
+      });
+    }
+
     // Check for death
     if (this.health <= 0) {
       this.state = State.Dead;
@@ -247,7 +258,7 @@ export class Player extends Entity {
     this.yvel = clamp(this.yvel, -this.maxSpeed, this.maxSpeed);
     this.calculateDir(); // Needed for Attack
 
-    this.wiggle(50, 69);
+    if (game.frame % 10 == 0) this.wiggle(50, 69);
     this.keepOnScreen(w, h);
   }
 
@@ -269,15 +280,17 @@ export class Player extends Entity {
     this.y += this.ydir * yspeed;
 
     // Collision test
-    enemies.instances.forEach((enemy) => {
-      if (
-        this.collides(enemy) &&
-        enemy.state != State.Dying &&
-        enemy.state != State.Dead
-      ) {
-        enemy.state = State.Dying;
-      }
-    });
+    if (enemies) {
+      enemies.instances.forEach((enemy) => {
+        if (
+          this.collides(enemy) &&
+          enemy.state != State.Dying &&
+          enemy.state != State.Dead
+        ) {
+          enemy.state = State.Dying;
+        }
+      });
+    }
 
     this.keepOnScreen(w, h);
 
@@ -382,12 +395,33 @@ export class Player extends Entity {
     };
   }
 
+  public increaseAttrSpeed(val: number) {
+    this.maxSpeed += val;
+  }
+
+  public increaseAttrHealth(val: number) {
+    this.maxHealth += val;
+  }
+
+  public increaseAttrPower(val: number) {
+    this.maxPower += val;
+  }
+
+  public increaseAttrCool(val: number) {
+    this.maxCool += val;
+    if (this.maxCool <= 30) this.maxCool = 30;
+  }
+
   public updatePower() {
     if (this.power < this.maxPower) {
       this.power++;
     } else {
       this.power = this.maxPower;
     }
+  }
+
+  public get velocity() {
+    return [this.xvel, this.yvel];
   }
 }
 

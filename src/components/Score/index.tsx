@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
+import { game } from "../../App";
 import "./index.scss";
 
-interface Props {
-  score: Number;
-  highscore: Number;
-}
-
-const Score: React.FC<Props> = (props: Props) => {
-  // const [score, setScore] = useState(props.score)
-  const [highscore, setHighscore] = useState(props.highscore)
+const Score: React.FC = () => {
+  const [score, setScore] = useState(game.score);
+  game.setScore = setScore;
+  const highscore = game.highscore;
+  // const [highscore, setHighscore] = useState(props.highscore)
 
   // useEffect(() => {
   //   setScore(props.score);
@@ -17,7 +15,7 @@ const Score: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="score">
-      <p>Score: {"" + props.score}</p>
+      <p>Score: {"" + score}</p>
       <p>highscore: {"" + highscore}</p>
     </div>
   );
