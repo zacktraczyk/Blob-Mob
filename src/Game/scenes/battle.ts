@@ -47,6 +47,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   player.draw(ctx);
   damagePoints.draw(ctx);
   enemies.draw(ctx);
+  difficultyScalar.debug(ctx);
 
   drawHUD(ctx);
 

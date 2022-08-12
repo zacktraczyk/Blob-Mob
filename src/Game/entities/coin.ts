@@ -40,14 +40,19 @@ class Coin extends Entity {
   private yvel: number;
   readonly accel: number;
 
+  public timer: number;
+
   constructor(x: number, y: number) {
     super(x, y, 30, 25);
-
     this.state = State.Spawn;
+
     this.value = 1;
+
     this.xvel = 0;
     this.yvel = 0;
     this.accel = 0.1;
+
+    this.timer = 10;
 
     // Set velocity for launch
     if (player && player.state < State.Dying) {
@@ -61,6 +66,7 @@ class Coin extends Entity {
   public draw(ctx: CanvasRenderingContext2D) {
     // Back Oval
     const offset = 5;
+    if (this.w <= 0 || this.h <= 0) return;
 
     ctx.fillStyle = "yellow";
     ctx.beginPath();
@@ -98,6 +104,7 @@ class Coin extends Entity {
   }
 
   public controller(game: GameAttributes, w: number, h: number) {
+    console.log(this.state)
     switch (this.state) {
       case State.Spawn:
         this.launch(w, h);
@@ -116,6 +123,10 @@ class Coin extends Entity {
   }
 
   private launch(w: number, h: number) {
+    if (this.timer > 0) {
+      this.timer--;
+    }
+
     if (Math.abs(this.xvel) <= this.accel) this.xvel = 0;
     else if (this.xvel > 0) this.xvel -= this.accel * 1.5;
     else if (this.xvel < 0) this.xvel += this.accel * 1.5;

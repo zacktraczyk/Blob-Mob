@@ -10,10 +10,11 @@ import "./index.scss";
 
 interface Props {
   navHome: Function;
+  navPlay: Function;
 }
 
 const Shop: React.FC<Props> = (props: Props) => {
-  const { navHome } = props;
+  const { navHome, navPlay } = props;
   const [playerStats, setPlayerStats] = useState<PlayerAttributes>(
     player.getAttributes()
   );
@@ -93,6 +94,9 @@ const Shop: React.FC<Props> = (props: Props) => {
           />
         </div>
         <div className="powerups"></div>
+        <button onClick={() => navPlay()} className="play-button">
+          Play
+        </button>
       </div>
     </div>
   );

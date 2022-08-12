@@ -14,6 +14,7 @@ const colorNorm = "#ffd6cc";
 const colorCool = "#adedff";
 const colorDamage = "#ff6d6d";
 
+// Used for shop updates
 export interface PlayerAttributes {
   maxSpeed: number;
   maxCool: number;
@@ -22,33 +23,37 @@ export interface PlayerAttributes {
 }
 
 export class Player extends Entity {
-  private maxSpeed: number;
+  private frownCount: number;
+
   private accel: number;
   private xdir: number;
   private ydir: number;
   private xvel: number;
   private yvel: number;
+  private maxSpeed: number;
 
   public action: Action;
-
-  public maxCool: number;
-  public cool: number;
-  public maxPower: number;
-  public power: number;
-  public maxHealth: number;
-  public health: number;
-  private frownCount: number;
 
   private pushRadius: number;
   private pushR: number;
   private timer: number;
 
+  // Adjustable
+  public maxCool: number;
+  public maxPower: number;
+  public maxHealth: number;
+  // ---
+
+  public cool: number;
+  public power: number;
+  public health: number;
+
   constructor(x: number, y: number, w: number, h: number) {
     super(x, y, w, h);
     this.color = colorNorm;
     this.state = State.Normal;
+    this.frownCount = 0;
 
-    this.maxSpeed = 4;
     this.accel = 0.4;
     this.xdir = 1;
     this.ydir = 0;
@@ -57,17 +62,18 @@ export class Player extends Entity {
 
     this.action = Action.Normal;
 
-    this.maxCool = 150;
-    this.cool = 0;
-    this.maxPower = 50;
-    this.power = 0;
-    this.maxHealth = 50;
-    this.health = this.maxHealth;
-    this.frownCount = 0;
-
     this.pushRadius = 240;
     this.pushR = 0;
     this.timer = 0;
+
+    this.maxSpeed = 4;
+    this.maxHealth = 50;
+    this.maxPower = 50;
+    this.maxCool = 150;
+
+    this.health = this.maxHealth;
+    this.power = 0;
+    this.cool = 0;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
@@ -132,6 +138,7 @@ export class Player extends Entity {
     }
   }
 
+  // Controllers --------------------  
   public controller(w: number, h: number) {
     if (this.state == State.Dead) {
       return;
@@ -159,7 +166,7 @@ export class Player extends Entity {
     // Check Coin Collisions
     if (coins) {
       coins.instances.forEach((coin) => {
-        if (this.collides(coin) && coin.state == State.Normal) {
+        if (this.collides(coin) && (coin.state == State.Normal || (coin.state == State.Spawn && coin.timer <= 0))) {
           coin.state = State.Dying;
         }
       });
@@ -227,14 +234,7 @@ export class Player extends Entity {
     this.frownCount = clamp(this.frownCount, 0, frownCountMax);
   }
 
-  public shrink(dx: number, dy: number, s: number) {
-    s = clamp(s / 2, 55, 60 + s / 2);
-    this.wiggle(55, s);
-
-    this.x += dx;
-    this.y += dy;
-  }
-
+  // Actions --------------------
   private move(w: number, h: number, dir: Input["keyState"]) {
     // Increase speed if keydown
     if (dir.right) this.xvel += this.accel;
@@ -260,14 +260,6 @@ export class Player extends Entity {
 
     if (game.frame % 10 == 0) this.wiggle(50, 69);
     this.keepOnScreen(w, h);
-  }
-
-  private calculateDir() {
-    let mag = Math.sqrt(this.xvel * this.xvel + this.yvel * this.yvel);
-    if (mag > 0) {
-      this.xdir = this.xvel / mag;
-      this.ydir = this.yvel / mag;
-    }
   }
 
   private attack(w: number, h: number, duration: number) {
@@ -321,6 +313,23 @@ export class Player extends Entity {
       this.power = 0;
       this.timer = 0;
       this.action = Action.Normal;
+    }
+  }
+
+  public shrink(dx: number, dy: number, s: number) {
+    s = clamp(s / 2, 55, 60 + s / 2);
+    this.wiggle(55, s);
+
+    this.x += dx;
+    this.y += dy;
+  }
+
+  // Helper Methods --------------------
+  private calculateDir() {
+    let mag = Math.sqrt(this.xvel * this.xvel + this.yvel * this.yvel);
+    if (mag > 0) {
+      this.xdir = this.xvel / mag;
+      this.ydir = this.yvel / mag;
     }
   }
 
@@ -379,13 +388,18 @@ export class Player extends Entity {
     this.frownCount = frownCountMax * 0.6;
   }
 
-  public updateAttributes(attributes: PlayerAttributes) {
-    this.maxSpeed = attributes.maxSpeed;
-    this.maxCool = attributes.maxCool;
-    this.maxHealth = attributes.maxHealth;
-    this.health = this.maxHealth;
+  public updatePower() {
+    if (this.power < this.maxPower) {
+      this.power++;
+    } else {
+      this.power = this.maxPower;
+    }
   }
 
+  public get velocity() {
+    return [this.xvel, this.yvel];
+  }
+  // Attribute Methods --------------------
   public getAttributes(): PlayerAttributes {
     return {
       maxSpeed: this.maxSpeed,
@@ -393,6 +407,13 @@ export class Player extends Entity {
       maxHealth: this.maxHealth,
       maxPower: this.maxPower,
     };
+  }
+
+  public updateAttributes(attributes: PlayerAttributes) {
+    this.maxSpeed = attributes.maxSpeed;
+    this.maxCool = attributes.maxCool;
+    this.maxHealth = attributes.maxHealth;
+    this.health = this.maxHealth;
   }
 
   public increaseAttrSpeed(val: number) {
@@ -410,18 +431,6 @@ export class Player extends Entity {
   public increaseAttrCool(val: number) {
     this.maxCool += val;
     if (this.maxCool <= 30) this.maxCool = 30;
-  }
-
-  public updatePower() {
-    if (this.power < this.maxPower) {
-      this.power++;
-    } else {
-      this.power = this.maxPower;
-    }
-  }
-
-  public get velocity() {
-    return [this.xvel, this.yvel];
   }
 }
 

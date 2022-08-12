@@ -11,10 +11,10 @@ export class GameAttributes {
 
   private scoreVal: number;
   public setScore: React.Dispatch<React.SetStateAction<number>> | undefined;
-  public highscore: number;
-  public difficulty: number;
 
-  public tutorial: boolean;
+  public highscore: number;
+  public difficulty: number; // not used
+
   private coinVal: number;
   public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined;
 
@@ -27,8 +27,6 @@ export class GameAttributes {
 
   constructor() {
     this.difficulty = 5;
-
-    this.tutorial = false;
 
     this.scoreVal = 0;
     this.highscore = 0;
@@ -44,24 +42,17 @@ export class GameAttributes {
     this.scene = Scenes.menu;
   }
 
-  public setTutorial() {
-    window.localStorage.setItem("tutorial", "COMPLETED");
-  }
-
-  public getTutorial(): boolean {
-    let t = window.localStorage.getItem("tutorial");
-    if (t == null) {
-      return false;
-    }
-
-    return true;
-  }
-
+  // Score getter/setter
   public set score(val: number) {
     this.scoreVal = val;
     this.syncReactScore();
   }
 
+  public get score() {
+    return this.scoreVal;
+  }
+
+  // Coins getter/setter
   public set coins(val: number) {
     this.coinVal = val;
     this.syncReactCoins();
@@ -71,10 +62,7 @@ export class GameAttributes {
     return this.coinVal;
   }
 
-  public get score() {
-    return this.scoreVal;
-  }
-
+  // React hook calls
   public syncReactCoins() {
     if (!this.setCoins) {
       console.error(
@@ -97,6 +85,7 @@ export class GameAttributes {
     this.setScore(this.score);
   }
 
+  // Scene changes
   public gameOver() {
     this.scene = Scenes.gameOver;
   }

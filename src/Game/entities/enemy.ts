@@ -97,13 +97,15 @@ export class Enemy extends Entity {
   private spawn(w: number, h: number, target: Player) {
     let rand = Math.random();
 
-    if (rand < 0.5) {
-      // side
+    if (rand <= 0.5) {
+      // sides
+      rand = Math.random();
       this.x = rand < 0.5 ? -this.w - 5 : w + 5;
       rand = Math.random();
       this.y = rand * (h + 10) - 5;
     } else {
       // top/bottom
+      rand = Math.random();
       this.x = rand * (w + 10) - 5;
       rand = Math.random();
       this.y = rand < 0.5 ? -this.h - 5 : h + 5;

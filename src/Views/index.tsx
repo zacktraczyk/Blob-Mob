@@ -52,6 +52,7 @@ const Views: React.FC<Props> = (props: Props) => {
             setPage(View.Home);
             game.scene = Scenes.menu;
           }}
+          navPlay={() => setPage(View.Play)}
         ></Shop>
       );
       break;
