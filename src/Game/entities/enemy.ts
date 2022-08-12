@@ -111,6 +111,8 @@ export class Enemy extends Entity {
       this.y = rand < 0.5 ? -this.h - 5 : h + 5;
     }
 
+    this.speed *= Math.random();
+
     this.target = target;
     this.state = State.Normal;
   }
