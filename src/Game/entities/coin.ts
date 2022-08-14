@@ -104,7 +104,6 @@ class Coin extends Entity {
   }
 
   public controller(game: GameAttributes, w: number, h: number) {
-    console.log(this.state)
     switch (this.state) {
       case State.Spawn:
         this.launch(w, h);

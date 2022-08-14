@@ -4,6 +4,7 @@ import { damagePoints } from "./entities/damagePoints";
 import { enemies } from "./entities/enemy";
 import { coins } from "./entities/coin";
 import { input } from "./input";
+import { drawController } from "./entities/draw";
 
 export class GameAttributes {
   public frame: number;
@@ -110,6 +111,7 @@ export class GameAttributes {
     enemies.reset();
     damagePoints.reset();
     coins.reset();
+    drawController.reset();
 
     this.paused = false;
     this.score = 0;

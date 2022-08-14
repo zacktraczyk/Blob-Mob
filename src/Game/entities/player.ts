@@ -62,6 +62,7 @@ export class Player extends Entity {
     this.yvel = 0;
 
     this.action = Action.Normal;
+    this.damaging = false;
 
     this.pushRadius = 240;
     this.pushR = 0;
@@ -367,7 +368,7 @@ export class Player extends Entity {
 
   public updatePower() {
     if (this.power < this.maxPower) {
-      this.power+= 10;
+      this.power+= 2;
     } else {
       this.power = this.maxPower;
     }

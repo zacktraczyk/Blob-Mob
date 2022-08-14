@@ -1,7 +1,6 @@
 export enum State {
   Spawn,
   Normal,
-  Damage,
   Dying,
   Dead,
 }

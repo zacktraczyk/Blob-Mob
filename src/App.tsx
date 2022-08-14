@@ -15,7 +15,7 @@ import Views, { View } from "./Views";
 export const game = new GameAttributes();
 
 const App = () => {
-  const [page, setPage] = useState<View>(View.Play);
+  const [page, setPage] = useState<View>(View.Home);
 
   const uid = "" + auth?.currentUser?.uid;
   const docRef = doc(db, "highscores", uid);

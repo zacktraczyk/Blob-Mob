@@ -2,6 +2,7 @@ import { game } from "../../App";
 import { GameAttributes } from "../gameAttributes";
 import { Scenes } from "../scenes/scenes";
 import { coins } from "./coin";
+import { drawController } from "./draw";
 import { State, Entity, Action } from "./entity";
 import { player, Player } from "./player";
 
@@ -323,7 +324,7 @@ export class Enemy extends Entity {
     }
   }
 
-  public pushLine(x: number, y: number) {
+  public pushLine() {
     this.x += this.pushMagnitude * -this.xdir;
     this.y += this.pushMagnitude * -this.ydir;
   }

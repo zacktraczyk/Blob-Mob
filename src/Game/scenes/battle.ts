@@ -51,7 +51,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   damagePoints.draw(ctx);
   enemies.draw(ctx);
   drawController.draw(ctx);
-  drawController.debug(ctx);
+  // drawController.debug(ctx);
   // difficultyScalar.debug(ctx);
 
   drawHUD(ctx);
