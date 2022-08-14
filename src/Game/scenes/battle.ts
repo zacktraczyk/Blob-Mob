@@ -7,6 +7,7 @@ import { damagePoints } from "../entities/damagePoints";
 import { enemies } from "../entities/enemy";
 import { coins } from "../entities/coin";
 import { drawHUD, drawPauseMenu } from "./sceneElements";
+import { drawController } from "../entities/draw";
 
 let transTimer = 0; // after death change scene timer
 let duration = 100;
@@ -38,6 +39,8 @@ function update(ctx: CanvasRenderingContext2D) {
   player.controller(ctx.canvas.width, ctx.canvas.height);
   damagePoints.controller();
   enemies.controller();
+
+  drawController.controller(ctx.canvas.width, ctx.canvas.height);
 }
 
 function draw(ctx: CanvasRenderingContext2D) {
@@ -47,6 +50,8 @@ function draw(ctx: CanvasRenderingContext2D) {
   player.draw(ctx);
   damagePoints.draw(ctx);
   enemies.draw(ctx);
+  drawController.draw(ctx);
+  drawController.debug(ctx);
   // difficultyScalar.debug(ctx);
 
   drawHUD(ctx);

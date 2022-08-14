@@ -1,5 +1,5 @@
 export class Input {
-  private mouse: { x: number; y: number };
+  public mouse: { x: number; y: number };
   public mouseDown: boolean;
 
   public keyState: any;
@@ -78,15 +78,22 @@ export class Input {
   public mousePosition(event: MouseEvent) {
     this.mouse.x = event.x;
     this.mouse.y = event.y;
-    this.mouseDown = true;
   }
 
   public addMouseListener() {
     document.addEventListener(
-      "click",
+      "mousedown",
+      () => (this.mouseDown = true),
+      false
+    );
+
+    document.addEventListener(
+      "mousemove",
       (event) => this.mousePosition(event),
       false
     );
+
+    document.addEventListener("mouseup", () => (this.mouseDown = false), false);
   }
 }
 

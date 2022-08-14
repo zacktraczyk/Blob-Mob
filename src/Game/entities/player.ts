@@ -33,6 +33,7 @@ export class Player extends Entity {
   private maxSpeed: number;
 
   public action: Action;
+  public damaging: boolean;
 
   private pushRadius: number;
   private pushR: number;
@@ -87,6 +88,7 @@ export class Player extends Entity {
     ctx.fillRect(x, y, this.w, this.h);
 
     ctx.lineWidth = 3;
+    ctx.strokeStyle = 'black';
 
     //Draws Left Eye
     ctx.beginPath();
@@ -208,19 +210,7 @@ export class Player extends Entity {
   }
 
   private healthController() {
-    if (this.action == Action.Attack) {
-      return;
-    }
-
-    let damage = false;
-    enemies.instances.forEach((enemy) => {
-      if (this.collides(enemy) && enemy.state == State.Normal) {
-        damage = true;
-        return;
-      }
-    });
-
-    if (damage) {
+    if (this.damaging) {
       this.color = colorDamage;
       this.health--;
       this.frownCount++;
@@ -270,19 +260,6 @@ export class Player extends Entity {
     const yspeed = Math.max(10, Math.abs(this.yvel) * 2);
     this.x += this.xdir * xspeed;
     this.y += this.ydir * yspeed;
-
-    // Collision test
-    if (enemies) {
-      enemies.instances.forEach((enemy) => {
-        if (
-          this.collides(enemy) &&
-          enemy.state != State.Dying &&
-          enemy.state != State.Dead
-        ) {
-          enemy.state = State.Dying;
-        }
-      });
-    }
 
     this.keepOnScreen(w, h);
 
@@ -390,7 +367,7 @@ export class Player extends Entity {
 
   public updatePower() {
     if (this.power < this.maxPower) {
-      this.power++;
+      this.power+= 10;
     } else {
       this.power = this.maxPower;
     }

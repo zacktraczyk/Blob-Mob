@@ -61,5 +61,5 @@ export const Main = (
       break;
   }
 
-  return game;
+  // input.mouseDown = false; // THIS IS AN EVIL FIX FOR MOUSE INPUT
 };

@@ -2,8 +2,8 @@ import { game } from "../../App";
 import { GameAttributes } from "../gameAttributes";
 import { Scenes } from "../scenes/scenes";
 import { coins } from "./coin";
-import { State, Entity } from "./entity";
-import { Player } from "./player";
+import { State, Entity, Action } from "./entity";
+import { player, Player } from "./player";
 
 class EnemyController {
   public instances: Array<Enemy>;
@@ -28,13 +28,25 @@ class EnemyController {
   }
 
   public controller() {
+    let playerDamaging = false;
     for (let i = 0; i < this.instances.length; i++) {
-      if (this.instances[i].state == State.Dead) {
+      const enemy = this.instances[i];
+      if (enemy.state == State.Dead) {
         this.instances.splice(i, 1);
-      } else {
-        this.instances[i].controller();
+        return;
       }
+
+      // Player collision test
+      if (player && player.collides(enemy) && enemy.state < State.Dying) {
+        if (player.action != Action.Attack) {
+          playerDamaging = true;
+        } else {
+          enemy.state = State.Dying;
+        }
+      }
+      enemy.controller();
     }
+    player.damaging = playerDamaging;
   }
 
   public spawner(w: number, h: number, player: Player) {
@@ -126,7 +138,7 @@ export class Enemy extends Entity {
     let y = this.y - this.h / 2; // draw corner
 
     // ctx.lineWidth = 1;
-    if(game.frame % 3 == 0) {
+    if (game.frame % 3 == 0) {
       let rand = Math.round(Math.random() * 2);
       this.color = this.rcolors[rand];
     }
@@ -137,6 +149,7 @@ export class Enemy extends Entity {
     }
     ctx.beginPath();
 
+    ctx.strokeStyle = "black";
     //Draws Body
     ctx.moveTo(x - this.w / 8, y);
     ctx.bezierCurveTo(
@@ -308,6 +321,11 @@ export class Enemy extends Entity {
       this.x += this.pushMagnitude * -this.xdir;
       this.y += this.pushMagnitude * -this.ydir;
     }
+  }
+
+  public pushLine(x: number, y: number) {
+    this.x += this.pushMagnitude * -this.xdir;
+    this.y += this.pushMagnitude * -this.ydir;
   }
 }
 
