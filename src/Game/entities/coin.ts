@@ -52,21 +52,25 @@ class Coin extends Entity {
     this.xdir = 0;
     this.ydir = 0;
     this.speed = 0;
-    this.accel = 0.1;
+    this.accel = 0.2;
 
-    this.timer = 10;
+    this.timer = 15;
 
     // Set direction and speed
     if (player && player.state < State.Dying) {
       // <++> TODO: Add coin launch variance
-      const [xvel, yvel] = player.velocity;
+      let [xvel, yvel] = player.velocity;
+
+      const spread = Math.random() - 0.5;
+      xvel += (yvel/4)*spread;
+      yvel += (xvel/4)*spread;
 
       // Normalize vector
       const mag = Math.sqrt(xvel * xvel + yvel * yvel);
       this.xdir = xvel != 0 ? xvel / mag : 0;
       this.ydir = yvel != 0 ? yvel / mag : 0;
 
-      this.speed = mag * 2;
+      this.speed = mag * 3;
     }
   }
 
