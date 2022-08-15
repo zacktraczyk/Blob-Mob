@@ -1,11 +1,14 @@
 import { getAuth } from "firebase/auth";
+import { auth } from "../../apis/firebase";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { app } from "../../apis/firebase";
 import Login from "../../components/Login";
 import PlayerStat from "../../components/PlayerStat";
 import Scoreboard from "../../components/Scoreboard";
+import { game } from "../../App";
 import { player, PlayerAttributes } from "../../Game/entities/player";
+import { enemies } from "../../Game/entities/enemy";
+import Stats from "./Stats";
 import "./index.scss";
 
 interface Props {
@@ -13,14 +16,20 @@ interface Props {
   navPlay: Function;
 }
 
+enum Tabs {
+  Stats,
+  Powerups,
+  Fit,
+}
+
 const Shop: React.FC<Props> = (props: Props) => {
   const { navHome, navPlay } = props;
-  const [playerStats, setPlayerStats] = useState<PlayerAttributes>(
-    player.getAttributes()
-  );
-  const { maxHealth, maxCool, maxSpeed, maxPower } = playerStats;
+  const [tab, setTab] = useState<Tabs>(Tabs.Stats);
 
-  const auth = getAuth(app);
+  const navStatsClass = tab == Tabs.Stats ? "active" : "inactive";
+  const navPowerupsClass = tab == Tabs.Powerups ? "active" : "inactive";
+  const navFitClass = tab == Tabs.Fit ? "active" : "inactive";
+
   const [user] = useAuthState(auth);
 
   let displayName = "Gerald";
@@ -28,75 +37,72 @@ const Shop: React.FC<Props> = (props: Props) => {
     displayName = user.displayName;
   }
 
-  const updateSpeed = (val: number) => {
-    if (!val) return;
-
-    player.increaseAttrSpeed(val);
-    setPlayerStats(player.getAttributes());
-  };
-
-  const updateHealth = (val: number) => {
-    if (!val) return;
-
-    player.increaseAttrHealth(val);
-    setPlayerStats(player.getAttributes());
-  };
-
-  const updatePower = (val: number) => {
-    if (!val) return;
-
-    player.increaseAttrPower(val);
-    setPlayerStats(player.getAttributes());
-  };
-
-  const updateCool = (val: number) => {
-    if (!val) return;
-
-    player.increaseAttrCool(val);
-    setPlayerStats(player.getAttributes());
-  };
-
   return (
     <div className="shop">
       <div className="shop__left">
-        <p>Press R to spawn enemy</p>
-      </div>
-      <div className="shop__right">
-        <h2>{displayName}</h2>
-        <div className="stats">
-          <PlayerStat
-            arrowUp={true}
-            name={"Speed"}
-            value={maxSpeed}
-            updateValue={() => updateSpeed(1)}
-            cost={15}
-          />
-          <PlayerStat
-            arrowUp={true}
-            name={"Health"}
-            value={maxHealth}
-            updateValue={() => updateHealth(20)}
-            cost={5}
-          />
-          <PlayerStat
-            arrowUp={true}
-            name={"Power"}
-            value={maxPower}
-            cost={10}
-            updateValue={() => updatePower(10)}
-          />
-          <PlayerStat
-            arrowUp={false}
-            name={"Cool"}
-            value={maxCool}
-            cost={20}
-            updateValue={() => updateCool(-10)}
-          />
-        </div>
-        <div className="powerups"></div>
-        <button onClick={() => navPlay()} className="play-button">
+        <button
+          className="button-spawn"
+          onClick={() => {
+            const ctx = game.ctx;
+            if (!ctx) return;
+
+            enemies.spawn(ctx.canvas.width, ctx.canvas.height, player);
+          }}
+        >
+          Spawn Enemy
+        </button>
+        <button
+          className="button-play"
+          onClick={() => navPlay()}
+        >
           Play
         </button>
+      </div>
+
+      <div className="shop__right">
+        <div
+          className="tab-stats-click tab-label"
+          onClick={() => setTab(Tabs.Stats)}
+        >
+          Stats
+          <i className="fa-solid fa-arrow-up-9-1"></i>
+        </div>
+        <div
+          className="tab-powerups-click tab-label"
+          onClick={() => setTab(Tabs.Powerups)}
+        >
+          Powerups
+          <i className="fa-brands fa-superpowers"></i>
+        </div>
+        <div
+          className="tab-fit-click tab-label"
+          onClick={() => setTab(Tabs.Fit)}
+        >
+          Fit
+          <i className="fa-solid fa-glasses"></i>
+        </div>
+        <div className={`nav-top tab-stats ${navStatsClass}`}></div>
+        <div className={`nav-top tab-powerups ${navPowerupsClass}`}></div>
+        <div className={`nav-top tab-fit ${navFitClass}`}></div>
+        {/* <h2>{displayName}</h2> */}
+        <div className="shop__right-main">
+          {tab == Tabs.Stats ? <Stats /> : tab == Tabs.Powerups ? <></> : <></>}
+        </div>
+        <div className="shop__right-card-background"></div>
+        <div className="shop__right-nav-bottom">
+          <i
+            className={`fa-solid fa-angle-left fa-2xl ${
+              tab == 0 ? "arrow-inactive" : "arrow-active"
+            }`}
+            onClick={() => setTab(tab > 0 ? tab - 1 : tab)}
+          ></i>
+          <i
+            className={`fa-solid fa-angle-right fa-2xl ${
+              tab == Tabs.Fit ? "arrow-inactive" : "arrow-active"
+            }`}
+            onClick={() => setTab(tab < Tabs.Fit ? tab + 1 : tab)}
+          ></i>
+        </div>
       </div>
     </div>
   );

@@ -15,6 +15,21 @@ const PlayerStat: React.FC<Props> = (props: Props) => {
 
   const dir = arrowUp ? "up" : "down";
   const afford = cost <= game.coins ? "afford" : "cant-afford";
+  let arrowClass = "default";
+  switch (name) {
+    case "Speed":
+      arrowClass = "speed";
+      break;
+    case "Health":
+      arrowClass = "health";
+      break;
+    case "Power":
+      arrowClass = "power";
+      break;
+    case "Cool":
+      arrowClass = "cool";
+      break;
+  }
 
   const purchaseUpdate = () => {
     if (cost > game.coins) return;
@@ -30,7 +45,7 @@ const PlayerStat: React.FC<Props> = (props: Props) => {
         <p className="playerStat__stat-name">{name}</p>
         <p className="playerStat__stat-number">{value}</p>
       </div>
-      <div className={`playerStat__upgrade ${dir} ${afford}`}>
+      <div className={`playerStat__upgrade ${dir} ${afford} ${arrowClass}`}>
         <i className="fa-solid fa-arrow-up fa-2xl" onClick={purchaseUpdate}></i>
         <span className="playerStat__upgrade-cost">
           <p>{"$" + cost}</p>

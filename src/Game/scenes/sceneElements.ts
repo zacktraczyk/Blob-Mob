@@ -1,10 +1,12 @@
+import { game } from "../../App";
 import { player } from "../entities/player";
 
 const borderWidth = 3;
 
-export function drawHUD(
-  ctx: CanvasRenderingContext2D
-) {
+export function drawHUD() {
+  const ctx = game.ctx;
+  if (ctx == null) return;
+
   // Health
   ctx.fillStyle = "black";
   ctx.fillRect(ctx.canvas.width / 2, 10, ctx.canvas.width / 2 - 10, 20);
@@ -39,7 +41,8 @@ export function drawHUD(
     ctx.fillRect(
       (ctx.canvas.width * 3) / 4 + 5 + borderWidth,
       40 + borderWidth,
-      (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) + 5 -
+      (player.power / player.maxPower) * (ctx.canvas.width / 4 - 15) +
+        5 -
         borderWidth * 2,
       20 - borderWidth * 2
     );

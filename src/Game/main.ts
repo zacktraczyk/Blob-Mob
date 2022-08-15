@@ -14,16 +14,15 @@ import { coins } from "./entities/coin";
 
 export const Main = (
   game: GameAttributes,
-  ctx: CanvasRenderingContext2D,
   setPage: React.Dispatch<React.SetStateAction<View>>
 ) => {
-  if (ctx == null) return;
+  if (!game.ctx) return;
   ++game.frame;
 
   switch (game.scene) {
     // ------------------> MENU
     case Scenes.menu:
-      Menu(ctx);
+      Menu();
       break;
 
     // ------------------> SHOP
@@ -31,7 +30,7 @@ export const Main = (
       game.reset();
       game.scene = Scenes.shopMain;
     case Scenes.shopMain:
-      Shop(ctx);
+      Shop();
       break;
 
     // ------------------> TUTORIAL
@@ -40,7 +39,7 @@ export const Main = (
       tutorialRules.reset();
       game.scene = Scenes.tutorialMain;
     case Scenes.tutorialMain:
-      Tutorial(ctx);
+      Tutorial();
       break;
 
     // ------------------> PLAY
@@ -48,7 +47,7 @@ export const Main = (
       game.reset();
       game.scene = Scenes.battle;
     case Scenes.battle:
-      Battle(ctx);
+      Battle();
       break;
 
     // ------------------> GAMEOVER
@@ -57,7 +56,7 @@ export const Main = (
       setPage(View.Gameover);
       game.scene = Scenes.gameOverMain;
     case Scenes.gameOverMain:
-      Gameover(ctx);
+      Gameover();
       break;
   }
 

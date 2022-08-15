@@ -70,6 +70,8 @@ class EnemyController {
   }
 
   public spawn(w: number, h: number, player: Player) {
+    const speed = this.speed * (Math.log(Math.random())/2 + 1);
+
     let enemy = new Enemy(w, h, player, this.speed);
     this.instances.push(enemy);
   }
@@ -123,8 +125,6 @@ export class Enemy extends Entity {
       rand = Math.random();
       this.y = rand < 0.5 ? -this.h - 5 : h + 5;
     }
-
-    this.speed *= Math.random();
 
     this.target = target;
     this.state = State.Normal;
@@ -295,7 +295,6 @@ export class Enemy extends Entity {
     this.w = Math.max(0, this.w - 2);
     this.h = Math.max(0, this.h - 3.9);
 
-    // 80% change of spawning a coin
     if (
       (game.scene == Scenes.battle,
       !this.triedCoinSpawn && Math.random() <= 0.8)

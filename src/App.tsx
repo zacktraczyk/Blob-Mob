@@ -28,7 +28,10 @@ const App = () => {
   return (
     <>
       <Canvas
-        draw={(ctx: CanvasRenderingContext2D) => Main(game, ctx, setPage)}
+        draw={(ctx: CanvasRenderingContext2D) => {
+          game.ctx = ctx;
+          Main(game, setPage);
+        }}
       />
       <Score />
 

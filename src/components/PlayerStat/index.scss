@@ -1,17 +1,19 @@
 @import "../../assets/styles/variables";
 
 .playerStat {
-  width: 10em;
-
   display: flex;
   flex-direction: row;
-  gap: 0.5em;
+
+  width: 6em;
+  height: 3.2em;
 
   &__stat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 8em;
+    justify-content: space-between;
+    width: 3em;
+    height: 100%;
 
     &-name {
       padding: 0px;
@@ -28,22 +30,24 @@
 
 
   &__upgrade {
-    position: relative;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    width: 100%;
+
+    width: 3em;
+    height: 100%;
 
     i {
-      color: $color-main;
-      font-size: 4em;
+      font-size: 2em;
+      margin-top: 0.5em;
       transition: all 0.1s;
     }
 
     &-cost {
       p {
-        position: absolute;
-        bottom: 0px;
-        margin: 0px 0px 0px -1em;
+        margin: 0px;
+        text-align: center;
       }
     }
   }
@@ -55,28 +59,43 @@
   }
 
   .afford {
+    i:active {
+      margin-top: 30px;
+    }
+
     p {
       color: green;
     }
 
-    i {
-      &:hover {
-        margin-top: 5px;
-      }
-
-      &:active {
-        margin-top: -10px;
-      }
-    }
   }
 
   .cant-afford {
     i {
-      color: #e6e6e6;
+      color: $color-gray;
     }
 
     p {
       color: #dc6d6d;
     }
+  }
+
+  .speed {
+      color: $color-game-speed;
+  }
+
+  .health {
+      color: $color-game-health;
+  }
+
+  .power {
+      color: $color-game-power;
+  }
+
+  .cool {
+      color: $color-game-cool;
+  }
+
+  .default {
+      color: $color-main;
   }
 }

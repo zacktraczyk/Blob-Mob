@@ -9,9 +9,9 @@ import { game } from "../../App";
 
 let playerDeathCool = 200;
 
-export function Shop(ctx: CanvasRenderingContext2D) {
-  draw(ctx);
-  update(ctx);
+export function Shop() {
+  draw();
+  update();
 
   // Pause before reset
   if (player.state == State.Dead) {
@@ -26,13 +26,12 @@ export function Shop(ctx: CanvasRenderingContext2D) {
 
 let spawnEnemyRelease = true;
 
-function update(ctx: CanvasRenderingContext2D) {
+function update() {
+  const ctx = game.ctx;
+  if (!ctx) return;
 
   // Confine to half of screen
-  player.controller(ctx.canvas.width / 2, ctx.canvas.height);
-  // if (player.cool <= 0) {
-  //   player.power = player.maxPower; // So Player can test powerups
-  // }
+  player.controller(ctx.canvas.width / 3, ctx.canvas.height);
   enemies.controller();
   damagePoints.controller();
 
@@ -46,12 +45,15 @@ function update(ctx: CanvasRenderingContext2D) {
   }
 }
 
-function draw(ctx: CanvasRenderingContext2D) {
+function draw() {
+  const ctx = game.ctx;
+  if (ctx == null) return;
+
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   player.draw(ctx);
   enemies.draw(ctx);
   damagePoints.draw(ctx);
 
-  drawHUD(ctx);
+  drawHUD();
 }

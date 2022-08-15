@@ -7,6 +7,7 @@ import { input } from "./input";
 import { drawController } from "./entities/draw";
 
 export class GameAttributes {
+  public ctx: CanvasRenderingContext2D|null;
   public frame: number;
   public paused: boolean;
 
@@ -27,11 +28,12 @@ export class GameAttributes {
   public scene: Scenes;
 
   constructor() {
+    this.ctx = null;
     this.difficulty = 5;
 
     this.scoreVal = 0;
     this.highscore = 0;
-    this.coinVal = 0;
+    this.coinVal = 100;
 
     this.frame = 0;
     this.paused = false;
@@ -118,7 +120,8 @@ export class GameAttributes {
     this.frame = 0;
   }
 
-  // public debug(ctx: CanvasRenderingContext2D) {
+  // public debug() {
+  //     const ctx = this.ctx;
   //     ctx.font = '20px Arial Bold';
   //     ctx.fillStyle = 'black';
 

@@ -12,11 +12,11 @@ import { drawController } from "../entities/draw";
 let transTimer = 0; // after death change scene timer
 let duration = 100;
 
-export function Battle(ctx: CanvasRenderingContext2D) {
-  if (!game.paused) update(ctx);
+export function Battle() {
+  if (!game.paused) update();
   game.pause();
 
-  draw(ctx);
+  draw();
 
   // Pause after death before transition
   if (player.state == State.Dead) {
@@ -28,7 +28,10 @@ export function Battle(ctx: CanvasRenderingContext2D) {
   }
 }
 
-function update(ctx: CanvasRenderingContext2D) {
+function update() {
+  const ctx = game.ctx;
+  if (ctx == null) return;
+
   if (player.state != State.Dead) {
     enemies.spawner(ctx.canvas.width, ctx.canvas.height, player);
   }
@@ -43,7 +46,10 @@ function update(ctx: CanvasRenderingContext2D) {
   drawController.controller(ctx.canvas.width, ctx.canvas.height);
 }
 
-function draw(ctx: CanvasRenderingContext2D) {
+function draw() {
+  const ctx = game.ctx;
+  if (ctx == null) return;
+
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   coins.draw(ctx);
@@ -54,7 +60,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   // drawController.debug(ctx);
   // difficultyScalar.debug(ctx);
 
-  drawHUD(ctx);
+  drawHUD();
 
   if (game.paused) drawPauseMenu(ctx);
 }

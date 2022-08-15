@@ -36,8 +36,9 @@ class CoinController {
 class Coin extends Entity {
   readonly value: number;
 
-  private xvel: number;
-  private yvel: number;
+  private xdir: number;
+  private ydir: number;
+  public speed: number;
   readonly accel: number;
 
   public timer: number;
@@ -48,8 +49,9 @@ class Coin extends Entity {
 
     this.value = 1;
 
-    this.xvel = 0;
-    this.yvel = 0;
+    this.xdir = 0;
+    this.ydir = 0;
+    this.speed = 0;
     this.accel = 0.1;
 
     this.timer = 10;
@@ -57,9 +59,17 @@ class Coin extends Entity {
     // Set velocity for launch
     if (player && player.state < State.Dying) {
       // <++> TODO: Add coin launch variance
-      [this.xvel, this.yvel] = player.velocity;
-      this.xvel *= 3;
-      this.yvel *= 3;
+      const [xvel, yvel] = player.velocity;
+      const mag = Math.sqrt(xvel * xvel + yvel * yvel);
+      console.log("MAGNITUDE", mag);
+      console.log(`xvel, yvel: (${xvel}, ${yvel})`);
+
+      this.xdir = xvel != 0 ? xvel / mag : 0;
+      this.ydir = yvel != 0 ? yvel / mag : 0;
+      console.log(`xvel / this.speed = ${xvel} / ${this.speed}`, xvel/ this.speed)
+      console.log(`xdir, ydir: (${this.xdir}, ${this.ydir})`);
+
+      this.speed = mag * 2.5;
     }
   }
 
@@ -104,6 +114,9 @@ class Coin extends Entity {
   }
 
   public controller(game: GameAttributes, w: number, h: number) {
+    // console.log(`X Y coords: (${this.x}, ${this.y})`)
+    // console.log(`xdir ydir: (${this.xdir}, ${this.ydir})`)
+    // console.log(`speed: ${this.speed}`)
     switch (this.state) {
       case State.Spawn:
         this.launch(w, h);
@@ -126,29 +139,23 @@ class Coin extends Entity {
       this.timer--;
     }
 
-    if (Math.abs(this.xvel) <= this.accel) this.xvel = 0;
-    else if (this.xvel > 0) this.xvel -= this.accel * 1.5;
-    else if (this.xvel < 0) this.xvel += this.accel * 1.5;
+    this.speed -= this.accel;
 
-    if (Math.abs(this.yvel) <= this.accel) this.yvel = 0;
-    else if (this.yvel > 0) this.yvel -= this.accel * 1.5;
-    else if (this.yvel < 0) this.yvel += this.accel * 1.5;
-
-    this.x += this.xvel;
-    this.y += this.yvel;
+    this.x += this.xdir * this.speed;
+    this.y += this.ydir * this.speed;
 
     this.bounceOnScreen(w, h);
 
-    if (this.xvel == 0 && this.yvel == 0) {
+    if (this.speed <= 0) {
       this.state = State.Normal;
     }
   }
 
   private bounceOnScreen(w: number, h: number) {
-    if (this.x <= 0 && this.xvel < 0) this.xvel *= -1;
-    else if (this.x >= w && this.xvel > 0) this.xvel *= -1;
-    if (this.y <= 0 && this.yvel < 0) this.yvel *= -1;
-    else if (this.y >= h && this.yvel > 0) this.yvel *= -1;
+    if (this.x <= 0 && this.xdir < 0) this.xdir *= -1;
+    else if (this.x >= w && this.xdir > 0) this.xdir *= -1;
+    if (this.y <= 0 && this.ydir < 0) this.ydir *= -1;
+    else if (this.y >= h && this.ydir > 0) this.ydir *= -1;
   }
 
   private wiggle() {

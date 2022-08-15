@@ -34,8 +34,11 @@ export class DifficultyScalar {
 
     // Wait for enemy spawn
     const x = game.frame / 100;
-    if (x > 0 && x <= 240) {
+    if (x > 0 && x < 120) {
         enemies.spawnWait = Math.round((-3/240*x + 3)*100)/100;
+    }
+    if (x >= 120 && x <= 180) {
+        enemies.spawnWait = Math.round((-1/60*x + 3)*100)/100;
     }
 
     // Scale enemy speed

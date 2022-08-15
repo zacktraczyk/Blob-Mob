@@ -7,9 +7,9 @@ import { Stage, tutorialRules } from "../tutorialRules";
 import { damagePoints } from "../entities/damagePoints";
 import { game } from "../../App";
 
-export function Tutorial(ctx: CanvasRenderingContext2D) {
-  update(ctx);
-  draw(ctx);
+export function Tutorial() {
+  update();
+  draw();
 
   if (tutorialRules.stage == Stage.end) {
     game.reset()
@@ -18,7 +18,10 @@ export function Tutorial(ctx: CanvasRenderingContext2D) {
   }
 }
 
-function update(ctx: CanvasRenderingContext2D) {
+function update() {
+  const ctx = game.ctx;
+  if (!ctx) return;
+
   player.controller(ctx.canvas.width, ctx.canvas.height);
   damagePoints.controller();
   enemies.controller();
@@ -28,7 +31,10 @@ function update(ctx: CanvasRenderingContext2D) {
 
 }
 
-function draw(ctx: CanvasRenderingContext2D) {
+function draw() {
+  const ctx = game.ctx;
+  if (!ctx) return;
+
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
   player.draw(ctx);
@@ -36,5 +42,5 @@ function draw(ctx: CanvasRenderingContext2D) {
   tutorialRules.draw(ctx);
 
   if (tutorialRules.stage >= Stage.bars)
-    drawHUD(ctx);
+    drawHUD();
 }
