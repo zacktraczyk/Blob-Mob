@@ -56,20 +56,17 @@ class Coin extends Entity {
 
     this.timer = 10;
 
-    // Set velocity for launch
+    // Set direction and speed
     if (player && player.state < State.Dying) {
       // <++> TODO: Add coin launch variance
       const [xvel, yvel] = player.velocity;
-      const mag = Math.sqrt(xvel * xvel + yvel * yvel);
-      console.log("MAGNITUDE", mag);
-      console.log(`xvel, yvel: (${xvel}, ${yvel})`);
 
+      // Normalize vector
+      const mag = Math.sqrt(xvel * xvel + yvel * yvel);
       this.xdir = xvel != 0 ? xvel / mag : 0;
       this.ydir = yvel != 0 ? yvel / mag : 0;
-      console.log(`xvel / this.speed = ${xvel} / ${this.speed}`, xvel/ this.speed)
-      console.log(`xdir, ydir: (${this.xdir}, ${this.ydir})`);
 
-      this.speed = mag * 2.5;
+      this.speed = mag * 2;
     }
   }
 
@@ -114,9 +111,6 @@ class Coin extends Entity {
   }
 
   public controller(game: GameAttributes, w: number, h: number) {
-    // console.log(`X Y coords: (${this.x}, ${this.y})`)
-    // console.log(`xdir ydir: (${this.xdir}, ${this.ydir})`)
-    // console.log(`speed: ${this.speed}`)
     switch (this.state) {
       case State.Spawn:
         this.launch(w, h);
