@@ -1,3 +1,4 @@
+import PowerupBar from "./components/PowerupBar";
 import { doc } from "firebase/firestore";
 import { useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -40,6 +41,7 @@ const App = () => {
       </div>
 
       <Coins />
+      {page != View.Home && <PowerupBar />}
       <Navbar
         navHome={() => {
           setPage(View.Home);

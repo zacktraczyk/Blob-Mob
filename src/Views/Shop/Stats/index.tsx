@@ -57,7 +57,7 @@ const Stats: React.FC = () => {
         name={"Speed"}
         value={maxSpeed}
         updateValue={() => updateSpeed(1)}
-        cost={50}
+        cost={40}
       />
       <PlayerStat
         arrowUp={true}
