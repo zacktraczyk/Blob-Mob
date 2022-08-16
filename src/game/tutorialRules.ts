@@ -1,5 +1,5 @@
 import { game } from "@App";
-import { Game } from "./gameAttributes";
+import { Game } from "./game";
 import { Action } from "./entities/entity";
 import { enemies } from "./entities/enemy";
 import { input } from "./input";

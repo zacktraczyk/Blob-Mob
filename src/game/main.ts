@@ -1,4 +1,3 @@
-import { Game } from "./gameAttributes";
 import { Scenes } from "./scenes/scenes";
 import { Menu } from "./scenes/menu";
 import { Shop } from "./scenes/shop";
@@ -11,6 +10,7 @@ import { input } from "./input";
 import { View } from "@Views/index.tsx";
 import { saveHighscore } from "@Apis/firebase";
 import { coins } from "./entities/coin";
+import { Game } from "./game";
 
 export const Main = (
   game: Game,

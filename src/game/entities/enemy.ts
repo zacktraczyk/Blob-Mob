@@ -1,5 +1,5 @@
 import { game } from "@App";
-import { Game } from "../gameAttributes";
+import { Game } from "../game";
 import { Scenes } from "../scenes/scenes";
 import { coins } from "./coin";
 import { drawController } from "./draw";

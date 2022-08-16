@@ -3,7 +3,7 @@ import { input, Input } from "../../input";
 import { damagePoints } from "../damagePoints";
 import { enemies } from "../enemy";
 import { coins } from "../coin";
-import { game } from "@App";
+import { game } from "../../../App";
 import { drawFace, Face } from "./faces/faces";
 
 // Clamp number between two values with the following line:
