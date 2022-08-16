@@ -6,10 +6,12 @@ import Login from "../../components/Login";
 import PlayerStat from "../../components/PlayerStat";
 import Scoreboard from "../../components/Scoreboard";
 import { game } from "../../App";
-import { player, PlayerAttributes } from "../../Game/entities/player";
+import { player, PlayerAttributes } from "../../Game/entities/player/player";
 import { enemies } from "../../Game/entities/enemy";
 import Stats from "./Stats";
 import "./index.scss";
+import Powerups from "./Powerups";
+import Fit from "./Fit";
 
 interface Props {
   navHome: Function;
@@ -51,10 +53,7 @@ const Shop: React.FC<Props> = (props: Props) => {
         >
           Spawn Enemy
         </button>
-        <button
-          className="button-play"
-          onClick={() => navPlay()}
-        >
+        <button className="button-play" onClick={() => navPlay()}>
           Play
         </button>
       </div>
@@ -86,7 +85,13 @@ const Shop: React.FC<Props> = (props: Props) => {
         <div className={`nav-top tab-fit ${navFitClass}`}></div>
         {/* <h2>{displayName}</h2> */}
         <div className="shop__right-main">
-          {tab == Tabs.Stats ? <Stats /> : tab == Tabs.Powerups ? <></> : <></>}
+          {tab == Tabs.Stats ? (
+            <Stats />
+          ) : tab == Tabs.Powerups ? (
+            <Powerups />
+          ) : (
+            <Fit />
+          )}
         </div>
         <div className="shop__right-card-background"></div>
         <div className="shop__right-nav-bottom">

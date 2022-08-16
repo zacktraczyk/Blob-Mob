@@ -1,22 +1,23 @@
-import PowerupBar from "./components/PowerupBar";
-import { doc } from "firebase/firestore";
 import { useState } from "react";
+import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { auth, db } from "./apis/firebase";
-import Canvas from "./components/Canvas";
-import Coins from "./components/Coins";
-import Navbar from "./components/Navbar";
-import Score from "./components/Score";
-import { player, PlayerAttributes } from "./Game/entities/player";
-import { GameAttributes } from "./Game/gameAttributes";
-import { Main } from "./Game/main";
-import { Scenes } from "./Game/scenes/scenes";
-import Views, { View } from "./Views";
 
-export const game = new GameAttributes();
+import Canvas from "@Components/Canvas";
+import Score from "@Components/Score";
+import Coins from "@Components/Coins";
+import PowerupBar from "@Components/PowerupBar";
+import Navbar from "@Components/Navbar";
+import Views, { View } from "@Views/index.tsx";
+
+import { Game } from "@Game/game";
+import { Main } from "@Game/main";
+import { Scenes } from "@Game/scenes/scenes";
+
+export const game = new Game();
 
 const App = () => {
-  const [page, setPage] = useState<View>(View.Home);
+  const [page, setPage] = useState<View>(View.Play);
 
   const uid = "" + auth?.currentUser?.uid;
   const docRef = doc(db, "highscores", uid);

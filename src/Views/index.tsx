@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Scenes } from "../Game/scenes/scenes";
-import { game } from "../App";
+import { game } from "@App";
+import { Scenes } from "@Game/scenes/scenes";
 import Home from "./Home";
-import Score from "../components/Score";
 import Shop from "./Shop";
 import Gameover from "./Gameover";
-import { browserLocalPersistence } from "firebase/auth";
 
 export enum View {
   Home,

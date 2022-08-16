@@ -1,0 +1,17 @@
+.navbar {
+  position: absolute;
+  display: flex;
+  flex: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5em;
+
+  bottom: 1em;
+  right: 25px;
+  height: 4em;
+
+  &__icon {
+    height: 100%;
+    padding: 0 10px;
+  }
+}

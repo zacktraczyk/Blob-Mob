@@ -1,0 +1,40 @@
+@import "../../../assets/styles/variables";
+
+.fit {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 80%;
+  width: 50%;
+  margin-top: 1em;
+  padding: 10px;
+  font-size: 2em;
+
+  canvas {
+    position: relative;
+    z-index: 100;
+    width: 1.5em;
+    height: 1.5em;
+    background-color: $color-main;
+  }
+
+  h2 {
+    font-size: 1em;
+    text-align: left;
+  }
+
+  // &__body {
+    // &-normal {
+
+    // }
+  // }
+
+  &__face {
+    &-items {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+
+    }
+  }
+}

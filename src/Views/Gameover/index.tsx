@@ -1,4 +1,4 @@
-import { game } from "../../App";
+import { game } from "@App";
 import "./index.scss";
 
 interface Props {
