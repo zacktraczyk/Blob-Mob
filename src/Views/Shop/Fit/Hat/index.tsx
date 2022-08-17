@@ -13,59 +13,59 @@ import { game } from "@App";
 
 import "./index.scss";
 
-const Faces: React.FC = () => {
+const Hat: React.FC = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   return (
-    <div className="fit-faces">
+    <div className="fit-hats">
       <h2>Faces</h2>
-      <div className="fit-faces__items">
+      <div className="fit-hats__items">
         <PlayerFit
           name={"Default"}
           cost={0}
-          locked={false}
+          locked={true}
           face={Face.Normal}
           faceFunc={faceNormal}
           onClick={forceUpdate}
         />
         <PlayerFit
-          name={"Baby"}
-          cost={5}
-          locked={false}
-          face={Face.Tooth}
-          faceFunc={faceTooth}
-          onClick={forceUpdate}
-        />
-        <PlayerFit
-          name={"Cyclops"}
-          cost={15}
-          locked={false}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
-          onClick={forceUpdate}
-        />
-        <PlayerFit
-          name={"Cyclops"}
-          cost={15}
+          name={"Default"}
+          cost={0}
           locked={true}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
+          face={Face.Normal}
+          faceFunc={faceNormal}
           onClick={forceUpdate}
         />
         <PlayerFit
-          name={"Cyclops"}
-          cost={15}
+          name={"Default"}
+          cost={0}
           locked={true}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
+          face={Face.Normal}
+          faceFunc={faceNormal}
           onClick={forceUpdate}
         />
         <PlayerFit
-          name={"Cyclops"}
-          cost={15}
+          name={"Default"}
+          cost={0}
           locked={true}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
+          face={Face.Normal}
+          faceFunc={faceNormal}
+          onClick={forceUpdate}
+        />
+        <PlayerFit
+          name={"Default"}
+          cost={0}
+          locked={true}
+          face={Face.Normal}
+          faceFunc={faceNormal}
+          onClick={forceUpdate}
+        />
+        <PlayerFit
+          name={"Default"}
+          cost={0}
+          locked={true}
+          face={Face.Normal}
+          faceFunc={faceNormal}
           onClick={forceUpdate}
         />
       </div>
@@ -73,4 +73,4 @@ const Faces: React.FC = () => {
   );
 };
 
-export default Faces;
+export default Hat;

@@ -3,11 +3,11 @@
 .fit {
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 1.5em;
   height: 80%;
   width: 80%;
 
-  font-size: 0.7em;
+  font-size: 0.6em;
 
   h2 {
     padding-bottom: 1em;
@@ -35,5 +35,11 @@
 
     width: 100%;
     }
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .fit {
+    font-size: 0.7em;
   }
 }

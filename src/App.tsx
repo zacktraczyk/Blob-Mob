@@ -17,7 +17,7 @@ import { Scenes } from "@Game/scenes/scenes";
 export const game = new Game();
 
 const App = () => {
-  const [page, setPage] = useState<View>(View.Play);
+  const [page, setPage] = useState<View>(View.Home);
 
   const uid = "" + auth?.currentUser?.uid;
   const docRef = doc(db, "highscores", uid);

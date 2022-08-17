@@ -156,6 +156,7 @@
 
   &__right {
     height: 60vh;
+    grid-template-rows: 3em 1fr 6em;
 
     .tab-label {
       font-size: 2vw;

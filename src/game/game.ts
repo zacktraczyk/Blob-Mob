@@ -35,7 +35,7 @@ export class Game {
 
     this.scoreVal = 0;
     this.highscore = 0;
-    this.coinVal = 100;
+    this.coinVal = 0;
 
     this.frame = 0;
     this.paused = false;

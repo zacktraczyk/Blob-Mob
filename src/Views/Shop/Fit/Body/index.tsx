@@ -17,9 +17,9 @@ const Body: React.FC = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   return (
-    <div className="body-fit">
+    <div className="fit-body">
       <h2>Body</h2>
-      <div className="body-fit__items">
+      <div className="fit-body__items">
         <PlayerFit
           name={"Default"}
           cost={0}
@@ -52,7 +52,23 @@ const Body: React.FC = () => {
           faceFunc={faceNormal}
           onClick={forceUpdate}
         />
-      </div>{" "}
+        <PlayerFit
+          name={"Default"}
+          cost={0}
+          locked={true}
+          face={Face.Normal}
+          faceFunc={faceNormal}
+          onClick={forceUpdate}
+        />
+        <PlayerFit
+          name={"Default"}
+          cost={0}
+          locked={true}
+          face={Face.Normal}
+          faceFunc={faceNormal}
+          onClick={forceUpdate}
+        />
+      </div>
     </div>
   );
 };
