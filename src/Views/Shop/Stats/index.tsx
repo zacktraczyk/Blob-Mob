@@ -1,11 +1,11 @@
 import { getAuth } from "firebase/auth";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { app } from "../../../apis/firebase";
-import Login from "../../../components/Login";
-import PlayerStat from "../../../components/PlayerStat";
-import Scoreboard from "../../../components/Scoreboard";
-import { player, PlayerAttributes } from "../../../Game/entities/player/player";
+import { app } from "@Apis/firebase";
+import Login from "@Components/Login";
+import PlayerStat from "@Components/PlayerStat";
+import Scoreboard from "@Components/Scoreboard";
+import { player, PlayerAttributes } from "@Game/entities/player/player";
 import "./index.scss";
 
 const Stats: React.FC = () => {

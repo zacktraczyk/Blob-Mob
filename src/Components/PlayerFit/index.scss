@@ -1,0 +1,58 @@
+@import "../../assets/styles/variables";
+
+.playerFit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3em;
+
+  width: 4em;
+  height: 6em;
+  border-width: 0.2em;
+  border-style: solid;
+
+  &.frame-normal {
+    border-color: white;
+  }
+
+  &.frame-locked {
+    color: $color-darkGray;
+    background-color: $color-gray;
+  }
+
+  &.frame-cant-afford {
+    color: $color-shop-cant-afford-main;
+    background-color: $color-shop-cant-afford-secondary;
+  }
+
+  &.frame-afford {
+    color: $color-shop-afford-main;
+    background-color: $color-shop-afford-secondary;
+  }
+
+  &.frame-selected {
+    color: $color-shop-selected;
+    background-color: none;
+  }
+
+  p {
+    font-size: 0.8em;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  canvas {
+    position: relative;
+    z-index: 100;
+    width: 3em;
+    height: 3em;
+    background-color: orange;
+  }
+
+  &-locked {
+    width: 3em;
+    height: 3em;
+    background-color: $color-darkGray;
+  }
+}

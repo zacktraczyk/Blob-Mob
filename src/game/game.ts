@@ -5,11 +5,13 @@ import { enemies } from "./entities/enemy";
 import { coins } from "./entities/coin";
 import { input } from "./input";
 import { drawController } from "./entities/draw";
+import { Face } from "./entities/player/faces/faces";
 
 export class Game {
   public ctx: CanvasRenderingContext2D|null;
   public frame: number;
   public paused: boolean;
+  private pauseKeyRelease: boolean;
 
   private scoreVal: number;
   public setScore: React.Dispatch<React.SetStateAction<number>> | undefined;
@@ -20,7 +22,7 @@ export class Game {
   private coinVal: number;
   public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined;
 
-  private pauseKeyRelease: boolean;
+  public purchasedFaces: Array<Face>;
 
   private fxSound: number;
   private musSound: number;
@@ -33,11 +35,13 @@ export class Game {
 
     this.scoreVal = 0;
     this.highscore = 0;
-    this.coinVal = 0;
+    this.coinVal = 100;
 
     this.frame = 0;
     this.paused = false;
     this.pauseKeyRelease = true;
+
+    this.purchasedFaces = [Face.Normal];
 
     this.fxSound = 1;
     this.musSound = 0.5;

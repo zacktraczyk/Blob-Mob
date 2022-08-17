@@ -1,0 +1,11 @@
+@import "../../../../assets/styles/variables";
+
+.body-fit {
+  &__items {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+
+    width: 100%;
+  }
+}
