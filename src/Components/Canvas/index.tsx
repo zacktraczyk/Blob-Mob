@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import "./index.scss";
 
+const FramesPerSecond = 60;
+const FrameMinTime = (1000/60) * (60 / FramesPerSecond) - (1000/60) * 0.5;
+
 interface CanvasProps {
   draw: Function;
 }
@@ -19,14 +22,23 @@ const Canvas = (props: CanvasProps) => {
     if (ctx == null) throw new Error("Could not get context");
 
     let animationFrameId = 0;
+    let lastFrameTime = 0;
 
-    const render = () => {
+    const render = (time: number) => {
+      if(time - lastFrameTime < FrameMinTime) {
+        animationFrameId = window.requestAnimationFrame(render);
+        return;
+      }
+
       resizeCanvasToDisplaySize(c);
       draw(ctx);
 
+      lastFrameTime = time;
       animationFrameId = window.requestAnimationFrame(render);
+
     };
-    render();
+
+    window.requestAnimationFrame(render);
 
     return () => {
       window.cancelAnimationFrame(animationFrameId);
