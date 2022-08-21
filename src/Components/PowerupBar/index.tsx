@@ -1,5 +1,5 @@
-import powerupDraw from "../../assets/icons/powerups/powerup-draw.png";
-import powerupPush from "../../assets/icons/powerups/powerup-push.png";
+import powerupDraw from "@Assets/icons/powerups/powerup-draw.png";
+import powerupPush from "@Assets/icons/powerups/powerup-push.png";
 
 import "./index.scss";
 
