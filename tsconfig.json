@@ -19,7 +19,28 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "baseUrl": "src",
+    "paths": {
+      "@App": [
+        "App.tsx"
+      ],
+      "@Apis/*": [
+        "apis/*"
+      ],
+      "@Assets/*": [
+        "assets/*"
+      ],
+      "@Game/*": [
+        "game/*"
+      ],
+      "@Components/*": [
+        "Components/*"
+      ],
+      "@Views/*": [
+        "Views/*",
+        "Views"
+      ],
+    }
   },
   "include": [
     "src"

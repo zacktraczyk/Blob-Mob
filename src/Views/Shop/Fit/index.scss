@@ -1,0 +1,45 @@
+@import "../../../assets/styles/variables";
+
+.fit {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  height: 80%;
+  width: 80%;
+
+  font-size: 0.6em;
+
+  h2 {
+    padding-bottom: 1em;
+
+    font-size: 1em;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  &__body {
+    &-items {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+
+    width: 100%;
+    }
+  }
+
+  &__face {
+    &-items {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+
+    width: 100%;
+    }
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .fit {
+    font-size: 0.7em;
+  }
+}

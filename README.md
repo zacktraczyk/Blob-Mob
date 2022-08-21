@@ -1,43 +1,17 @@
 # Blob Mob Fullstack Game
 
-I decided to add a backend login and leaderboard to my javascript game [Blob Mob](https://github.com/xxzbuckxx/Blob-Mob) which can be played [here](https://xxzbuckxx.github.io/Blob-Mob/).
+Originally a pure javascript game using HTML Canvas, now a typescript game with
+React for the UI components and menus. Play
+[here](https://xxzbuckxx.github.io/Blob-Mob/).
 
-## Frontend
-
-### Requirements
+## Requirements
 
 For development you need Node.js installed in your enviroment.
 
-### Install
+## Running the project
 
-``` Bash
-$ git clone git@github.com:xxzbuckxx/tic-tac-toe-react-demo.git
-$ cd tic-tac-toe-react-demo
-$ npm install
-```
+`$ yarn run dev`
 
-### Configure App
+## Simple build for production
 
-Open `vite.config.ts` to change the deployment url (called `base`).
-
-### Running the project
-
-`$ npm run dev`
-
-### Simple build for production
-
-`$ npm run build`
-
-## Backend
-
-### Requiremnts
-
-For development you need Node.js, the amazon CDK cli, and an AWS account.
-
-### Deploy
-
-``` Bash
-$ npm run build
-$ cdk synth
-$ cdk deploy
-```
+`$ yarn run build`

@@ -1,7 +1,7 @@
 import { saveHighscore } from "../../apis/firebase";
-import Login from "../../components/Login";
-import Scoreboard from "../../components/Scoreboard";
-import ShopCard from "../../components/ShopCard";
+import Login from "@Components/Login";
+import Scoreboard from "@Components/Scoreboard";
+import ShopCard from "@Components/ShopCard";
 import "./index.scss";
 
 interface Props {

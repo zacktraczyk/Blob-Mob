@@ -1,0 +1,101 @@
+@import "../../assets/styles/variables";
+
+.playerStat {
+  display: flex;
+  flex-direction: row;
+
+  width: 6em;
+  height: 3.2em;
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 3em;
+    height: 100%;
+
+    &-name {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    &-number {
+      line-height: 1;
+      font-size: 2em;
+      padding: 0px;
+      margin: 0px;
+    }
+  }
+
+
+  &__upgrade {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 3em;
+    height: 100%;
+
+    i {
+      font-size: 2em;
+      margin-top: 0.5em;
+      transition: all 0.1s;
+    }
+
+    &-cost {
+      p {
+        margin: 0px;
+        text-align: center;
+      }
+    }
+  }
+
+  .down {
+    i {
+      transform: scaleY(-1);
+    }
+  }
+
+  .afford {
+    i:active {
+      margin-top: 30px;
+    }
+
+    p {
+      color: green;
+    }
+
+  }
+
+  .cant-afford {
+    i {
+      color: $color-gray;
+    }
+
+    p {
+      color: #dc6d6d;
+    }
+  }
+
+  .speed {
+      color: $color-game-speed;
+  }
+
+  .health {
+      color: $color-game-health;
+  }
+
+  .power {
+      color: $color-game-power;
+  }
+
+  .cool {
+      color: $color-game-cool;
+  }
+
+  .default {
+      color: $color-main;
+  }
+}

@@ -7,9 +7,23 @@ $color-text-alt: #fff;
 $color-background: linear-gradient(to right, #E2AEDD, #EBCBF4);
 $color-card-background: #fff;
 
+$color-gray: #e6e6e6;
+$color-darkGray: #919191;
+
 $color-main: #E2AEDD;
 $color-signout: #e24a4a;
 $color-google: #4BD735;
 $color-facebook: #12BCF1;
 $color-tutorial: #F3B14E;
 $color-upgrade: #399C54;
+
+$color-game-cool: blue;
+$color-game-health: $color-main;
+$color-game-power: #33cc33;
+$color-game-speed: #F3B14E;
+
+$color-shop-afford-main: $color-game-power;
+$color-shop-afford-secondary: #d2ebd2;
+$color-shop-cant-afford-main: $color-signout;
+$color-shop-cant-afford-secondary: #f3d4d4;
+$color-shop-selected: $color-facebook;
