@@ -1,10 +1,11 @@
-import { State, Action, Entity } from "../entity";
-import { input, Input } from "../../input";
-import { damagePoints } from "../damagePoints";
-import { enemies } from "../enemy";
-import { coins } from "../coin";
-import { game } from "../../../App";
-import { drawFace, Face } from "./faces/faces";
+import { State, Action, Entity } from "./entity";
+import { input, Input } from "../input";
+import { damagePoints } from "./damagePoints";
+import { enemies } from "./enemy";
+import { coins } from "./coin";
+import { game } from "../../App";
+import { FaceAttr, FaceFunction, Face } from "../shop/faces";
+import faceNormal from "@Game/shop/faces/faceNormal";
 
 // Clamp number between two values with the following line:
 const clamp = (num: number, min: number, max: number) =>
@@ -23,7 +24,8 @@ export interface PlayerAttributes {
 }
 
 export class Player extends Entity {
-  public face: Face;
+  // Faces are assigned in Shop View
+  public face: keyof typeof Face;
   public frownCount: number;
   readonly frownCountMax: number;
 
@@ -53,9 +55,9 @@ export class Player extends Entity {
 
   constructor(x: number, y: number, w: number, h: number) {
     super(x, y, w, h);
+    this.face = "normal";
     this.color = colorNorm;
     this.state = State.Normal;
-    this.face = Face.Normal;
     this.frownCount = 0;
     this.frownCountMax = 30;
 
@@ -88,11 +90,12 @@ export class Player extends Entity {
     let x = this.x - this.w / 2;
     let y = this.y - this.h / 2;
 
-    //Draws body
+    // Draws body
     ctx.fillStyle = this.color; //Set to #ffd6cc
     ctx.fillRect(x, y, this.w, this.h);
 
-    drawFace(ctx, player, this.face)
+    // Draws Face
+    Face[this.face](ctx, player);
 
     if (this.action == Action.Push) {
       ctx.beginPath();
@@ -102,7 +105,7 @@ export class Player extends Entity {
     }
   }
 
-  // Controllers --------------------  
+  // Controllers --------------------
   public controller(w: number, h: number) {
     if (this.state == State.Dead) {
       return;
@@ -130,7 +133,11 @@ export class Player extends Entity {
     // Check Coin Collisions
     if (coins) {
       coins.instances.forEach((coin) => {
-        if (this.collides(coin) && (coin.state == State.Normal || (coin.state == State.Spawn && coin.timer <= 0))) {
+        if (
+          this.collides(coin) &&
+          (coin.state == State.Normal ||
+            (coin.state == State.Spawn && coin.timer <= 0))
+        ) {
           coin.state = State.Dying;
         }
       });
@@ -191,7 +198,7 @@ export class Player extends Entity {
     // Increase speed if keydown
     // if (dir.right) {
 
-    // } 
+    // }
     // if (dir.right && dir.)
 
     if (dir.right) this.xvel += this.accel;
@@ -334,7 +341,7 @@ export class Player extends Entity {
 
   public updatePower() {
     if (this.power < this.maxPower) {
-      this.power+= 2;
+      this.power += 2;
     } else {
       this.power = this.maxPower;
     }

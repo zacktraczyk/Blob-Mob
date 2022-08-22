@@ -78,8 +78,8 @@ export class Input {
   public mousePosition(event: MouseEvent) {
     // <++> TODO: Fix canvas scaling
     // *2 is janky fix for scaling in canvas component
-    this.mouse.x = event.x*2;
-    this.mouse.y = event.y*2;
+    this.mouse.x = event.x * 1.5;
+    this.mouse.y = event.y * 1.5;
   }
 
   public addMouseListener() {

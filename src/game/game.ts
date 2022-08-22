@@ -1,14 +1,14 @@
 import { Scenes } from "./scenes/scenes";
-import { player } from "./entities/player/player";
+import { player } from "./entities/player";
 import { damagePoints } from "./entities/damagePoints";
 import { enemies } from "./entities/enemy";
 import { coins } from "./entities/coin";
 import { input } from "./input";
 import { drawController } from "./entities/draw";
-import { Face } from "./entities/player/faces/faces";
+import { Face } from "./shop/faces";
 
 export class Game {
-  public ctx: CanvasRenderingContext2D|null;
+  public ctx: CanvasRenderingContext2D | null;
   public frame: number;
   public paused: boolean;
   private pauseKeyRelease: boolean;
@@ -21,8 +21,6 @@ export class Game {
 
   private coinVal: number;
   public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined;
-
-  public purchasedFaces: Array<Face>;
 
   private fxSound: number;
   private musSound: number;
@@ -40,8 +38,6 @@ export class Game {
     this.frame = 0;
     this.paused = false;
     this.pauseKeyRelease = true;
-
-    this.purchasedFaces = [Face.Normal];
 
     this.fxSound = 1;
     this.musSound = 0.5;

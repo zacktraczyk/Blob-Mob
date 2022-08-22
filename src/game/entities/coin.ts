@@ -1,6 +1,6 @@
 import { Game } from "../game";
 import { Entity, State } from "./entity";
-import { player } from "./player/player";
+import { player } from "./player";
 
 class CoinController {
   public instances: Array<Coin>;
@@ -62,8 +62,8 @@ class Coin extends Entity {
       let [xvel, yvel] = player.velocity;
 
       const spread = Math.random() - 0.5;
-      xvel += (yvel/4)*spread;
-      yvel += (xvel/4)*spread;
+      xvel += (yvel / 4) * spread;
+      yvel += (xvel / 4) * spread;
 
       // Normalize vector
       const mag = Math.sqrt(xvel * xvel + yvel * yvel);

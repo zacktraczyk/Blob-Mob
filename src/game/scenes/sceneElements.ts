@@ -1,5 +1,5 @@
 import { game } from "@App";
-import { player } from "../entities/player/player";
+import { player } from "../entities/player";
 
 export function drawHUD() {
   const ctx = game.ctx;
@@ -10,7 +10,7 @@ export function drawHUD() {
   const barHeight = h / 40;
   const barPadding = 20;
   const borderWidth = 7;
-  const fontSize = barHeight/2; 
+  const fontSize = barHeight / 2;
 
   // Health
   ctx.fillStyle = "black";
@@ -20,7 +20,7 @@ export function drawHUD() {
   ctx.fillText(
     player.health + "/" + player.maxHealth,
     w * (3 / 4) - 10,
-    fontSize * (7/3)
+    fontSize * (7 / 3)
   );
   ctx.fillRect(
     w / 2 + borderWidth,
@@ -70,7 +70,8 @@ export function drawHUD() {
   ctx.fillRect(
     w / 2 + borderWidth,
     barPadding + barHeight + barPadding + borderWidth,
-    (1 - player.cool / player.maxCool) * (w / 4 - barPadding/2 - borderWidth * 2),
+    (1 - player.cool / player.maxCool) *
+      (w / 4 - barPadding / 2 - borderWidth * 2),
     barHeight - borderWidth * 2
   );
 

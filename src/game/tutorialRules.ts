@@ -3,7 +3,7 @@ import { Game } from "./game";
 import { Action } from "./entities/entity";
 import { enemies } from "./entities/enemy";
 import { input } from "./input";
-import { player } from "./entities/player/player";
+import { player } from "./entities/player";
 
 export enum Stage {
   move,
@@ -19,7 +19,7 @@ class TurtorialRules {
   public stage: Stage;
   private check: boolean;
 
-  private controlCheck: [0|1, 0|1, 0|1, 0|1];
+  private controlCheck: [0 | 1, 0 | 1, 0 | 1, 0 | 1];
 
   constructor() {
     this.timer = 0;

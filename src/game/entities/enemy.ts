@@ -4,7 +4,7 @@ import { Scenes } from "../scenes/scenes";
 import { coins } from "./coin";
 import { drawController } from "./draw";
 import { State, Entity, Action } from "./entity";
-import { player, Player } from "./player/player";
+import { player, Player } from "./player";
 
 class EnemyController {
   public instances: Array<Enemy>;
@@ -70,7 +70,7 @@ class EnemyController {
   }
 
   public spawn(w: number, h: number, player: Player) {
-    const speed = this.speed * (Math.log(Math.random())/2 + 1);
+    const speed = this.speed * (Math.log(Math.random()) / 2 + 1);
 
     let enemy = new Enemy(w, h, player, this.speed);
     this.instances.push(enemy);

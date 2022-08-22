@@ -1,7 +1,7 @@
 import { input } from "../input";
 import { enemies } from "./enemy";
 import { Entity, State } from "./entity";
-import { player } from "./player/player";
+import { player } from "./player";
 
 const distance = ([x1, y1]: Point, [x2, y2]: Point) =>
   Math.abs(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));

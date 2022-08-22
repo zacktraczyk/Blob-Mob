@@ -1,15 +1,6 @@
-import Canvas from "@Components/Canvas";
-import {
-  drawFace,
-  Face,
-  faceCyclops,
-  faceNormal,
-} from "@Game/entities/player/faces/faces";
-import { faceTooth } from "@Game/entities/player/faces/faceTooth";
-import { player } from "@Game/entities/player/player";
-import PlayerFit from "@Components/PlayerFit";
 import { useReducer } from "react";
-import { game } from "@App";
+import Canvas from "@Components/Canvas";
+import PlayerFit from "@Components/PlayerFit";
 
 import "./index.scss";
 
@@ -23,49 +14,31 @@ const Faces: React.FC = () => {
         <PlayerFit
           name={"Default"}
           cost={0}
-          locked={false}
-          face={Face.Normal}
-          faceFunc={faceNormal}
+          face={"normal"}
           onClick={forceUpdate}
         />
         <PlayerFit
           name={"Baby"}
-          cost={5}
-          locked={false}
-          face={Face.Tooth}
-          faceFunc={faceTooth}
+          cost={10}
+          face={"tooth"}
           onClick={forceUpdate}
         />
         <PlayerFit
           name={"Cyclops"}
-          cost={15}
-          locked={false}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
+          cost={10}
+          face={"cyclops"}
           onClick={forceUpdate}
         />
         <PlayerFit
-          name={"Cyclops"}
-          cost={15}
-          locked={true}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
+          name={"Default"}
+          cost={-1}
+          face={"normal"}
           onClick={forceUpdate}
         />
         <PlayerFit
-          name={"Cyclops"}
-          cost={15}
-          locked={true}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
-          onClick={forceUpdate}
-        />
-        <PlayerFit
-          name={"Cyclops"}
-          cost={15}
-          locked={true}
-          face={Face.Cyclops}
-          faceFunc={faceCyclops}
+          name={"Default"}
+          cost={-1}
+          face={"normal"}
           onClick={forceUpdate}
         />
       </div>

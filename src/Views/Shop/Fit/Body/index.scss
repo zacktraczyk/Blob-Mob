@@ -4,7 +4,7 @@
   &__items {
     display: flex;
     flex-direction: row;
-    gap: 0.5em;
+    justify-content: space-between;
 
     width: 100%;
   }

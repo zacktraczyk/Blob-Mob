@@ -5,7 +5,7 @@ import { app } from "@Apis/firebase";
 import Login from "@Components/Login";
 import PlayerStat from "@Components/PlayerStat";
 import Scoreboard from "@Components/Scoreboard";
-import { player, PlayerAttributes } from "@Game/entities/player/player";
+import { player, PlayerAttributes } from "@Game/entities/player";
 import "./index.scss";
 
 const Stats: React.FC = () => {

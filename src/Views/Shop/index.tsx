@@ -6,7 +6,7 @@ import Login from "@Components/Login";
 import PlayerStat from "@Components/PlayerStat";
 import Scoreboard from "@Components/Scoreboard";
 import { game } from "@App";
-import { player, PlayerAttributes } from "@Game/entities/player/player";
+import { player, PlayerAttributes } from "@Game/entities/player";
 import { enemies } from "@Game/entities/enemy";
 import Stats from "./Stats";
 import "./index.scss";

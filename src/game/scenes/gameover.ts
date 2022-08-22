@@ -1,6 +1,6 @@
-import { game } from '@App';
-import { player } from '../entities/player/player';
-import { enemies } from '../entities/enemy';
+import { game } from "@App";
+import { player } from "../entities/player";
+import { enemies } from "../entities/enemy";
 
 export function Gameover() {
   update();

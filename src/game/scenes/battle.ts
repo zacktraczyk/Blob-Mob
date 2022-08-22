@@ -2,7 +2,7 @@ import { game } from "@App";
 import { State } from "../entities/entity";
 import { difficultyScalar } from "../difficulty";
 import { input } from "../input";
-import { player } from "../entities/player/player";
+import { player } from "../entities/player";
 import { damagePoints } from "../entities/damagePoints";
 import { enemies } from "../entities/enemy";
 import { coins } from "../entities/coin";

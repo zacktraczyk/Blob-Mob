@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import "./index.scss";
 
-const FramesPerSecond = 60;
-const FrameMinTime = (1000/60) * (60 / FramesPerSecond) - (1000/60) * 0.5;
+const FramesPerSecond = 30;
+const FrameMinTime = (1000 / 60) * (60 / FramesPerSecond) - (1000 / 60) * 0.5;
 
 interface CanvasProps {
   draw: Function;
@@ -25,7 +25,7 @@ const Canvas = (props: CanvasProps) => {
     let lastFrameTime = 0;
 
     const render = (time: number) => {
-      if(time - lastFrameTime < FrameMinTime) {
+      if (time - lastFrameTime < FrameMinTime) {
         animationFrameId = window.requestAnimationFrame(render);
         return;
       }
@@ -35,7 +35,6 @@ const Canvas = (props: CanvasProps) => {
 
       lastFrameTime = time;
       animationFrameId = window.requestAnimationFrame(render);
-
     };
 
     window.requestAnimationFrame(render);
@@ -54,8 +53,8 @@ const resizeCanvasToDisplaySize = (canvas: HTMLCanvasElement) => {
   const { width, height } = canvas.getBoundingClientRect();
 
   if (canvas.width !== width || canvas.height !== height) {
-    canvas.width = width * 2;
-    canvas.height = height * 2;
+    canvas.width = width * 1.5;
+    canvas.height = height * 1.5;
     return true;
   }
 

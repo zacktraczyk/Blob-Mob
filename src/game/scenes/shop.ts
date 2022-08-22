@@ -2,7 +2,7 @@ import { game } from "@App";
 import { input } from "../input";
 import { drawHUD } from "./sceneElements";
 import { State } from "../entities/entity";
-import { player } from "../entities/player/player";
+import { player } from "../entities/player";
 import { enemies } from "../entities/enemy";
 import { damagePoints } from "../entities/damagePoints";
 
@@ -36,7 +36,7 @@ function update() {
 
   if (input.keyState.enemySpawn) {
     if (spawnEnemyRelease) {
-      enemies.spawn(ctx.canvas.width, ctx.canvas.height, player) ;
+      enemies.spawn(ctx.canvas.width, ctx.canvas.height, player);
     }
     spawnEnemyRelease = false;
   } else {

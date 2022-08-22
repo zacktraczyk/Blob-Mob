@@ -1,17 +1,10 @@
-export const faceTooth = (
+import { FaceAttr, FaceFunction } from ".";
+
+const faceNormal: FaceFunction = (
   ctx: CanvasRenderingContext2D,
-
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-
-  xvel: number,
-  yvel: number,
-
-  frownCount: number,
-  frownCountMax: number
+  faceAttr: FaceAttr
 ) => {
+  let { x, y, w, h, xvel, yvel, frownCount, frownCountMax } = faceAttr;
   // Translate center x,y to draw corner
   x -= w / 2;
   y -= h / 2;
@@ -44,29 +37,11 @@ export const faceTooth = (
   ctx.stroke();
   ctx.closePath();
 
-  // Tooth
-  const [mouthX, mouthY] = [w / 8, h / 2 + 5];
-  const mouthH = h / 4;
-  let frownDelta = (frownCount / frownCountMax) * 1.4 - 0.7;
-  const toothWidth = w / 8;
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "black";
-  ctx.fillRect(
-    x + w / 2 - toothWidth / 2,
-    y + mouthY + mouthH * -frownDelta,
-    toothWidth,
-    toothWidth
-  );
-  ctx.strokeRect(
-    x + w / 2 - toothWidth / 2,
-    y + mouthY + mouthH * -frownDelta,
-    toothWidth,
-    toothWidth
-  );
-
-  // Draws Mouth
-  frownDelta = (frownCount / frownCountMax) * 2 - 1;
+  //Draws Mouth
   ctx.beginPath();
+  const frownDelta = (frownCount / frownCountMax) * 2 - 1;
+  const [mouthX, mouthY] = [w / 8, h * (3 / 4)];
+  const mouthH = h / 8;
   ctx.moveTo(x + mouthX, y + mouthY + frownDelta);
   ctx.bezierCurveTo(
     x + mouthX,
@@ -78,5 +53,6 @@ export const faceTooth = (
   );
   ctx.stroke();
   ctx.closePath();
-
 };
+
+export default faceNormal;
