@@ -46,7 +46,6 @@ const App = () => {
       </div>
 
       <Coins />
-      {/* {page != View.Home && <PowerupBar />} */}
       <Navbar
         navHome={() => {
           setPage(View.Home);
