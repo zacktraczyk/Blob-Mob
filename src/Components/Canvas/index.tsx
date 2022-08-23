@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import "./index.scss";
 
-const FramesPerSecond = 30;
+const FramesPerSecond = 60;
 const FrameMinTime = (1000 / 60) * (60 / FramesPerSecond) - (1000 / 60) * 0.5;
 
 interface CanvasProps {
@@ -29,6 +29,7 @@ const Canvas = (props: CanvasProps) => {
         animationFrameId = window.requestAnimationFrame(render);
         return;
       }
+      c.onselectstart = () => false; // disable text selecting on canvas
 
       resizeCanvasToDisplaySize(c);
       draw(ctx);

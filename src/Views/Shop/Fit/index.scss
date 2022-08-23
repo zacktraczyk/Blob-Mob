@@ -1,5 +1,3 @@
-@import "../../../assets/styles/variables";
-
 .fit {
   display: flex;
   flex-direction: column;
@@ -15,6 +13,15 @@
     font-size: 1em;
     font-weight: normal;
     text-align: left;
+  }
+
+  .fit-items {
+    display: flex;
+    flex-direction: row;
+    gap: 1.6em;
+
+    overflow-x: scroll;
+    overflow-y: auto;
   }
 }
 

@@ -9,7 +9,6 @@ import { input } from "./input";
 
 import { View } from "@Views/index.tsx";
 import { saveHighscore } from "@Apis/firebase";
-import { coins } from "./entities/coin";
 import { Game } from "./game";
 
 export const Main = (
@@ -59,6 +58,4 @@ export const Main = (
       Gameover();
       break;
   }
-
-  // input.mouseDown = false; // THIS IS AN EVIL FIX FOR MOUSE INPUT
 };

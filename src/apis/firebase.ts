@@ -55,7 +55,7 @@ export const saveHighscore = async (score: Number) => {
           score: score,
         });
       } else {
-        console.log("not a new highscore :/")
+        console.log("not a new highscore :/");
       }
     } else {
       const highscoresRef = collection(db, "highscores");

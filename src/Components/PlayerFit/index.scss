@@ -7,7 +7,7 @@
   justify-content: flex-start;
   gap: 0.3em;
 
-  width: 4.5em;
+  min-width: 4.5em;
   height: 6em;
   border-width: 0.2em;
   border-style: solid;
@@ -47,12 +47,6 @@
     z-index: 100;
     width: 3em;
     height: 3em;
-    background-color: orange;
-  }
-
-  &-locked {
-    width: 3em;
-    height: 3em;
-    background-color: $color-darkGray;
+    // background-color: orange;
   }
 }

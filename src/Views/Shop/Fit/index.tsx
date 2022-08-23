@@ -1,18 +1,25 @@
-import { useReducer } from "react";
-import Body from "./Body";
+import { player } from "@Game/entities/player";
+import shop from "@Game/shop";
+import { useEffect, useReducer, useState } from "react";
+import Bodies from "./Bodies";
 import Faces from "./Faces";
-import Hat from "./Hat";
+import Hats from "./Hats";
 
 import "./index.scss";
 
 const Fit: React.FC = () => {
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [playerFit, setPlayerFit] = useState({
+    body: player.body,
+    face: player.face,
+  });
+
+  shop.setPlayerFit = setPlayerFit;
 
   return (
     <div className="fit">
-      <Body />
-      <Faces />
-      <Hat />
+      <Bodies fit={playerFit} />
+      <Faces fit={playerFit} />
+      {/* <Hats /> */}
     </div>
   );
 };

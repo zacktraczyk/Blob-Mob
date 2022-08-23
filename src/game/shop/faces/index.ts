@@ -19,7 +19,19 @@ export type FaceFunction = (
 ) => void;
 
 export const Face = {
-  normal: faceNormal,
-  tooth: faceTooth,
-  cyclops: faceCyclops,
+  normal: {
+    name: "Default",
+    draw: faceNormal,
+    cost: 0,
+  },
+  tooth: {
+    name: "Baby",
+    draw: faceTooth,
+    cost: 20,
+  },
+  cyclops: {
+    name: "Cyclops",
+    draw: faceCyclops,
+    cost: 30,
+  },
 };
