@@ -3,6 +3,7 @@ import { game } from "@App";
 import { player } from "@Game/entities/player";
 import { Face, FaceAttr } from "@Game/shop/faces";
 import { Body, BodyAttr } from "@Game/shop/bodies";
+import { Hat, HatAttr } from "@Game/shop/hats";
 import shop from "@Game/shop";
 
 import "./index.scss";
@@ -17,34 +18,38 @@ interface Props {
   type: PlayerFitType;
   face: keyof typeof Face;
   body: keyof typeof Body;
+  hat: keyof typeof Hat;
 }
 
 const PlayerFit: React.FC<Props> = (props: Props) => {
-  const { type, face, body } = props;
+  const { type, face, body, hat } = props;
 
   // Get Draw Functions
   const drawBody = Body[body].draw;
   const drawFace = Face[face].draw;
-  // const drawHat = Hat[hat].draw;
+  const drawHat = Hat[hat].draw;
 
   // Get Cost
   let cost = 0;
   let name = "";
+  let purchased = false;
+  let selected = false;
   if (type == PlayerFitType.Body) {
     cost = Body[body].cost;
     name = Body[body].name;
+    purchased = shop.checkPurchaseBody(body);
+    selected = player.body === body;
   } else if (type == PlayerFitType.Face) {
     cost = Face[face].cost;
     name = Face[face].name;
+    purchased = shop.checkPurchaseFace(face);
+    selected = player.face === face;
+  } else if (type == PlayerFitType.Hat) {
+    cost = Hat[hat].cost;
+    name = Hat[hat].name;
+    purchased = shop.checkPurchaseHat(hat);
+    selected = player.hat === hat;
   }
-  // else if (type == PlayerFitType.Hat) cost = Hat[hat].cost
-
-  const purchased =
-    (type == PlayerFitType.Face && shop.checkPurchaseFace(face)) ||
-    (type == PlayerFitType.Body && shop.checkPurchaseBody(body));
-  const selected =
-    (type == PlayerFitType.Face && player.face === face) ||
-    (type == PlayerFitType.Body && player.body === body);
 
   let frameClass = "frame-normal";
   let label = "";
@@ -70,9 +75,11 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
   const click = () => {
     shop.purchaseFace(face);
     shop.purchaseBody(body);
+    shop.purchaseHat(hat);
     if (purchased) {
       player.face = face;
       player.body = body;
+      player.hat = hat;
     }
     shop.syncReactShop();
   };
@@ -82,7 +89,7 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
       <p className="playerFit-name">{cost >= 0 ? name : "LOCKED"}</p>
       <Canvas
         draw={(ctx: CanvasRenderingContext2D) => {
-          const bodyAtter: BodyAttr = {
+          const bodyAttr: BodyAttr = {
             x: ctx.canvas.width / 2,
             y: ctx.canvas.height / 2,
             w: ctx.canvas.width,
@@ -90,14 +97,28 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
           };
 
           const faceAttr: FaceAttr = {
-            ...bodyAtter,
+            ...bodyAttr,
             xvel: player.xvel,
             yvel: player.yvel,
             frownCount: player.frownCount,
             frownCountMax: player.frownCountMax,
           };
 
-          drawBody(ctx, bodyAtter);
+          if (type == PlayerFitType.Hat) {
+            const hatAttr: HatAttr = {
+              x: ctx.canvas.width / 2,
+              y: ctx.canvas.height * (11 / 8),
+              w: ctx.canvas.width,
+              h: ctx.canvas.height,
+              xvel: player.xvel,
+              yvel: player.yvel,
+            };
+
+            drawHat(ctx, hatAttr);
+            return;
+          }
+
+          drawBody(ctx, bodyAttr);
           drawFace(ctx, faceAttr);
         }}
       />

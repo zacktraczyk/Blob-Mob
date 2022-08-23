@@ -7,6 +7,7 @@ import { game } from "../../App";
 import { FaceAttr, FaceFunction, Face } from "../shop/faces";
 import faceNormal from "@Game/shop/faces/faceNormal";
 import { Body } from "@Game/shop/bodies";
+import { Hat } from "@Game/shop/hats";
 
 // Clamp number between two values with the following line:
 const clamp = (num: number, min: number, max: number) =>
@@ -28,6 +29,7 @@ export class Player extends Entity {
   // Faces are assigned in Shop View
   public body: keyof typeof Body;
   public face: keyof typeof Face;
+  public hat: keyof typeof Hat;
   public frownCount: number;
   readonly frownCountMax: number;
 
@@ -36,7 +38,6 @@ export class Player extends Entity {
   private ydir: number;
   public xvel: number;
   public yvel: number;
-  private maxSpeed: number;
 
   public action: Action;
   public damaging: boolean;
@@ -46,6 +47,7 @@ export class Player extends Entity {
   private timer: number;
 
   // Adjustable
+  public maxSpeed: number;
   public maxCool: number;
   public maxPower: number;
   public maxHealth: number;
@@ -60,6 +62,7 @@ export class Player extends Entity {
 
     this.body = "normal";
     this.face = "normal";
+    this.hat = "normal";
     this.color = colorNorm;
     this.state = State.Normal;
     this.frownCount = 0;
@@ -94,6 +97,9 @@ export class Player extends Entity {
 
     // Draws Face
     Face[this.face].draw(ctx, player);
+
+    // Draws Hat
+    Hat[this.hat].draw(ctx, player);
 
     if (this.action == Action.Push) {
       ctx.beginPath();

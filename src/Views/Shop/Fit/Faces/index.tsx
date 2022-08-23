@@ -1,24 +1,32 @@
 import Canvas from "@Components/Canvas";
 import PlayerFit, { PlayerFitType } from "@Components/PlayerFit";
-import { Face } from "@Game/shop/faces";
 import { player } from "@Game/entities/player";
 import { Body } from "@Game/shop/bodies";
+import { Face } from "@Game/shop/faces";
+import { Hat } from "@Game/shop/hats";
 
 interface Props {
   fit: {
     body: keyof typeof Body;
     face: keyof typeof Face;
+    hat: keyof typeof Hat;
   };
 }
 
 const Faces: React.FC<Props> = (props: Props) => {
-  const { body } = props.fit;
+  const { body, hat } = props.fit;
 
   let faces = new Array();
   let face: keyof typeof Face;
   for (face in Face) {
     faces.push(
-      <PlayerFit key={face} type={PlayerFitType.Face} body={body} face={face} />
+      <PlayerFit
+        key={face}
+        type={PlayerFitType.Face}
+        body={body}
+        face={face}
+        hat={hat}
+      />
     );
   }
 

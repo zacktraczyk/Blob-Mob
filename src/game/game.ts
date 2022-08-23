@@ -16,7 +16,9 @@ export class Game {
   private scoreVal: number;
   public setScore: React.Dispatch<React.SetStateAction<number>> | undefined;
 
-  public highscore: number;
+  public highscoreVal: number;
+  public setHighscore: React.Dispatch<React.SetStateAction<number>> | undefined;
+
   public difficulty: number; // not used
 
   private coinVal: number;
@@ -32,8 +34,8 @@ export class Game {
     this.difficulty = 5;
 
     this.scoreVal = 0;
-    this.highscore = 0;
-    this.coinVal = 100;
+    this.highscoreVal = 0;
+    this.coinVal = 0;
 
     this.frame = 0;
     this.paused = false;
@@ -65,11 +67,20 @@ export class Game {
     return this.coinVal;
   }
 
+  // Highscore getter/setter
+  public set highscore(val: number) {
+    this.highscoreVal = val;
+    this.syncReactHighscore();
+  }
+
+  public get highscore() {
+    return this.highscoreVal;
+  }
   // React hook calls
   public syncReactCoins() {
     if (!this.setCoins) {
       console.error(
-        "gameAttributes: syncReactCoins: setCoins hook not passed to GameAttributes Object"
+        "Game: syncReactCoins: setCoins hook not passed to game Object"
       );
       return;
     }
@@ -80,12 +91,23 @@ export class Game {
   public syncReactScore() {
     if (!this.setScore) {
       console.error(
-        "gameAttributes: syncReactScore: setScore hook not passed to GameAttributes Object"
+        "Game: syncReactScore: setScore hook not passed to game Object"
       );
       return;
     }
 
     this.setScore(this.score);
+  }
+
+  public syncReactHighscore() {
+    if (!this.setHighscore) {
+      console.error(
+        "Game: syncReactScore: setHighscore hook not passed to game Object"
+      );
+      return;
+    }
+
+    this.setHighscore(this.highscoreVal);
   }
 
   // Scene changes

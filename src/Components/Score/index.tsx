@@ -4,14 +4,9 @@ import "./index.scss";
 
 const Score: React.FC = () => {
   const [score, setScore] = useState(game.score);
+  const [highscore, setHighscore] = useState(game.highscore);
   game.setScore = setScore;
-  const highscore = game.highscore;
-  // const [highscore, setHighscore] = useState(props.highscore)
-
-  // useEffect(() => {
-  //   setScore(props.score);
-  //   setHighscore(props.highscore);
-  // }, [props.score, props.highscore])
+  game.setHighscore = setHighscore;
 
   return (
     <div className="score">

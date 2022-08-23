@@ -2,16 +2,19 @@ import { game } from "@App";
 import { player } from "@Game/entities/player";
 import { Body } from "./bodies";
 import { Face } from "./faces";
+import { Hat } from "./hats";
 
 class Shop {
   public purchasedFaces: Array<keyof typeof Face>;
   public purchasedBodies: Array<keyof typeof Body>;
+  public purchasedHats: Array<keyof typeof Hat>;
 
   public setPlayerFit:
     | React.Dispatch<
         React.SetStateAction<{
-          body: "normal" | "gold";
-          face: "normal" | "tooth" | "cyclops";
+          body: keyof typeof Body;
+          face: keyof typeof Face;
+          hat: keyof typeof Hat;
         }>
       >
     | undefined;
@@ -19,6 +22,7 @@ class Shop {
   constructor() {
     this.purchasedFaces = ["normal"];
     this.purchasedBodies = ["normal"];
+    this.purchasedHats = ["normal"];
   }
 
   public purchaseBody(body: keyof typeof Body): boolean {
@@ -50,6 +54,21 @@ class Shop {
     return false;
   }
 
+  public purchaseHat(hat: keyof typeof Hat): boolean {
+    const cost = Hat[hat].cost;
+
+    if (game.coins < cost) return false;
+
+    if (!this.checkPurchaseHat(hat)) {
+      game.coins -= cost;
+      shop.purchasedHats.push(hat);
+      // console.log(`added face ${face}, faces: ${shop.purchasedFaces}`);
+      return true;
+    }
+
+    return false;
+  }
+
   public checkPurchaseFace(face: keyof typeof Face): boolean {
     for (const i in this.purchasedFaces) {
       if (face === this.purchasedFaces[i]) {
@@ -62,6 +81,15 @@ class Shop {
   public checkPurchaseBody(body: keyof typeof Body): boolean {
     for (const i in this.purchasedBodies) {
       if (body === this.purchasedBodies[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public checkPurchaseHat(hat: keyof typeof Hat): boolean {
+    for (const i in this.purchasedHats) {
+      if (hat === this.purchasedHats[i]) {
         return true;
       }
     }
@@ -84,7 +112,11 @@ class Shop {
       return;
     }
 
-    this.setPlayerFit({ body: player.body, face: player.face });
+    this.setPlayerFit({
+      body: player.body,
+      face: player.face,
+      hat: player.hat,
+    });
   }
 }
 

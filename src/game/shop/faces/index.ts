@@ -27,11 +27,11 @@ export const Face = {
   tooth: {
     name: "Baby",
     draw: faceTooth,
-    cost: 20,
+    cost: 100,
   },
   cyclops: {
     name: "Cyclops",
     draw: faceCyclops,
-    cost: 30,
+    cost: 300,
   },
 };

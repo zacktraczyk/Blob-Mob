@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { doc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { auth, db } from "./apis/firebase";
+import { auth, db, getAccount, getHighscore } from "./apis/firebase";
 
 import Canvas from "@Components/Canvas";
 import Score from "@Components/Score";
@@ -13,19 +13,23 @@ import Views, { View } from "@Views/index.tsx";
 import { Game } from "@Game/game";
 import { Main } from "@Game/main";
 import { Scenes } from "@Game/scenes/scenes";
+import shop from "@Game/shop";
+import { onAuthStateChanged } from "firebase/auth";
 
 export const game = new Game();
 
 const App = () => {
   const [page, setPage] = useState<View>(View.Home);
 
-  const uid = "" + auth?.currentUser?.uid;
-  const docRef = doc(db, "highscores", uid);
-  const [highscore] = useDocumentData(docRef);
+  const onAuthStateChanged = () => {
+    getAccount();
+    getHighscore();
+  };
 
-  if (highscore && highscore.score) {
-    game.highscore = highscore.score;
-  }
+  useEffect(() => {
+    const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
   return (
     <>
@@ -42,7 +46,7 @@ const App = () => {
       </div>
 
       <Coins />
-      {page != View.Home && <PowerupBar />}
+      {/* {page != View.Home && <PowerupBar />} */}
       <Navbar
         navHome={() => {
           setPage(View.Home);

@@ -20,8 +20,8 @@ export const Body = {
     cost: 0,
   },
   gold: {
-    name: "Gold",
+    name: "Pee",
     draw: bodyGold,
-    cost: 10,
+    cost: 50,
   },
 };

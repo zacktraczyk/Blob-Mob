@@ -1,6 +1,6 @@
 import { getAuth } from "firebase/auth";
-import { auth } from "@Apis/firebase";
-import { useState } from "react";
+import { auth, updateAccount } from "@Apis/firebase";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@Components/Login";
 import PlayerStat from "@Components/PlayerStat";
@@ -38,6 +38,12 @@ const Shop: React.FC<Props> = (props: Props) => {
   if (user && user.displayName) {
     displayName = user.displayName;
   }
+
+  useEffect(() => {
+    return () => {
+      updateAccount();
+    };
+  }, []);
 
   return (
     <div className="shop">
