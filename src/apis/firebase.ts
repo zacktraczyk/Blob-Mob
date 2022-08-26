@@ -62,12 +62,17 @@ export const getAccount = async () => {
       purchasedBodies,
       purchasedFaces,
       purchasedHats,
+      fit,
     } = docSnap.data();
 
     game.coins = coins;
     shop.purchasedBodies = purchasedBodies;
     shop.purchasedFaces = purchasedFaces;
     shop.purchasedHats = purchasedHats;
+    player.body = fit.body;
+    player.face = fit.face;
+    player.hat = fit.hat;
+
     player.updateAttributes(playerAttr);
   } else {
     console.log("firebase: getAccount: Creating new user");
@@ -84,6 +89,11 @@ export const getAccount = async () => {
       purchasedBodies: shop.purchasedBodies,
       purchasedFaces: shop.purchasedFaces,
       purchasedHats: shop.purchasedHats,
+      fit: {
+        face: player.face,
+        body: player.body,
+        hat: player.hat,
+      },
     });
     saveHighscore(game.highscore);
   }
@@ -107,6 +117,11 @@ export const updateAccount = async () => {
     purchasedBodies: shop.purchasedBodies,
     purchasedFaces: shop.purchasedFaces,
     purchasedHats: shop.purchasedHats,
+    fit: {
+      face: player.face,
+      body: player.body,
+      hat: player.hat,
+    },
   });
 };
 
