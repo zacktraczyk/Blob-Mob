@@ -7,14 +7,14 @@ const Stat = {
   },
   maxSpeed: {
     name: "Speed",
-    initial: 1,
+    initial: 3,
     increase: 1,
     priceScale: [50, 100, 150, 200, 400, 500],
   },
   maxHealth: {
     name: "Health",
-    initial: 50,
-    increase: 10,
+    initial: 20,
+    increase: 20,
     priceScale: [20, 40, 50, 70, 90, 100],
   },
   maxCool: {

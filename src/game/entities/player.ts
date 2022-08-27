@@ -8,6 +8,7 @@ import { FaceAttr, FaceFunction, Face } from "../shop/faces";
 import faceNormal from "@Game/shop/faces/faceNormal";
 import { Body } from "@Game/shop/bodies";
 import { Hat } from "@Game/shop/hats";
+import Stat from "@Game/shop/stats";
 
 // Clamp number between two values with the following line:
 const clamp = (num: number, min: number, max: number) =>
@@ -81,10 +82,10 @@ export class Player extends Entity {
     this.pushR = 0;
     this.timer = 0;
 
-    this.maxSpeed = 4;
-    this.maxHealth = 50;
-    this.maxPower = 50;
-    this.maxCool = 150;
+    this.maxSpeed = Stat.maxSpeed.initial;
+    this.maxHealth = Stat.maxHealth.initial;
+    this.maxPower = Stat.maxPower.initial;
+    this.maxCool = Stat.maxCool.initial;
 
     this.health = this.maxHealth;
     this.power = 0;

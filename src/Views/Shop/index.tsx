@@ -20,7 +20,7 @@ interface Props {
 
 enum Tabs {
   Stats,
-  Powerups,
+  // Powerups,
   Fit,
 }
 
@@ -29,7 +29,7 @@ const Shop: React.FC<Props> = (props: Props) => {
   const [tab, setTab] = useState<Tabs>(Tabs.Stats);
 
   const navStatsClass = tab == Tabs.Stats ? "active" : "inactive";
-  const navPowerupsClass = tab == Tabs.Powerups ? "active" : "inactive";
+  // const navPowerupsClass = tab == Tabs.Powerups ? "active" : "inactive";
   const navFitClass = tab == Tabs.Fit ? "active" : "inactive";
 
   const [user] = useAuthState(auth);
@@ -72,13 +72,13 @@ const Shop: React.FC<Props> = (props: Props) => {
           Stats
           <i className="fa-solid fa-arrow-up-9-1"></i>
         </div>
-        <div
+        {/* <div
           className="tab-powerups-click tab-label"
           onClick={() => setTab(Tabs.Powerups)}
         >
           Powerups
           <i className="fa-brands fa-superpowers"></i>
-        </div>
+        </div> */}
         <div
           className="tab-fit-click tab-label"
           onClick={() => setTab(Tabs.Fit)}
@@ -87,15 +87,15 @@ const Shop: React.FC<Props> = (props: Props) => {
           <i className="fa-solid fa-glasses"></i>
         </div>
         <div className={`nav-top tab-stats ${navStatsClass}`}></div>
-        <div className={`nav-top tab-powerups ${navPowerupsClass}`}></div>
+        {/* <div className={`nav-top tab-powerups ${navPowerupsClass}`}></div> */}
         <div className={`nav-top tab-fit ${navFitClass}`}></div>
         {/* <h2>{displayName}</h2> */}
         <div className="shop__right-main">
           {tab == Tabs.Stats ? (
             <Stats />
-          ) : tab == Tabs.Powerups ? (
-            <Powerups />
           ) : (
+            // ) : tab == Tabs.Powerups ? (
+            //   <Powerups />
             <Fit />
           )}
         </div>
