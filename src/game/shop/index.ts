@@ -1,13 +1,20 @@
 import { game } from "@App";
-import { player } from "@Game/entities/player";
+import { player, PlayerAttributes } from "@Game/entities/player";
 import { Body } from "./bodies";
 import { Face } from "./faces";
 import { Hat } from "./hats";
+import Stat from "./stats";
 
 class Shop {
   public purchasedFaces: Array<keyof typeof Face>;
   public purchasedBodies: Array<keyof typeof Body>;
   public purchasedHats: Array<keyof typeof Hat>;
+
+  public purchasedStatsIdx: PlayerAttributes;
+
+  public setPlayerStats:
+    | React.Dispatch<React.SetStateAction<PlayerAttributes>>
+    | undefined;
 
   public setPlayerFit:
     | React.Dispatch<
@@ -23,8 +30,53 @@ class Shop {
     this.purchasedFaces = ["normal"];
     this.purchasedBodies = ["normal"];
     this.purchasedHats = ["normal"];
+    this.purchasedStatsIdx = {
+      maxHealth: 0,
+      maxPower: 0,
+      maxCool: 0,
+      maxSpeed: 0,
+    };
   }
 
+  // Stats ------------------------
+  public purchaseStat(stat: keyof PlayerAttributes): boolean {
+    const idx = this.purchasedStatsIdx[stat];
+    const cost = Stat[stat].priceScale[idx];
+
+    if (game.coins < cost) return false;
+
+    if (idx < Stat[stat].priceScale.length) {
+      game.coins -= cost;
+      this.purchasedStatsIdx[stat]++;
+      player[stat] += Stat[stat].increase;
+      this.syncReactStatsShop();
+      return true;
+    }
+
+    return false;
+  }
+
+  public syncReactStatsShop() {
+    if (!this.setPlayerStats) {
+      console.error(
+        "shop: syncReactShop: setPlayerStats hook not passed to Shop Object"
+      );
+      return;
+    }
+
+    console.log("SYNCING STATS");
+
+    this.setPlayerStats(player.getAttributes());
+  }
+
+  public syncPlayerStatsShop() {
+    let attr: keyof PlayerAttributes;
+    for (attr in this.purchasedStatsIdx) {
+      player[attr] =
+        Stat[attr].initial + Stat[attr].increase * this.purchasedStatsIdx[attr];
+    }
+  }
+  // Fit --------------------------
   public purchaseBody(body: keyof typeof Body): boolean {
     const cost = Body[body].cost;
 
@@ -32,7 +84,7 @@ class Shop {
 
     if (!this.checkPurchaseBody(body)) {
       game.coins -= cost;
-      shop.purchasedBodies.push(body);
+      this.purchasedBodies.push(body);
       return true;
     }
 
@@ -46,7 +98,7 @@ class Shop {
 
     if (!this.checkPurchaseFace(face)) {
       game.coins -= cost;
-      shop.purchasedFaces.push(face);
+      this.purchasedFaces.push(face);
       // console.log(`added face ${face}, faces: ${shop.purchasedFaces}`);
       return true;
     }
@@ -61,7 +113,7 @@ class Shop {
 
     if (!this.checkPurchaseHat(hat)) {
       game.coins -= cost;
-      shop.purchasedHats.push(hat);
+      this.purchasedHats.push(hat);
       // console.log(`added face ${face}, faces: ${shop.purchasedFaces}`);
       return true;
     }
@@ -96,15 +148,7 @@ class Shop {
     return false;
   }
 
-  public debug(ctx: CanvasRenderingContext2D) {
-    let x = ctx.canvas.width * (1 / 3);
-    let y = ctx.canvas.height * (7 / 8);
-    ctx.fillText("PurchasedFaces:" + this.purchasedFaces, x, y);
-    y += 10;
-    ctx.fillText("PurchasedBodies:" + this.purchasedBodies, x, y);
-  }
-
-  public syncReactShop() {
+  public syncReactFitShop() {
     if (!this.setPlayerFit) {
       console.error(
         "shop: syncReactShop: setPlayerFit hook not passed to Shop Object"
@@ -117,6 +161,14 @@ class Shop {
       face: player.face,
       hat: player.hat,
     });
+  }
+
+  public debug(ctx: CanvasRenderingContext2D) {
+    let x = ctx.canvas.width * (1 / 3);
+    let y = ctx.canvas.height * (7 / 8);
+    ctx.fillText("PurchasedFaces:" + this.purchasedFaces, x, y);
+    y += 10;
+    ctx.fillText("PurchasedBodies:" + this.purchasedBodies, x, y);
   }
 }
 

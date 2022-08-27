@@ -1,42 +1,44 @@
 import { useEffect, useState } from "react";
-import { game } from "../../App";
+import { player, PlayerAttributes } from "@Game/entities/player";
+import { game } from "@App";
 import "./index.scss";
+import Stat from "@Game/shop/stats";
+import shop from "@Game/shop";
 
 interface Props {
-  arrowUp: boolean;
-  name: string;
-  value: number;
-  cost: number;
-  updateValue: Function;
+  type: keyof PlayerAttributes;
+  stats: PlayerAttributes;
 }
 
 const PlayerStat: React.FC<Props> = (props: Props) => {
-  const { arrowUp, name, value, cost, updateValue } = props;
+  const { type, stats } = props;
 
-  const dir = arrowUp ? "up" : "down";
-  const afford = cost <= game.coins ? "afford" : "cant-afford";
+  const cost = Stat[type].priceScale[shop.purchasedStatsIdx[type]];
+  const name = Stat[type].name;
+  const value = stats[type];
+
+  let dir = "up";
   let arrowClass = "default";
-  switch (name) {
-    case "Speed":
+  switch (type) {
+    case "maxSpeed":
       arrowClass = "speed";
       break;
-    case "Health":
+    case "maxHealth":
       arrowClass = "health";
       break;
-    case "Power":
+    case "maxPower":
       arrowClass = "power";
       break;
-    case "Cool":
+    case "maxCool":
       arrowClass = "cool";
+      dir = "down";
       break;
   }
 
-  const purchaseUpdate = () => {
-    if (cost > game.coins) return;
+  const afford = cost <= game.coins ? "afford" : "cant-afford";
 
-    game.coins -= cost;
-    game.syncReactCoins();
-    updateValue();
+  const purchaseUpdate = () => {
+    shop.purchaseStat(type);
   };
 
   return (

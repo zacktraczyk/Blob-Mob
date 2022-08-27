@@ -1,4 +1,5 @@
 import { game } from "@App";
+import { Body } from "@Game/shop/bodies";
 import { player } from "../entities/player";
 
 export function drawHUD() {
@@ -12,10 +13,13 @@ export function drawHUD() {
   const borderWidth = 7;
   const fontSize = barHeight / 2;
 
+  const playerBody = Body[player.body];
+
   // Health
   ctx.fillStyle = "black";
   ctx.fillRect(w / 2, barPadding, w / 2 - barPadding, barHeight);
-  ctx.fillStyle = player.color;
+
+  ctx.fillStyle = playerBody.colorNorm;
   ctx.font = `${fontSize}px monospace`;
   ctx.fillText(
     player.health + "/" + player.maxHealth,
@@ -66,7 +70,7 @@ export function drawHUD() {
   );
 
   // Cool front Rectangle
-  ctx.fillStyle = "blue";
+  ctx.fillStyle = playerBody.colorCool;
   ctx.fillRect(
     w / 2 + borderWidth,
     barPadding + barHeight + barPadding + borderWidth,

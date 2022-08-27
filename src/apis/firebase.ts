@@ -58,32 +58,38 @@ export const getAccount = async () => {
     console.log(docSnap.data());
     const {
       coins,
-      playerAttr,
       purchasedBodies,
       purchasedFaces,
       purchasedHats,
+      playerAttrIdx,
+      fit,
     } = docSnap.data();
 
     game.coins = coins;
     shop.purchasedBodies = purchasedBodies;
     shop.purchasedFaces = purchasedFaces;
     shop.purchasedHats = purchasedHats;
-    player.updateAttributes(playerAttr);
+    shop.purchasedStatsIdx = playerAttrIdx;
+    player.body = fit.body;
+    player.face = fit.face;
+    player.hat = fit.hat;
+
+    shop.syncPlayerStatsShop();
   } else {
     console.log("firebase: getAccount: Creating new user");
     await setDoc(docRef, {
       uid: uid,
       username: auth?.currentUser?.displayName,
       coins: game.coins,
-      playerAttr: {
-        maxSpeed: player.maxSpeed,
-        maxCool: player.maxCool,
-        maxPower: player.maxPower,
-        maxHealth: player.maxHealth,
-      },
+      playerAttrIdx: shop.purchasedStatsIdx,
       purchasedBodies: shop.purchasedBodies,
       purchasedFaces: shop.purchasedFaces,
       purchasedHats: shop.purchasedHats,
+      fit: {
+        face: player.face,
+        body: player.body,
+        hat: player.hat,
+      },
     });
     saveHighscore(game.highscore);
   }
@@ -98,15 +104,15 @@ export const updateAccount = async () => {
   const docRef = doc(db, "players", uid);
   await updateDoc(docRef, {
     coins: game.coins,
-    playerAttr: {
-      maxSpeed: player.maxSpeed,
-      maxCool: player.maxCool,
-      maxPower: player.maxPower,
-      maxHealth: player.maxHealth,
-    },
+    playerAttrIdx: shop.purchasedStatsIdx,
     purchasedBodies: shop.purchasedBodies,
     purchasedFaces: shop.purchasedFaces,
     purchasedHats: shop.purchasedHats,
+    fit: {
+      face: player.face,
+      body: player.body,
+      hat: player.hat,
+    },
   });
 };
 

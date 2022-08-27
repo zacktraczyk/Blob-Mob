@@ -81,7 +81,7 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
       player.body = body;
       player.hat = hat;
     }
-    shop.syncReactShop();
+    shop.syncReactFitShop();
   };
 
   return (
@@ -94,6 +94,8 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
             y: ctx.canvas.height / 2,
             w: ctx.canvas.width,
             h: ctx.canvas.height,
+            cool: player.cool,
+            maxCool: player.maxCool,
           };
 
           const faceAttr: FaceAttr = {
