@@ -92,14 +92,14 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
           const pos = {
             x: ctx.canvas.width / 2,
             y: ctx.canvas.height / 2,
-            w: ctx.canvas.width,
-            h: ctx.canvas.height,
+            w: ctx.canvas.width * (5 / 8),
+            h: ctx.canvas.width * (5 / 8),
           };
 
           if (type == PlayerFitType.Hat) {
             drawHat(ctx, {
               ...pos,
-              y: ctx.canvas.height * (11 / 8),
+              y: ctx.canvas.height * (6 / 7),
               xvel: player.xvel,
               yvel: player.yvel,
             });

@@ -1,11 +1,8 @@
 @use "@Styles" as *;
 
 .playerFit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.3em;
+  position: relative;
+  text-align: center;
 
   min-width: 4.5em;
   height: 6em;
@@ -36,6 +33,21 @@
     background-color: none;
   }
 
+  &-name {
+    position: absolute;
+    top: 0em;
+    width: 100%;
+    z-index: 200;
+  }
+
+  &-label {
+    position: absolute;
+    margin-bottom: 0;
+    bottom: 0em;
+    width: 100%;
+    z-index: 200;
+  }
+
   p {
     font-size: 0.8em;
     padding: 0px;
@@ -43,10 +55,10 @@
   }
 
   canvas {
-    position: relative;
-    z-index: 100;
-    width: 3em;
-    height: 3em;
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
     // background-color: orange;
   }
 }
