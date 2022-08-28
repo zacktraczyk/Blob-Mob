@@ -1,17 +1,17 @@
-import { getAuth } from "firebase/auth";
 import { auth, updateAccount } from "@Apis/firebase";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Login from "@Components/Login";
+import Login from "@Views/Home/Login";
 import PlayerStat from "@Components/PlayerStat";
-import Scoreboard from "@Components/Scoreboard";
+import Scoreboard from "@Views/Home/Scoreboard";
 import { game } from "@App";
 import { player, PlayerAttributes } from "@Game/entities/player";
 import { enemies } from "@Game/entities/enemy";
 import Stats from "./Stats";
-import "./index.scss";
-import Powerups from "./Powerups";
+// import Powerups from "./Powerups";
 import Fit from "./Fit";
+
+import "./index.scss";
 
 interface Props {
   navHome: Function;

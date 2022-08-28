@@ -1,7 +1,7 @@
 import { saveHighscore } from "../../apis/firebase";
-import Login from "@Components/Login";
-import Scoreboard from "@Components/Scoreboard";
-import ShopCard from "@Components/ShopCard";
+import Login from "@Views/Home/Login";
+import Scoreboard from "@Views/Home/Scoreboard";
+import ShopCard from "@Views/Home/ShopCard";
 import "./index.scss";
 
 interface Props {
@@ -15,9 +15,9 @@ const Home: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="home">
-        <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
-        <ShopCard navShop={() => navShop()} />
-        <Scoreboard />
+      <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
+      <ShopCard navShop={() => navShop()} />
+      <Scoreboard />
     </div>
   );
 };

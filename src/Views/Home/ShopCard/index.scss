@@ -1,5 +1,4 @@
-@import "../../assets/styles/card";
-@import "../../assets/styles/button";
+@use "@Styles" as *;
 
 .shopCard {
   display: flex;
@@ -17,7 +16,7 @@
     font-size: 2em;
   }
 
-    .upgrade-button {
-      background-color: $color-upgrade;
-    }
+  .upgrade-button {
+    background-color: $color-upgrade;
+  }
 }

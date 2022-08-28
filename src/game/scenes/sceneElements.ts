@@ -20,6 +20,10 @@ export function drawHUD() {
   ctx.fillRect(w / 2, barPadding, w / 2 - barPadding, barHeight);
 
   ctx.fillStyle = playerBody.colorNorm;
+  if (player && player.damaging) {
+    ctx.fillStyle = playerBody.colorDamg;
+    console.log("SCENE DRAW DAMAGE");
+  }
   ctx.font = `${fontSize}px monospace`;
   ctx.fillText(
     player.health + "/" + player.maxHealth,

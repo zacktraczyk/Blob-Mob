@@ -89,39 +89,37 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
       <p className="playerFit-name">{cost >= 0 ? name : "LOCKED"}</p>
       <Canvas
         draw={(ctx: CanvasRenderingContext2D) => {
-          const bodyAttr: BodyAttr = {
+          const pos = {
             x: ctx.canvas.width / 2,
             y: ctx.canvas.height / 2,
             w: ctx.canvas.width,
             h: ctx.canvas.height,
-            cool: player.cool,
-            maxCool: player.maxCool,
           };
 
-          const faceAttr: FaceAttr = {
-            ...bodyAttr,
+          if (type == PlayerFitType.Hat) {
+            drawHat(ctx, {
+              ...pos,
+              y: ctx.canvas.height * (11 / 8),
+              xvel: player.xvel,
+              yvel: player.yvel,
+            });
+            return;
+          }
+
+          drawBody(ctx, {
+            ...pos,
+            cool: player.cool,
+            maxCool: player.maxCool,
+            damaging: player.damaging,
+          });
+
+          drawFace(ctx, {
+            ...pos,
             xvel: player.xvel,
             yvel: player.yvel,
             frownCount: player.frownCount,
             frownCountMax: player.frownCountMax,
-          };
-
-          if (type == PlayerFitType.Hat) {
-            const hatAttr: HatAttr = {
-              x: ctx.canvas.width / 2,
-              y: ctx.canvas.height * (11 / 8),
-              w: ctx.canvas.width,
-              h: ctx.canvas.height,
-              xvel: player.xvel,
-              yvel: player.yvel,
-            };
-
-            drawHat(ctx, hatAttr);
-            return;
-          }
-
-          drawBody(ctx, bodyAttr);
-          drawFace(ctx, faceAttr);
+          });
         }}
       />
       <p className="playerFit-label">{label}</p>

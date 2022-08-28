@@ -1,13 +1,13 @@
 import { Body, BodyAttr, BodyFunction } from ".";
 
-const bodyGold: BodyFunction = (
+const bodyEnemy: BodyFunction = (
   ctx: CanvasRenderingContext2D,
   bodyAttr: BodyAttr
 ) => {
   let { x, y, w, h, cool, maxCool, damaging } = bodyAttr;
-  const colorNorm = Body.gold.colorNorm;
-  const colorCool = Body.gold.colorCool;
-  const colorDamg = Body.gold.colorDamg;
+  const colorNorm = Body.enemy.colorNorm;
+  const colorCool = Body.enemy.colorCool;
+  const colorDamg = Body.enemy.colorDamg;
   // Translate center x,y to draw corner
   x -= w / 2;
   y -= h / 2;
@@ -18,4 +18,4 @@ const bodyGold: BodyFunction = (
   ctx.fillRect(x, y, w, h);
 };
 
-export default bodyGold;
+export default bodyEnemy;

@@ -47,7 +47,7 @@ class EnemyController {
       }
       enemy.controller();
     }
-    player.damaging = playerDamaging;
+    if (player && player.state != State.Dead) player.damaging = playerDamaging;
   }
 
   public spawner(w: number, h: number, player: Player) {
@@ -309,7 +309,7 @@ export class Enemy extends Entity {
       if (player != null) {
         player.updatePower();
       }
-      if (game.scene == Scenes.battle) {
+      if (game.scene == Scenes.battle || game.scene == Scenes.tutorialMain) {
         game.score++;
       }
       this.state = State.Dead;

@@ -1,5 +1,4 @@
-@import "../../assets/styles/card";
-@import "../../assets/styles/button";
+@use "@Styles" as *;
 
 .login {
   display: flex;

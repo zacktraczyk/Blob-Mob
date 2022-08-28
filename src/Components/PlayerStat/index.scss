@@ -1,4 +1,4 @@
-@import "../../assets/styles/variables";
+@use "@Styles" as *;
 
 .playerStat {
   display: flex;
@@ -80,22 +80,22 @@
   }
 
   .speed {
-      color: $color-game-speed;
+    color: $color-game-speed;
   }
 
   .health {
-      color: $color-game-health;
+    color: $color-game-health;
   }
 
   .power {
-      color: $color-game-power;
+    color: $color-game-power;
   }
 
   .cool {
-      color: $color-game-cool;
+    color: $color-game-cool;
   }
 
   .default {
-      color: $color-main;
+    color: $color-main;
   }
 }

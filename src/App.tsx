@@ -47,10 +47,8 @@ const App = () => {
 
       <Coins />
       <Navbar
-        navHome={() => {
-          setPage(View.Home);
-          game.scene = Scenes.menu;
-        }}
+        navHome={() => setPage(View.Home)}
+        navInfo={() => setPage(View.Info)}
       />
     </>
   );

@@ -14,8 +14,6 @@ import Stat from "@Game/shop/stats";
 const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
 
-const colorNorm = "#ffd6cc";
-const colorCool = "#adedff";
 const colorDamage = "#ff6d6d";
 
 // Used for shop updates
@@ -64,7 +62,6 @@ export class Player extends Entity {
     this.body = "normal";
     this.face = "normal";
     this.hat = "normal";
-    this.color = colorNorm;
     this.state = State.Normal;
     this.frownCount = 0;
     this.frownCountMax = 30;
@@ -113,6 +110,7 @@ export class Player extends Entity {
   // Controllers --------------------
   public controller(w: number, h: number) {
     if (this.state == State.Dead) {
+      this.damaging = true;
       return;
     }
 
@@ -123,14 +121,10 @@ export class Player extends Entity {
     this.y += this.yvel;
 
     // Cooldown
-    if (this.action != Action.Push) {
-      if (this.cool > 0) {
-        --this.cool;
-        this.color = colorCool;
-        if (this.frownCount < this.frownCountMax * 0.5) this.frownCount++;
-      } else {
-        this.color = colorNorm;
-      }
+    if (this.action != Action.Push && this.cool > 0) {
+      --this.cool;
+      // Change smile to meh face
+      if (this.frownCount < this.frownCountMax * 0.5) this.frownCount++;
     }
 
     this.healthController();
@@ -167,7 +161,6 @@ export class Player extends Entity {
     // Action Follow through
     switch (this.action) {
       case Action.Attack:
-        this.color = "#adedff";
         this.attack(w, h, 8);
         return; // exit control loop
 
@@ -177,7 +170,6 @@ export class Player extends Entity {
 
       case Action.Push:
         this.move(w, h, keys);
-        this.color = "#adedff";
         this.pushField(600);
         break;
     }
@@ -185,7 +177,6 @@ export class Player extends Entity {
 
   private healthController() {
     if (this.damaging) {
-      this.color = colorDamage;
       this.health--;
       this.frownCount++;
       if (damagePoints != null) {

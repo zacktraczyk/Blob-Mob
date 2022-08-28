@@ -1,6 +1,4 @@
-@import "../../assets/styles/card";
-@import "../../assets/styles/button";
-@import "../../assets/styles/variables";
+@use "@Styles" as *;
 
 .shop {
   display: grid;

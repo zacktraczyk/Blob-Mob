@@ -1,6 +1,6 @@
 const Stat = {
   maxPower: {
-    name: "Power",
+    name: "Draw",
     initial: 10,
     increase: 10,
     priceScale: [5, 10, 15, 20, 40, 50, 60, 80, 100, 150, 200],

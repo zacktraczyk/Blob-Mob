@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { signInGoogle, signInFacebook, signOut, auth } from "../../apis/firebase";
+import {
+  signInGoogle,
+  signInFacebook,
+  signOut,
+  auth,
+} from "../../../apis/firebase";
 
 import "./index.scss";
 
@@ -20,7 +25,7 @@ const Login: React.FC<Props> = (props: Props) => {
 
       <div className="login__buttons">
         <button className="play-button" onClick={() => navPlay()}>
-          {user ? ("Play") : ("Play as Guest")}
+          {user ? "Play" : "Play as Guest"}
         </button>
         <div className="login__buttons-auth">
           {user ? (
@@ -33,7 +38,10 @@ const Login: React.FC<Props> = (props: Props) => {
                 Google
                 <i className="fa-brands fa-google"></i>
               </button>
-              <button className="facebook-button" onClick={() => signInFacebook()}>
+              <button
+                className="facebook-button"
+                onClick={() => signInFacebook()}
+              >
                 Facebook
                 <i className="fa-brands fa-square-facebook"></i>
               </button>
