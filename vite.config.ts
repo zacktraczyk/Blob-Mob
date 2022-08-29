@@ -6,7 +6,6 @@ import * as path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/Blob-Mob/",
   plugins: [tsconfigPaths(), react(), visualizer()],
   resolve: {
     alias: {

@@ -23,7 +23,8 @@ jobs:
           VITE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: |
           yarn
-          yarn run build
+          echo "$VITE_API_KEY"
+          yarn run build --base=Blob-Mob
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
