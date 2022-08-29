@@ -4,11 +4,7 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
   getFirestore,
-  limit,
-  orderBy,
-  query,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -17,7 +13,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  updateCurrentUser,
 } from "firebase/auth";
 import { game } from "@App";
 import shop from "@Game/shop";
