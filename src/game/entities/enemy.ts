@@ -19,11 +19,11 @@ class EnemyController {
 
   constructor() {
     this.instances = new Array();
-    this.cool = 0;
     this.speed = 1;
 
     this.maxInst = 10;
-    this.spawnWait = 1;
+    this.spawnWait = 5;
+    this.cool = this.spawnWait;
     this.value = 1;
   }
 
@@ -54,10 +54,10 @@ class EnemyController {
   }
 
   public spawner(w: number, h: number, player: Player) {
-    this.cool -= 0.01;
-    if (this.instances.length < this.maxInst && this.cool * 1000 <= 0) {
+    this.cool -= 1;
+    if (this.instances.length < this.maxInst && this.cool <= 0) {
       this.spawn(w, h, player);
-      this.cool = this.spawnWait;
+      this.cool = this.spawnWait * 60; // 60fps
     }
   }
 
