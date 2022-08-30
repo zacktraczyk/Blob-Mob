@@ -45,19 +45,17 @@ export class DifficultyScalar {
       case Difficulties.Easy:
         enemies.speed = 1;
         spawnWait = 2000 / (seconds + 200) - 0.3;
-        coins.value = 1;
         enemies.value = 1;
         break;
       case Difficulties.Medium:
         enemies.speed = 3;
         spawnWait = 500 / (seconds + 96) - 0.8;
-        coins.value = 1;
         enemies.value = 1;
         break;
       case Difficulties.Hard:
         enemies.speed = 8;
         spawnWait = 180 / (seconds + 70) - 0.4;
-        coins.value = 2;
+        // coins.value = 2;
         enemies.value = 2;
         break;
     }

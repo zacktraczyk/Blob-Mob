@@ -311,7 +311,9 @@ export class Enemy extends Entity {
       (game.scene == Scenes.battle,
       !this.triedCoinSpawn && Math.random() <= 0.8)
     ) {
-      coins.spawn(this.x, this.y);
+      for (let i = 0; i < this.value; i++) {
+        coins.spawn(this.x, this.y);
+      }
     }
     this.triedCoinSpawn = true;
 
