@@ -1,5 +1,8 @@
 import { Difficulties, difficultyScalar } from "@Game/difficulty";
 import { useState } from "react";
+import imageEasy from "@Assets/images/difficulty-easy.jpg";
+import imageMedium from "@Assets/images/difficulty-medium.jpg";
+import imageHard from "@Assets/images/difficulty-hard.jpg";
 import "./index.scss";
 
 interface Props {
@@ -16,7 +19,7 @@ const Difficulty: React.FC<Props> = (props: Props) => {
       <h2>Difficulty</h2>
       <div className="difficulty__level">
         <div
-          className={`difficulty__level-option ${
+          className={`difficulty__level-option opt-easy ${
             selected == Difficulties.Easy ? "selected" : ""
           }`}
           onClick={() => setSelected(Difficulties.Easy)}
@@ -29,7 +32,7 @@ const Difficulty: React.FC<Props> = (props: Props) => {
           </ul>
         </div>
         <div
-          className={`difficulty__level-option ${
+          className={`difficulty__level-option opt-medium ${
             selected == Difficulties.Medium ? "selected" : ""
           }`}
           onClick={() => setSelected(Difficulties.Medium)}
@@ -40,7 +43,7 @@ const Difficulty: React.FC<Props> = (props: Props) => {
           </ul>
         </div>
         <div
-          className={`difficulty__level-option ${
+          className={`difficulty__level-option opt-hard ${
             selected == Difficulties.Hard ? "selected" : ""
           }`}
           onClick={() => setSelected(Difficulties.Hard)}

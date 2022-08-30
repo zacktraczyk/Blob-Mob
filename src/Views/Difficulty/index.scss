@@ -38,11 +38,28 @@
         color: $color-main;
       }
 
+      &.opt-easy {
+        background-image: url("@Styles/../images/difficulty-easy.jpg");
+        background-size: cover;
+      }
+
+      &.opt-medium {
+        background-image: url("@Styles/../images/difficulty-medium.jpg");
+        background-size: cover;
+      }
+
+      &.opt-hard {
+        background-image: url("@Styles/../images/difficulty-hard.jpg");
+        background-size: cover;
+      }
+
       ul {
         padding: 0;
 
         list-style: none;
         font-size: 0.8em;
+
+        color: white;
       }
 
       &.selected {
@@ -52,5 +69,4 @@
 
     }
   }
-
 }

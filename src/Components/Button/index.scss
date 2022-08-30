@@ -1,0 +1,72 @@
+@use "@Styles" as *;
+
+.button {
+  &__back {
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+
+    .play {
+      background-color: $color-main;
+    }
+
+    .sign-out {
+      background-color: $color-signout-main;
+    }
+
+    .google {
+      background-color: $color-google-main;
+    }
+
+    .facebook {
+      background-color: $color-facebook-main;
+    }
+
+    .tutorial {
+      background-color: $color-tutorial-main;
+    }
+
+    .upgrade {
+      background-color: $color-upgrade-main;
+    }
+  }
+
+  &__front {
+    display: block;
+    padding: 12px 42px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    color: white;
+    transform: translateY(-6px);
+
+    .play {
+      background-color: $color-secondary;
+    }
+
+    .sign-out {
+      background-color: $color-signout-secondary;
+    }
+
+    .google {
+      background-color: $color-google-secondary;
+    }
+
+    .facebook {
+      background-color: $color-facebook-secondary;
+    }
+
+    .tutorial {
+      background-color: $color-tutorial-secondary;
+    }
+
+    .upgrade {
+      background-color: $color-upgrade-secondary;
+    }
+  }
+
+  &__back:active &__front {
+    transform: translateY(-2px);
+  }
+}

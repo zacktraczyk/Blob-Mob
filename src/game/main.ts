@@ -48,7 +48,6 @@ export const Main = (
       game.scene = Scenes.battle;
     case Scenes.battle:
       Battle();
-      difficultyScalar.debug(game.ctx);
       break;
 
     // ------------------> GAMEOVER
