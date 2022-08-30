@@ -46,6 +46,7 @@ export const Main = (
     case Scenes.play: // INIT
       game.reset();
       game.scene = Scenes.battle;
+      difficultyScalar.controller();
     case Scenes.battle:
       Battle();
       break;
