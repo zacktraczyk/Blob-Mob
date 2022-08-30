@@ -6,63 +6,69 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    outline-offset: 4px;
+    outline-offset: 0.4em;
 
-    .play {
-      background-color: $color-main;
+    &.opt-play {
+      background-color: $color-secondary;
     }
 
-    .sign-out {
-      background-color: $color-signout-main;
+    &.opt-signout {
+      background-color: $color-signout-secondary;
     }
 
-    .google {
-      background-color: $color-google-main;
+    &.opt-google {
+      background-color: $color-google-secondary;
     }
 
-    .facebook {
-      background-color: $color-facebook-main;
+    &.opt-facebook {
+      background-color: $color-facebook-secondary;
     }
 
-    .tutorial {
-      background-color: $color-tutorial-main;
+    &.opt-tutorial {
+      background-color: $color-tutorial-secondary;
     }
 
-    .upgrade {
-      background-color: $color-upgrade-main;
+    &.opt-upgrade {
+      background-color: $color-upgrade-secondary;
     }
   }
 
   &__front {
-    display: block;
-    padding: 12px 42px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1ch;
+
+    padding: calc(6px + 0.2em) 0;
     border-radius: 12px;
-    font-size: 1.25rem;
+    height: clac(inherit - 6px);
+    font-size: 1.3em;
     color: white;
     transform: translateY(-6px);
 
-    .play {
-      background-color: $color-secondary;
+    &.opt-play {
+      background-color: $color-main;
     }
 
-    .sign-out {
-      background-color: $color-signout-secondary;
+    &.opt-signout {
+      background-color: $color-signout-main;
     }
 
-    .google {
-      background-color: $color-google-secondary;
+    &.opt-google {
+      background-color: $color-google-main;
     }
 
-    .facebook {
-      background-color: $color-facebook-secondary;
+    &.opt-facebook {
+      background-color: $color-facebook-main;
     }
 
-    .tutorial {
-      background-color: $color-tutorial-secondary;
+    &.opt-tutorial {
+      background-color: $color-tutorial-main;
     }
 
-    .upgrade {
-      background-color: $color-upgrade-secondary;
+    &.opt-upgrade {
+      background-color: $color-upgrade-main;
     }
   }
 

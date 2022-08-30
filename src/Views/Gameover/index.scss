@@ -15,7 +15,7 @@
     margin: 0px;
     text-align: center;
     font-size: 4em;
-    text-shadow: 4px 4px 0px $color-signout;
+    text-shadow: 4px 4px 0px $color-signout-main;
   }
 
   ul {
@@ -44,9 +44,9 @@
       width: 100%;
     }
 
-    .upgrade-button {
-      width: 100%;
-      background-color: $color-upgrade;
-    }
+    // .upgrade-button {
+    //   width: 100%;
+    //   background-color: $color-upgrade;
+    // }
   }
 }

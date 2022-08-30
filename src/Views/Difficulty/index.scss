@@ -3,8 +3,8 @@
 .difficulty {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
+  align-items: center;
+  justify-content: stretch;
   width: 600px;
   height: 500px;
 
@@ -19,6 +19,7 @@
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
+    width: 100%;
     flex-grow: 1;
 
     &-option {
@@ -66,7 +67,6 @@
         border-color: $color-shop-selected;
         box-shadow: 0 0 1em 0.3em $color-shop-selected;
       }
-
     }
   }
 }

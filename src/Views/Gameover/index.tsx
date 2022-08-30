@@ -1,4 +1,5 @@
 import { game } from "@App";
+import Button from "@Components/Button";
 import "./index.scss";
 
 interface Props {
@@ -29,8 +30,22 @@ const Gameover: React.FC<Props> = (props: Props) => {
         </li> */}
       </ul>
       <div className="gameover__buttons">
-        <button className="play-button" onClick={() => navPlay()}>Play Again</button>
-        <button className="upgrade-button" onClick={() => navShop()}>Upgrade</button>
+        <Button
+          width="100%"
+          height="auto"
+          color="play"
+          onClick={() => navPlay()}
+        >
+          Play Again
+        </Button>
+        <Button
+          width="100%"
+          height="auto"
+          color="upgrade"
+          onClick={() => navShop()}
+        >
+          Upgrade
+        </Button>
       </div>
     </div>
   );

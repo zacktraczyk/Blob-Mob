@@ -4,6 +4,7 @@ import imageEasy from "@Assets/images/difficulty-easy.jpg";
 import imageMedium from "@Assets/images/difficulty-medium.jpg";
 import imageHard from "@Assets/images/difficulty-hard.jpg";
 import "./index.scss";
+import Button from "@Components/Button";
 
 interface Props {
   navPlay: Function;
@@ -63,8 +64,10 @@ const Difficulty: React.FC<Props> = (props: Props) => {
         </div>
       </div>
 
-      <button
-        className="play-button"
+      <Button
+        width="50%"
+        height="auto"
+        color="play"
         onClick={() => {
           difficultyScalar.difficulty = selected;
 
@@ -72,7 +75,7 @@ const Difficulty: React.FC<Props> = (props: Props) => {
         }}
       >
         Play
-      </button>
+      </Button>
     </div>
   );
 };

@@ -2,17 +2,33 @@ import React from "react";
 import "./index.scss";
 
 interface Props {
-  className: string;
+  color: ButtonColors;
   children: React.ReactNode;
   onClick: Function;
+  height: string;
+  width: string;
 }
 
+type ButtonColors =
+  | "play"
+  | "signout"
+  | "google"
+  | "facebook"
+  | "tutorial"
+  | "upgrade"
+  | "github"
+  | "website";
+
 const Button: React.FC<Props> = (props: React.PropsWithChildren<Props>) => {
-  const { className, children, onClick } = props;
+  const { color, children, onClick, height, width } = props;
 
   return (
-    <button className={`button__back ${className}`} onClick={() => onClick()}>
-      <span className={`button__front ${className}`}>{children}</span>
+    <button
+      className={`button__back opt-${color}`}
+      style={{ height: height, width: width }}
+      onClick={() => onClick()}
+    >
+      <span className={`button__front opt-${color}`}>{children}</span>
     </button>
   );
 };

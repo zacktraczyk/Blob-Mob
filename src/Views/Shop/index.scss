@@ -14,14 +14,13 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 2em;
 
     width: 30vw;
     height: 500px;
 
-    .button-spawn {
-      background-color: $color-upgrade;
-    }
+    font-size: 0.8em;
   }
 
   &__right {

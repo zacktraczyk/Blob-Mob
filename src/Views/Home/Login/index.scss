@@ -22,43 +22,42 @@
     flex-direction: column;
     gap: 5px;
 
-    .play-button {
-      background-color: $color-main;
-      height: 3em;
-    }
+    font-size: 1em;
+
+    // .play-button {
+    //   background-color: $color-main;
+    //   height: 3em;
+    // }
 
     &-auth {
+      padding-top: 1em;
       display: flex;
       flex-direction: row;
       gap: 5px;
 
-      .signout-button {
-        width: 100%;
-        background-color: $color-signout;
-        height: auto;
-      }
+      font-size: 0.6em;
 
-      .google-button {
-        width: 100%;
-        background-color: $color-google;
-        height: auto;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 1ch;
-      }
+      // .google-button {
+      //   width: 100%;
+      //   background-color: $color-google;
+      //   height: auto;
+      //   display: flex;
+      //   flex-direction: row;
+      //   justify-content: center;
+      //   align-items: center;
+      //   gap: 1ch;
+      // }
 
-      .facebook-button {
-        width: 100%;
-        background-color: $color-facebook;
-        height: auto;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 1ch;
-      }
+      // .facebook-button {
+      //   width: 100%;
+      //   background-color: $color-facebook;
+      //   height: auto;
+      //   display: flex;
+      //   flex-direction: row;
+      //   justify-content: center;
+      //   align-items: center;
+      //   gap: 1ch;
+      // }
     }
   }
 
@@ -67,9 +66,5 @@
     color: $color-text-secondary;
     font-size: 1.2em;
     padding: 0.5em 0.5em;
-  }
-
-  .tutorial-button {
-    background-color: $color-tutorial;
   }
 }

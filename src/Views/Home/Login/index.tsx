@@ -1,3 +1,4 @@
+import Button from "@Components/Button";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -24,27 +25,45 @@ const Login: React.FC<Props> = (props: Props) => {
       <h2>BLOB MOB</h2>
 
       <div className="login__buttons">
-        <button className="play-button" onClick={() => navPlay()}>
+        <Button
+          height="3em"
+          width="100%"
+          color="play"
+          onClick={() => navPlay()}
+        >
           {user ? "Play" : "Play as Guest"}
-        </button>
+        </Button>
         <div className="login__buttons-auth">
           {user ? (
-            <button className="signout-button" onClick={() => signOut()}>
+            // <Button className="signout-button" onClick={() => signOut()}>
+            <Button
+              height="auto"
+              width="100%"
+              color={"signout"}
+              onClick={() => signOut()}
+            >
               Sign Out
-            </button>
+            </Button>
           ) : (
             <>
-              <button className="google-button" onClick={() => signInGoogle()}>
+              <Button
+                height="auto"
+                width="100%"
+                color="google"
+                onClick={() => signInGoogle()}
+              >
                 Google
                 <i className="fa-brands fa-google"></i>
-              </button>
-              <button
-                className="facebook-button"
+              </Button>
+              <Button
+                height="auto"
+                width="100%"
+                color="facebook"
                 onClick={() => signInFacebook()}
               >
                 Facebook
                 <i className="fa-brands fa-square-facebook"></i>
-              </button>
+              </Button>
             </>
           )}
         </div>
@@ -54,9 +73,14 @@ const Login: React.FC<Props> = (props: Props) => {
         <b>WASD</b> to move, <b>SPACE</b> to attack, or play...
       </div>
 
-      <button className="tutorial-button" onClick={() => navTutorial()}>
+      <Button
+        width="100%"
+        height="auto"
+        color="tutorial"
+        onClick={() => navTutorial()}
+      >
         Tutorial
-      </button>
+      </Button>
     </div>
   );
 };

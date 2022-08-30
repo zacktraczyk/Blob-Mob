@@ -12,6 +12,7 @@ import Stats from "./Stats";
 import Fit from "./Fit";
 
 import "./index.scss";
+import Button from "@Components/Button";
 
 interface Props {
   navHome: Function;
@@ -48,8 +49,10 @@ const Shop: React.FC<Props> = (props: Props) => {
   return (
     <div className="shop">
       <div className="shop__left">
-        <button
-          className="button-spawn"
+        <Button
+          width="11em"
+          height="auto"
+          color="upgrade"
           onClick={() => {
             const ctx = game.ctx;
             if (!ctx) return;
@@ -58,10 +61,15 @@ const Shop: React.FC<Props> = (props: Props) => {
           }}
         >
           Spawn Enemy
-        </button>
-        <button className="button-play" onClick={() => navPlay()}>
+        </Button>
+        <Button
+          width="5em"
+          height="auto"
+          color="play"
+          onClick={() => navPlay()}
+        >
           Play
-        </button>
+        </Button>
       </div>
 
       <div className="shop__right">

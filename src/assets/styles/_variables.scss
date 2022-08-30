@@ -11,11 +11,17 @@ $color-gray: #e6e6e6;
 $color-darkGray: #919191;
 
 $color-main: #E2AEDD;
-$color-signout: #e24a4a;
-$color-google: #4BD735;
-$color-facebook: #12BCF1;
-$color-tutorial: #F3B14E;
-$color-upgrade: #399C54;
+$color-secondary: #7f4f7a;
+$color-signout-main: #e24a4a;
+$color-signout-secondary: #8e2828;
+$color-google-main: #4BD735;
+$color-google-secondary: #377d2c;
+$color-facebook-main: #12BCF1;
+$color-facebook-secondary: #21657a;
+$color-tutorial-main: #F3B14E;
+$color-tutorial-secondary: #90682c;
+$color-upgrade-main: #399C54;
+$color-upgrade-secondary: #1e5a2e;
 
 $color-game-cool: blue;
 $color-game-health: $color-main;
@@ -24,6 +30,6 @@ $color-game-speed: #F3B14E;
 
 $color-shop-afford-main: $color-game-power;
 $color-shop-afford-secondary: #d2ebd2;
-$color-shop-cant-afford-main: $color-signout;
+$color-shop-cant-afford-main: $color-signout-main;
 $color-shop-cant-afford-secondary: #f3d4d4;
-$color-shop-selected: $color-facebook;
+$color-shop-selected: $color-facebook-main;
