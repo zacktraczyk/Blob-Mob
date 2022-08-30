@@ -1,0 +1,56 @@
+@use "@Styles" as *;
+
+.difficulty {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 600px;
+  height: 500px;
+
+  @include card-background;
+
+  h2 {
+    text-align: center;
+  }
+
+  &__level {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    flex-grow: 1;
+
+    &-option {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s;
+
+      width: 100%;
+      height: 90%;
+      margin: 0 1em;
+      border: 4px solid black;
+
+      text-align: center;
+
+      h3 {
+        color: $color-main;
+      }
+
+      ul {
+        padding: 0;
+
+        list-style: none;
+        font-size: 0.8em;
+      }
+
+      &.selected {
+        border-color: $color-shop-selected;
+        box-shadow: 0 0 1em 0.3em $color-shop-selected;
+      }
+
+    }
+  }
+
+}
