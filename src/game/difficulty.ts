@@ -1,16 +1,28 @@
 import { game } from "@App";
+import { coins } from "./entities/coin";
 import { enemies } from "./entities/enemy";
+import { clamp } from "./util";
 // DON'T CHANGE FORMAT (PARSED BY PYTHON)
 
+export enum Difficulties {
+  Easy,
+  Medium,
+  Hard,
+}
+
 export class DifficultyScalar {
-  constructor() {}
+  public difficulty: Difficulties;
+
+  constructor() {
+    this.difficulty = Difficulties.Medium;
+  }
 
   public debug(ctx: CanvasRenderingContext2D) {
     ctx.font = "20px Arial Bold";
     ctx.fillStyle = "black";
 
     let x = 40;
-    let y = ctx.canvas.height * 5 / 8 + 100;
+    let y = (ctx.canvas.height * 5) / 8 + 100;
 
     ctx.fillText(`difficulty debug --x`, x, y);
     y += 20;
@@ -24,24 +36,29 @@ export class DifficultyScalar {
   }
 
   public controller() {
-    // Scale max enemies (Stops Scaling at 240)
-    // const x = game.frame / 100;
-    // if (x > 0 && x < 240) {
-    //     enemies.maxInst = Math.floor((-10 * x)/(x-270)) + 1;
-    // }
     enemies.maxInst = 60;
 
-    // Wait for enemy spawn
-    const x = game.frame / 100;
-    if (x > 0 && x < 120) {
-        enemies.spawnWait = Math.round((-3/240*x + 3)*100)/100;
-    }
-    if (x >= 120 && x <= 180) {
-        enemies.spawnWait = Math.round((-1/60*x + 3)*100)/100;
+    const seconds = game.frame / 60;
+    let spawnWait = 3;
+
+    switch (this.difficulty) {
+      case Difficulties.Easy:
+        enemies.speed = 1;
+        spawnWait = 1000 / (seconds + 200) - 0.6;
+        break;
+      case Difficulties.Medium:
+        enemies.speed = 3;
+        spawnWait = 500 / (seconds + 96) - 0.8;
+        break;
+      case Difficulties.Hard:
+        enemies.speed = 8;
+        spawnWait = 180 / (seconds + 70) - 0.4;
+        coins.value = 2;
+        enemies.value = 2;
+        break;
     }
 
-    // Scale enemy speed
-    enemies.speed = 3;
+    enemies.spawnWait = clamp(Math.round(spawnWait * 100) / 100, 0, 4);
   }
 }
 

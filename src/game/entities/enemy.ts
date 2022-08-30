@@ -15,6 +15,8 @@ class EnemyController {
   public maxInst: number;
   public spawnWait: number;
 
+  public value: number;
+
   constructor() {
     this.instances = new Array();
     this.cool = 0;
@@ -22,6 +24,7 @@ class EnemyController {
 
     this.maxInst = 10;
     this.spawnWait = 1;
+    this.value = 1;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
@@ -72,7 +75,7 @@ class EnemyController {
   public spawn(w: number, h: number, player: Player) {
     const speed = this.speed * (Math.log(Math.random()) / 2 + 1);
 
-    let enemy = new Enemy(w, h, player, this.speed);
+    let enemy = new Enemy(w, h, player, this.speed, this.value);
     this.instances.push(enemy);
   }
 }
@@ -86,11 +89,18 @@ export class Enemy extends Entity {
 
   private target: Player | null;
   private triedCoinSpawn: boolean;
+  private value: number;
 
   private distance: number;
   private pushMagnitude: number;
 
-  constructor(w: number, h: number, target: Player, speed: number) {
+  constructor(
+    w: number,
+    h: number,
+    target: Player,
+    speed: number,
+    value: number
+  ) {
     super(0, 0, 50, 50);
     this.rcolors = ["#81ea25", "#6bba27", "#96e84e", "#abf966", "#b9f981"]; //Enemy color strobe
     this.color = this.rcolors[0];
@@ -106,10 +116,13 @@ export class Enemy extends Entity {
     this.distance = 0;
     this.pushMagnitude = 17;
 
-    this.spawn(w, h, target);
+    this.value = value;
+
+    this.target = target;
+    this.spawn(w, h);
   }
 
-  private spawn(w: number, h: number, target: Player) {
+  private spawn(w: number, h: number) {
     let rand = Math.random();
 
     if (rand <= 0.5) {
@@ -126,7 +139,6 @@ export class Enemy extends Entity {
       this.y = rand < 0.5 ? -this.h - 5 : h + 5;
     }
 
-    this.target = target;
     this.state = State.Normal;
   }
 
@@ -310,7 +322,7 @@ export class Enemy extends Entity {
         player.updatePower();
       }
       if (game.scene == Scenes.battle || game.scene == Scenes.tutorialMain) {
-        game.score++;
+        game.score += this.value;
       }
       this.state = State.Dead;
     }

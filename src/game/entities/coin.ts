@@ -3,14 +3,16 @@ import { Entity, State } from "./entity";
 import { player } from "./player";
 
 class CoinController {
+  public value: number;
   public instances: Array<Coin>;
 
   constructor() {
     this.instances = new Array();
+    this.value = 1;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    this.instances.forEach((dp) => dp.draw(ctx));
+    this.instances.forEach((c) => c.draw(ctx));
   }
 
   public controller(game: Game, w: number, h: number) {
@@ -24,7 +26,7 @@ class CoinController {
   }
 
   public spawn(x: number, y: number) {
-    let coin = new Coin(x, y);
+    let coin = new Coin(x, y, this.value);
     this.instances.push(coin);
   }
 
@@ -43,11 +45,11 @@ class Coin extends Entity {
 
   public timer: number;
 
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, value: number) {
     super(x, y, 30, 25);
     this.state = State.Spawn;
 
-    this.value = 1;
+    this.value = value;
 
     this.xdir = 0;
     this.ydir = 0;
@@ -171,6 +173,7 @@ class Coin extends Entity {
 
     if (this.w == 0 || this.h == 0) {
       game.coins += this.value;
+      console.log("INCREASING COINS BY", this.value);
       this.state = State.Dead;
     }
   }

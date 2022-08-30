@@ -9,10 +9,7 @@ import faceNormal from "@Game/shop/faces/faceNormal";
 import { Body } from "@Game/shop/bodies";
 import { Hat } from "@Game/shop/hats";
 import Stat from "@Game/shop/stats";
-
-// Clamp number between two values with the following line:
-const clamp = (num: number, min: number, max: number) =>
-  Math.min(Math.max(num, min), max);
+import { clamp } from "@Game/util";
 
 const colorDamage = "#ff6d6d";
 

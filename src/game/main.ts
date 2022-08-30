@@ -10,6 +10,7 @@ import { input } from "./input";
 import { View } from "@Views/index.tsx";
 import { saveHighscore } from "@Apis/firebase";
 import { Game } from "./game";
+import { difficultyScalar } from "./difficulty";
 
 export const Main = (
   game: Game,
@@ -47,6 +48,7 @@ export const Main = (
       game.scene = Scenes.battle;
     case Scenes.battle:
       Battle();
+      difficultyScalar.debug(game.ctx);
       break;
 
     // ------------------> GAMEOVER

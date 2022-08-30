@@ -5,12 +5,14 @@ import Home from "./Home";
 import Shop from "./Shop";
 import Gameover from "./Gameover";
 import About from "./About";
+import Difficulty from "./Difficulty";
 
 export enum View {
   Home,
   Info,
   Shop,
   Tutorial,
+  Difficulty,
   Play,
   Gameover,
 }
@@ -28,7 +30,7 @@ const Views: React.FC<Props> = (props: Props) => {
       game.scene = Scenes.menu;
       return (
         <Home
-          navPlay={() => setPage(View.Play)}
+          navPlay={() => setPage(View.Difficulty)}
           navTutorial={() => setPage(View.Tutorial)}
           navShop={() => setPage(View.Shop)}
         />
@@ -43,6 +45,11 @@ const Views: React.FC<Props> = (props: Props) => {
 
     case View.Tutorial:
       game.scene = Scenes.tutorial;
+      break;
+
+    case View.Difficulty:
+      game.scene = Scenes.menu;
+      return <Difficulty navPlay={() => setPage(View.Play)} />;
       break;
 
     case View.Play:
