@@ -9,8 +9,8 @@ export interface FaceAttr {
   y: number; // center of face
   w: number;
   h: number;
-  xvel: number;
-  yvel: number;
+  xdir: number;
+  ydir: number;
   frownCount: number;
   frownCountMax: number;
 }

@@ -30,10 +30,11 @@ export class Player extends Entity {
   readonly frownCountMax: number;
 
   private accel: number;
-  private xdir: number;
-  private ydir: number;
-  public xvel: number;
-  public yvel: number;
+  public xdir: number;
+  public ydir: number;
+  public speed: number;
+  // public xvel: number;
+  // public yvel: number;
 
   public action: Action;
   public damaging: boolean;
@@ -63,11 +64,10 @@ export class Player extends Entity {
     this.frownCount = 0;
     this.frownCountMax = 30;
 
-    this.accel = 0.4;
     this.xdir = 1;
     this.ydir = 0;
-    this.xvel = 0;
-    this.yvel = 0;
+    this.accel = 0.1;
+    this.speed = 0;
 
     this.action = Action.Normal;
     this.damaging = false;
@@ -113,10 +113,6 @@ export class Player extends Entity {
 
     this.actionController(w, h, input.keyState);
 
-    // Update Position
-    this.x += this.xvel;
-    this.y += this.yvel;
-
     // Cooldown
     if (this.action != Action.Push && this.cool > 0) {
       --this.cool;
@@ -158,7 +154,7 @@ export class Player extends Entity {
     // Action Follow through
     switch (this.action) {
       case Action.Attack:
-        this.attack(w, h, 8);
+        this.attack(w, h, 12);
         return; // exit control loop
 
       case Action.Normal:
@@ -188,32 +184,31 @@ export class Player extends Entity {
 
   // Actions --------------------
   private move(w: number, h: number, dir: Input["keyState"]) {
-    // Increase speed if keydown
-    // if (dir.right) {
-
-    // }
-    // if (dir.right && dir.)
-
-    if (dir.right) this.xvel += this.accel;
-    if (dir.left) this.xvel -= this.accel;
-    if (dir.down) this.yvel += this.accel;
-    if (dir.up) this.yvel -= this.accel;
+    // Set Direction
+    const horz = dir.right || dir.left;
+    const vert = dir.up || dir.down;
+    if (horz && vert) {
+      this.xdir = dir.right ? 0.7071 : -0.7071;
+      this.ydir = dir.down ? 0.7071 : -0.7071;
+    } else if (horz) {
+      this.xdir = dir.right ? 1 : -1;
+      this.ydir = 0;
+    } else if (vert) {
+      this.xdir = 0;
+      this.ydir = dir.down ? 1 : -1;
+    }
 
     // Decrease speed if keyup
-    if (!dir.right && !dir.left) {
-      if (Math.abs(this.xvel) <= this.accel) this.xvel = 0;
-      else if (this.xvel > 0) this.xvel -= this.accel * 1.5;
-      else if (this.xvel < 0) this.xvel += this.accel * 1.5;
-    }
-    if (!dir.down && !dir.up) {
-      if (Math.abs(this.yvel) <= this.accel) this.yvel = 0;
-      else if (this.yvel > 0) this.yvel -= this.accel * 1.5;
-      else if (this.yvel < 0) this.yvel += this.accel * 1.5;
+    if (horz || vert) {
+      this.speed += this.accel;
+    } else if (this.speed > 0) {
+      this.speed = 0;
     }
 
-    this.xvel = clamp(this.xvel, -this.maxSpeed, this.maxSpeed);
-    this.yvel = clamp(this.yvel, -this.maxSpeed, this.maxSpeed);
-    this.calculateDir(); // Needed for Attack
+    this.speed = clamp(this.speed, 0, this.maxSpeed);
+
+    this.x += this.xdir * this.speed;
+    this.y += this.ydir * this.speed;
 
     if (game.frame % 10 == 0) this.wiggle(50, 69);
     this.keepOnScreen(w, h);
@@ -223,17 +218,13 @@ export class Player extends Entity {
     ++this.timer;
     this.cool += this.maxCool / duration;
 
-    const xspeed = Math.max(10, Math.abs(this.xvel) * 2);
-    const yspeed = Math.max(10, Math.abs(this.yvel) * 2);
-    this.x += this.xdir * xspeed;
-    this.y += this.ydir * yspeed;
+    this.x += this.xdir * this.maxSpeed * 3;
+    this.y += this.ydir * this.maxSpeed * 3;
 
     this.keepOnScreen(w, h);
 
     // End attack
     if (this.timer >= duration) {
-      this.xvel = 0;
-      this.yvel = 0;
       this.timer = 0;
       this.action = Action.Normal;
     }
@@ -269,14 +260,6 @@ export class Player extends Entity {
   }
 
   // Helper Methods --------------------
-  private calculateDir() {
-    let mag = Math.sqrt(this.xvel * this.xvel + this.yvel * this.yvel);
-    if (mag > 0) {
-      this.xdir = this.xvel / mag;
-      this.ydir = this.yvel / mag;
-    }
-  }
-
   public collides(target: Entity | null) {
     if (target == null) {
       return false;
@@ -315,8 +298,6 @@ export class Player extends Entity {
   private keepOnScreen(w: number, h: number) {
     this.x = clamp(this.x, this.w / 2 + 5, w - this.w / 2 - 5);
     this.y = clamp(this.y, this.h / 2 + 5, h - this.h / 2 - 5);
-    // this.x = 250;
-    // this.y = 250;
   }
 
   public reset() {
@@ -325,9 +306,7 @@ export class Player extends Entity {
     this.cool = 0;
     this.state = State.Normal;
     this.action = Action.Normal;
-
-    this.xvel = 0;
-    this.yvel = 0;
+    this.speed = 0;
 
     this.frownCount = this.frownCountMax * 0.6;
   }
@@ -340,9 +319,6 @@ export class Player extends Entity {
     }
   }
 
-  public get velocity() {
-    return [this.xvel, this.yvel];
-  }
   // Attribute Methods --------------------
   public getAttributes(): PlayerAttributes {
     return {
@@ -375,6 +351,17 @@ export class Player extends Entity {
   public increaseAttrCool(val: number) {
     this.maxCool += val;
     if (this.maxCool <= 30) this.maxCool = 30;
+  }
+
+  public debug(ctx: CanvasRenderingContext2D) {
+    ctx.font = "20px Arial Bold";
+    ctx.fillStyle = "black";
+
+    let x = 40;
+    let y = (ctx.canvas.height * 5) / 8;
+
+    ctx.fillText(`player direction: ${this.xdir} ${this.ydir}`, x, y);
+    y += 20;
   }
 }
 

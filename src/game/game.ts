@@ -140,6 +140,10 @@ export class Game {
     this.paused = false;
     this.score = 0;
     this.frame = 0;
+
+    if (!this.ctx) return;
+    player.x = this.ctx.canvas.width / 2;
+    player.y = this.ctx.canvas.height / 2;
   }
 
   // public debug() {

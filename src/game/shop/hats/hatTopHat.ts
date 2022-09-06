@@ -4,7 +4,7 @@ const hatTopHat: HatFunction = (
   ctx: CanvasRenderingContext2D,
   hatAttr: HatAttr
 ) => {
-  let { x, y, w, h, xvel, yvel } = hatAttr;
+  let { x, y, w, h } = hatAttr;
 
   // Translate center x,y to draw corner
   y -= h / 2;
