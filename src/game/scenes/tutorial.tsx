@@ -6,15 +6,18 @@ import { enemies } from "../entities/enemy";
 import { input } from "../input";
 import { Stage, tutorialRules } from "../tutorialRules";
 import { damagePoints } from "../entities/damagePoints";
+import { drawController } from "@Game/entities/draw";
+import { coins } from "@Game/entities/coin";
+import { View } from "@Views/index.tsx";
 
-export function Tutorial() {
+export function Tutorial(setPage: React.Dispatch<React.SetStateAction<View>>) {
   update();
   draw();
 
   if (tutorialRules.stage == Stage.end) {
     game.reset();
     tutorialRules.reset();
-    game.scene = Scenes.battle;
+    setPage(View.Difficulty);
   }
 }
 
@@ -22,12 +25,20 @@ function update() {
   const ctx = game.ctx;
   if (!ctx) return;
 
-  player.controller(ctx.canvas.width, ctx.canvas.height);
-  damagePoints.controller();
-  enemies.controller();
+  if (!game.paused) {
+    player.controller(ctx.canvas.width, ctx.canvas.height);
+    damagePoints.controller();
+    enemies.controller();
+  }
 
-  if (player.health <= 50) player.health = 50;
+  if (tutorialRules.stage >= Stage.draw_gesture)
+    drawController.controller(ctx.canvas.width, ctx.canvas.height);
+
+  coins.controller(game, ctx.canvas.width, ctx.canvas.height);
+
   tutorialRules.controller(ctx.canvas.width, ctx.canvas.height);
+
+  if (player.health <= player.maxHealth * 0.1) player.health = player.maxHealth;
 }
 
 function draw() {
@@ -38,7 +49,10 @@ function draw() {
 
   player.draw(ctx);
   enemies.draw(ctx);
+  coins.draw(ctx);
+  drawController.draw(ctx);
+
   tutorialRules.draw(ctx);
 
-  if (tutorialRules.stage >= Stage.bars) drawHUD();
+  if (tutorialRules.stage > Stage.enemy) drawHUD();
 }

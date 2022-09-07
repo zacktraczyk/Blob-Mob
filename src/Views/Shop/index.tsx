@@ -48,29 +48,7 @@ const Shop: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="shop">
-      <div className="shop__left">
-        <Button
-          width="11em"
-          height="auto"
-          color="upgrade"
-          onClick={() => {
-            const ctx = game.ctx;
-            if (!ctx) return;
-
-            enemies.spawn(ctx.canvas.width, ctx.canvas.height, player);
-          }}
-        >
-          Spawn Enemy
-        </Button>
-        <Button
-          width="5em"
-          height="auto"
-          color="play"
-          onClick={() => navPlay()}
-        >
-          Play
-        </Button>
-      </div>
+      <div className="shop__left"></div>
 
       <div className="shop__right">
         <div
@@ -121,6 +99,30 @@ const Shop: React.FC<Props> = (props: Props) => {
             }`}
             onClick={() => setTab(tab < Tabs.Fit ? tab + 1 : tab)}
           ></i>
+        </div>
+
+        <div className="shop__right-buttons">
+          <Button
+            width="11em"
+            height="auto"
+            color="upgrade"
+            onClick={() => {
+              const ctx = game.ctx;
+              if (!ctx) return;
+
+              enemies.spawn(ctx.canvas.width, ctx.canvas.height, player);
+            }}
+          >
+            Spawn Enemy
+          </Button>
+          <Button
+            width="5em"
+            height="auto"
+            color="play"
+            onClick={() => navPlay()}
+          >
+            Play
+          </Button>
         </div>
       </div>
     </div>
