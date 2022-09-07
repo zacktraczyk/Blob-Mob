@@ -108,3 +108,38 @@ export function drawPauseMenu(ctx: CanvasRenderingContext2D) {
   ctx.font = "50px monospace";
   ctx.fillText("PAUSE", w / 2 - ctx.measureText("Pause").width / 2, h / 2 + 10);
 }
+
+export const drawArrow = (
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+) => {
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = "black";
+
+  // Arrow - stem
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.closePath();
+
+  const stemLength = Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+  const tipLength = 10;
+  let [tip_xdir, tip_ydir] = [
+    (-y2 + y1 + x2 - x1) / stemLength,
+    (x2 - x1 + y2 - y1) / stemLength,
+  ];
+
+  // Tip
+  ctx.beginPath();
+  ctx.moveTo(x2 - tip_xdir * tipLength, y2 - tip_ydir * tipLength);
+  ctx.lineTo(x2, y2);
+  tip_xdir -= (2 * (x2 - x1)) / stemLength;
+  tip_ydir -= (2 * (y2 - y1)) / stemLength;
+  ctx.lineTo(x2 + tip_xdir * tipLength, y2 + tip_ydir * tipLength);
+  ctx.stroke();
+  ctx.closePath();
+};

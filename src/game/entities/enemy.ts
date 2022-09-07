@@ -1,4 +1,5 @@
 import { game } from "@App";
+import { Stage, tutorialRules } from "@Game/tutorialRules";
 import { Game } from "../game";
 import { Scenes } from "../scenes/scenes";
 import { coins } from "./coin";
@@ -91,7 +92,7 @@ export class Enemy extends Entity {
   private triedCoinSpawn: boolean;
   private value: number;
 
-  private distance: number;
+  public distance: number;
   private pushMagnitude: number;
 
   constructor(
@@ -308,8 +309,10 @@ export class Enemy extends Entity {
     this.h = Math.max(0, this.h - 3.9);
 
     if (
-      (game.scene == Scenes.battle,
-      !this.triedCoinSpawn && Math.random() <= 0.8)
+      !this.triedCoinSpawn &&
+      ((game.scene == Scenes.tutorialMain &&
+        tutorialRules.stage >= Stage.coins) ||
+        (game.scene == Scenes.battle && Math.random() <= 0.8))
     ) {
       for (let i = 0; i < this.value; i++) {
         coins.spawn(this.x, this.y);

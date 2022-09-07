@@ -39,7 +39,7 @@ export const Main = (
       tutorialRules.reset();
       game.scene = Scenes.tutorialMain;
     case Scenes.tutorialMain:
-      Tutorial();
+      Tutorial(setPage);
       break;
 
     // ------------------> PLAY

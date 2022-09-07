@@ -6,11 +6,13 @@ import Shop from "./Shop";
 import Gameover from "./Gameover";
 import About from "./About";
 import Difficulty from "./Difficulty";
+import FirstTime from "./FirstTime";
 
 export enum View {
   Home,
   Info,
   Shop,
+  FirstTime,
   Tutorial,
   Difficulty,
   Play,
@@ -30,7 +32,14 @@ const Views: React.FC<Props> = (props: Props) => {
       game.scene = Scenes.menu;
       return (
         <Home
-          navPlay={() => setPage(View.Difficulty)}
+          navPlay={() => {
+            const firstTime = localStorage.getItem("firstTime");
+            if (firstTime === "false") {
+              setPage(View.Difficulty);
+            } else {
+              setPage(View.FirstTime);
+            }
+          }}
           navTutorial={() => setPage(View.Tutorial)}
           navShop={() => setPage(View.Shop)}
         />
@@ -38,9 +47,18 @@ const Views: React.FC<Props> = (props: Props) => {
       break;
 
     case View.Info:
-      console.log("views: ABOUT");
       game.scene = Scenes.menu;
       return <About />;
+      break;
+
+    case View.FirstTime:
+      game.scene = Scenes.menu;
+      return (
+        <FirstTime
+          navPlay={() => setPage(View.Difficulty)}
+          navTutorial={() => setPage(View.Tutorial)}
+        />
+      );
       break;
 
     case View.Tutorial:
@@ -53,6 +71,7 @@ const Views: React.FC<Props> = (props: Props) => {
       break;
 
     case View.Play:
+      localStorage.setItem("firstTime", "false");
       game.scene = Scenes.play;
       break;
 
