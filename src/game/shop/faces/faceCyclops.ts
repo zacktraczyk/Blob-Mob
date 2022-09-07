@@ -4,7 +4,7 @@ const faceCyclops: FaceFunction = (
   ctx: CanvasRenderingContext2D,
   faceAttr: FaceAttr
 ) => {
-  let { x, y, w, h, xdir, ydir, frownCount, frownCountMax } = faceAttr;
+  let { x, y, w, h, xvel, yvel, frownCount, frownCountMax } = faceAttr;
 
   // Translate center x,y to draw corner
   x -= w / 2;
@@ -17,8 +17,8 @@ const faceCyclops: FaceFunction = (
   ctx.beginPath();
   ctx.fillStyle = "black";
   ctx.arc(
-    x + w / 2 + xdir * 4,
-    y + h / 4 + ydir / 4,
+    x + w / 2 + xvel * 2,
+    y + h / 4 + yvel / 2,
     (w / 4 + h / 4) / 4,
     0,
     2 * Math.PI
@@ -37,7 +37,7 @@ const faceCyclops: FaceFunction = (
   ctx.bezierCurveTo(
     x + mouthX,
     y + mouthY + mouthH * -frownDelta,
-    x + w - mouthX + xdir * 4,
+    x + w - mouthX + xvel,
     y + mouthY + mouthH * -frownDelta,
     x + w - mouthX,
     y + mouthY + frownDelta

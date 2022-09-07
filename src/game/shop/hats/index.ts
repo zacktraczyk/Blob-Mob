@@ -6,8 +6,8 @@ export interface HatAttr {
   y: number; // center of face
   w: number;
   h: number;
-  xdir: number;
-  ydir: number;
+  xvel: number;
+  yvel: number;
 }
 
 export type HatFunction = (

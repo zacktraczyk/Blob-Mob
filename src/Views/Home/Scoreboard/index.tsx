@@ -5,7 +5,14 @@ import {
 import { useEffect, useState } from "react";
 import { auth, db } from "../../../apis/firebase";
 import "./index.scss";
-import { collection, limit, orderBy, query } from "@firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  FirestoreError,
+  limit,
+  orderBy,
+  query,
+} from "firebase/firestore";
 
 const Scoreboard: React.FC = () => {
   const highscoresRef = collection(db, "highscores");

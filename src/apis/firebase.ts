@@ -1,4 +1,4 @@
-import { initializeApp } from "@firebase/app";
+import { initializeApp } from "firebase/app";
 import {
   addDoc,
   collection,
@@ -7,13 +7,13 @@ import {
   getFirestore,
   setDoc,
   updateDoc,
-} from "@firebase/firestore";
+} from "firebase/firestore";
 import {
   FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-} from "@firebase/auth";
+} from "firebase/auth";
 import { game } from "@App";
 import shop from "@Game/shop";
 import { player } from "@Game/entities/player";

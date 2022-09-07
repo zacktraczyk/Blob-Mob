@@ -1,4 +1,7 @@
+import { getAuth } from "firebase/auth";
 import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { app } from "@Apis/firebase";
 import Login from "@Views/Home/Login";
 import PlayerStat from "@Components/PlayerStat";
 import Scoreboard from "@Views/Home/Scoreboard";

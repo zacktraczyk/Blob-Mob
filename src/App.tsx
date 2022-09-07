@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { auth, getAccount, getHighscore } from "./apis/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { auth, db, getAccount, getHighscore } from "./apis/firebase";
 
 import Canvas from "@Components/Canvas";
 import Score from "@Components/Score";
@@ -12,6 +14,7 @@ import { Game } from "@Game/game";
 import { Main } from "@Game/main";
 import { Scenes } from "@Game/scenes/scenes";
 import shop from "@Game/shop";
+import { onAuthStateChanged } from "firebase/auth";
 
 export const game = new Game();
 

@@ -4,7 +4,7 @@ const faceNormal: FaceFunction = (
   ctx: CanvasRenderingContext2D,
   faceAttr: FaceAttr
 ) => {
-  let { x, y, w, h, xdir, ydir, frownCount, frownCountMax } = faceAttr;
+  let { x, y, w, h, xvel, yvel, frownCount, frownCountMax } = faceAttr;
   // Translate center x,y to draw corner
   x -= w / 2;
   y -= h / 2;
@@ -16,8 +16,8 @@ const faceNormal: FaceFunction = (
   ctx.beginPath();
   ctx.fillStyle = "black";
   ctx.arc(
-    x + w / 4 + xdir / 2,
-    y + h / 4 + ydir / 2,
+    x + w / 4 + xvel / 2,
+    y + h / 4 + yvel / 2,
     (w / 4 + h / 4) / 4,
     0,
     2 * Math.PI
@@ -28,8 +28,8 @@ const faceNormal: FaceFunction = (
   //Draws Right Eye
   ctx.beginPath();
   ctx.arc(
-    x + w - w / 4 + xdir,
-    y + h / 4 + ydir,
+    x + w - w / 4 + xvel,
+    y + h / 4 + yvel,
     (w / 4 + h / 4) / 6,
     0,
     2 * Math.PI
@@ -46,7 +46,7 @@ const faceNormal: FaceFunction = (
   ctx.bezierCurveTo(
     x + mouthX,
     y + mouthY + mouthH * -frownDelta,
-    x + w - mouthX + xdir,
+    x + w - mouthX + xvel,
     y + mouthY + mouthH * -frownDelta,
     x + w - mouthX,
     y + mouthY + frownDelta
