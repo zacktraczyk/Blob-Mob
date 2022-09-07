@@ -47,9 +47,9 @@ function draw() {
 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+  coins.draw(ctx);
   player.draw(ctx);
   enemies.draw(ctx);
-  coins.draw(ctx);
   drawController.draw(ctx);
 
   tutorialRules.draw(ctx);

@@ -117,7 +117,7 @@ export const drawArrow = (
   y2: number
 ) => {
   ctx.lineWidth = 5;
-  ctx.strokeStyle = "black;";
+  ctx.strokeStyle = "black";
 
   // Arrow - stem
   ctx.beginPath();
