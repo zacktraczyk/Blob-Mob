@@ -188,12 +188,6 @@ export class Player extends Entity {
 
   // Actions --------------------
   private move(w: number, h: number, dir: Input["keyState"]) {
-    // Increase speed if keydown
-    // if (dir.right) {
-
-    // }
-    // if (dir.right && dir.)
-
     if (dir.right) this.xvel += this.accel;
     if (dir.left) this.xvel -= this.accel;
     if (dir.down) this.yvel += this.accel;

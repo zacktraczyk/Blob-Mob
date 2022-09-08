@@ -1,3 +1,5 @@
+import { Howl } from "howler";
+
 import { Scenes } from "./scenes/scenes";
 import { Menu } from "./scenes/menu";
 import { Shop } from "./scenes/shop";
@@ -12,12 +14,21 @@ import { saveHighscore } from "@Apis/firebase";
 import { Game } from "./game";
 import { difficultyScalar } from "./difficulty";
 
+import noThanks from "@Assets/sound/No-Thanksv1.1.mp3";
+
+const music = new Howl({
+  src: [noThanks],
+  autoplay: true,
+  loop: true,
+});
+
 export const Main = (
   game: Game,
   setPage: React.Dispatch<React.SetStateAction<View>>
 ) => {
   if (!game.ctx) return;
-  ++game.frame;
+  if (!game.paused) ++game.frame;
+  if (input.keyState.mute) Howler.mute(true); // temp
 
   switch (game.scene) {
     // ------------------> MENU
