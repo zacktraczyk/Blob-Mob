@@ -24,6 +24,9 @@ export class Game {
   private coinVal: number;
   public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined;
 
+  private fxSound: number;
+  private musSound: number;
+
   public scene: Scenes;
 
   constructor() {
@@ -37,6 +40,9 @@ export class Game {
     this.frame = 0;
     this.paused = false;
     this.pauseKeyRelease = true;
+
+    this.fxSound = 1;
+    this.musSound = 0.5;
 
     this.scene = Scenes.menu;
   }
@@ -134,52 +140,55 @@ export class Game {
     this.paused = false;
     this.score = 0;
     this.frame = 0;
-  }
 
-  public debug() {
     if (!this.ctx) return;
-    const ctx = this.ctx;
-
-    ctx.font = "20px Arial Bold";
-    ctx.fillStyle = "black";
-    let x = 40;
-    let y = (ctx.canvas.height * 5) / 8 + 100;
-
-    ctx.fillText("difficulty: " + this.difficulty, x, y);
-
-    y += 30;
-    ctx.fillText("player: ", x, y);
-
-    x += 30;
-    y += 20;
-    ctx.fillText("speed: " + player.maxSpeed, x, y);
-
-    // y += 20;
-    // ctx.fillText("accel: " + player.accel, x, y);
-
-    y += 20;
-    ctx.fillText("cool: " + player.maxCool, x, y);
-
-    y += 20;
-    ctx.fillText("health: " + player.maxHealth, x, y);
-
-    y += 30;
-    x -= 30;
-    ctx.fillText("enemy: ", x, y);
-
-    x += 30;
-    y += 20;
-    ctx.fillText("speed: " + enemies.speed, x, y);
-
-    y += 20;
-    ctx.fillText("Spawn Rate: " + enemies.spawnWait + "s", x, y);
-
-    y += 20;
-    ctx.fillText("Max Number: " + enemies.maxInst, x, y);
-
-    y += 40;
-    if (enemies.instances != null) {
-      ctx.fillText("Blobs: " + enemies.instances.length, x, y);
-    }
+    player.x = this.ctx.canvas.width / 2;
+    player.y = this.ctx.canvas.height / 2;
   }
+
+  // public debug() {
+  //     const ctx = this.ctx;
+  //     ctx.font = '20px Arial Bold';
+  //     ctx.fillStyle = 'black';
+
+  //     let x = 40;
+  //     let y = ctx.canvas.height * 5 / 8 + 100;
+
+  //     ctx.fillText('difficulty: ' + this.difficulty, x, y);
+
+  //     y += 30;
+  //     ctx.fillText('player: ', x, y);
+
+  //     x += 30;
+  //     y += 20;
+  //     ctx.fillText('speed: ' + player.maxSpeed, x, y);
+
+  //     y += 20;
+  //     ctx.fillText('accel: ' + player.accel, x, y);
+
+  //     y += 20;
+  //     ctx.fillText('cool: ' + player.maxCool, x, y);
+
+  //     y += 20;
+  //     ctx.fillText('health: ' + player.maxHealth, x, y);
+
+  //     y += 30;
+  //     x -= 30;
+  //     ctx.fillText('enemy: ', x, y);
+
+  //     x += 30;
+  //     y += 20;
+  //     ctx.fillText('speed: ' + enemyController.speed, x, y);
+
+  //     y += 20;
+  //     ctx.fillText('Spawn Rate: ' + enemyController.spawnWait + 's', x, y);
+
+  //     y += 20;
+  //     ctx.fillText('Max Number: ' + enemyController.maxInst, x, y);
+
+  //     y += 40;
+  //     if (enemyController.instances != null) {
+  //         ctx.fillText('Blobs: ' + enemyController.instances.length, x, y);
+  //     }
+  // }
 }

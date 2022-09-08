@@ -22,7 +22,6 @@ export class Input {
       push: false,
 
       pause: false,
-      mute: false,
 
       // Shop
       enemySpawn: false,
@@ -45,7 +44,6 @@ export class Input {
       q: "push",
 
       p: "pause",
-      m: "mute",
 
       r: "enemySpawn",
     };

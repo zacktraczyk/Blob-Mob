@@ -100,8 +100,8 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
             drawHat(ctx, {
               ...pos,
               y: ctx.canvas.height * (6 / 7),
-              xvel: player.xvel,
-              yvel: player.yvel,
+              xdir: player.xdir,
+              ydir: player.ydir,
             });
             return;
           }
@@ -115,8 +115,8 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
 
           drawFace(ctx, {
             ...pos,
-            xvel: player.xvel,
-            yvel: player.yvel,
+            xdir: player.xdir,
+            ydir: player.ydir,
             frownCount: player.frownCount,
             frownCountMax: player.frownCountMax,
           });

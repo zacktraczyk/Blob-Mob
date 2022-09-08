@@ -1,4 +1,3 @@
-import sound from "@Game/sound";
 import React from "react";
 import "./index.scss";
 
@@ -27,10 +26,7 @@ const Button: React.FC<Props> = (props: React.PropsWithChildren<Props>) => {
     <button
       className={`button__back opt-${color}`}
       style={{ height: height, width: width }}
-      onClick={() => {
-        sound.play("button");
-        onClick();
-      }}
+      onClick={() => onClick()}
     >
       <span className={`button__front opt-${color}`}>{children}</span>
     </button>
