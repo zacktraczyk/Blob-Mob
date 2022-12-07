@@ -33,7 +33,7 @@ const App = () => {
       <Canvas
         draw={(ctx: CanvasRenderingContext2D) => {
           game.ctx = ctx;
-          Main(game, setPage);
+          Main(game, page, setPage);
         }}
       />
       <Score />

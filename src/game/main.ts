@@ -6,18 +6,20 @@ import { tutorialRules } from "./tutorialRules";
 import { Battle } from "./scenes/battle";
 import { Gameover } from "./scenes/gameover";
 import { input } from "./input";
+import { difficultyScalar } from "./difficulty";
+import { sound } from "./sound";
 
 import { View } from "@Views/index.tsx";
 import { saveHighscore } from "@Apis/firebase";
 import { Game } from "./game";
-import { difficultyScalar } from "./difficulty";
 
 export const Main = (
   game: Game,
+  page: View,
   setPage: React.Dispatch<React.SetStateAction<View>>
 ) => {
   if (!game.ctx) return;
-  ++game.frame;
+  if (!game.paused) ++game.frame;
 
   switch (game.scene) {
     // ------------------> MENU

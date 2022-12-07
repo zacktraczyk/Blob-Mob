@@ -7,6 +7,7 @@ import Gameover from "./Gameover";
 import About from "./About";
 import Difficulty from "./Difficulty";
 import FirstTime from "./FirstTime";
+import { sound, Themes } from "@Game/sound";
 
 export enum View {
   Home,
@@ -30,6 +31,7 @@ const Views: React.FC<Props> = (props: Props) => {
   switch (page) {
     case View.Home:
       game.scene = Scenes.menu;
+      sound.play(Themes.Title);
       return (
         <Home
           navPlay={() => {
@@ -48,11 +50,13 @@ const Views: React.FC<Props> = (props: Props) => {
 
     case View.Info:
       game.scene = Scenes.menu;
+      sound.play(Themes.Title);
       return <About />;
       break;
 
     case View.FirstTime:
       game.scene = Scenes.menu;
+      sound.play(Themes.Title);
       return (
         <FirstTime
           navPlay={() => setPage(View.Difficulty)}
@@ -63,20 +67,24 @@ const Views: React.FC<Props> = (props: Props) => {
 
     case View.Tutorial:
       game.scene = Scenes.tutorial;
+      sound.play(Themes.Title);
       break;
 
     case View.Difficulty:
       game.scene = Scenes.menu;
+      sound.play(Themes.Title);
       return <Difficulty navPlay={() => setPage(View.Play)} />;
       break;
 
     case View.Play:
       localStorage.setItem("firstTime", "false");
+      sound.play(Themes.Main);
       game.scene = Scenes.play;
       break;
 
     case View.Shop:
       game.scene = Scenes.shop;
+      sound.play(Themes.Shop);
       return (
         <Shop
           navHome={() => {

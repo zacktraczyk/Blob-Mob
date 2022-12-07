@@ -22,9 +22,9 @@ const Fit: React.FC = () => {
 
   return (
     <div className="fit">
+      <Hats fit={playerFit} />
       <Bodies fit={playerFit} />
       <Faces fit={playerFit} />
-      <Hats fit={playerFit} />
     </div>
   );
 };

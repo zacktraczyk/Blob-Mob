@@ -103,7 +103,7 @@ const Shop: React.FC<Props> = (props: Props) => {
 
         <div className="shop__right-buttons">
           <Button
-            width="11em"
+            width="50%"
             height="auto"
             color="upgrade"
             onClick={() => {
@@ -116,7 +116,7 @@ const Shop: React.FC<Props> = (props: Props) => {
             Spawn Enemy
           </Button>
           <Button
-            width="5em"
+            width="50%"
             height="auto"
             color="play"
             onClick={() => navPlay()}
