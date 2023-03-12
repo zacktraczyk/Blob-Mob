@@ -1,0 +1,50 @@
+name: Build and Lint
+
+env:
+  VITE_API_KEY: ${{ secrets.FIREBASE_API_KEY}}
+  VITE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+  VITE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID}}
+  VITE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET}}
+  VITE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID}}
+  VITE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+
+on:
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development, feature/**]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Create Production Build
+        run: yarn build --base=/Blob-Mob
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint Typescript
+        run: yarn lint
