@@ -15,16 +15,14 @@ export enum PlayerFitType {
   Hat,
 }
 
-interface Props {
+export interface PlayerFitProps {
   type: PlayerFitType
   face: keyof typeof Face
   body: keyof typeof Body
   hat: keyof typeof Hat
 }
 
-const PlayerFit: React.FC<Props> = (props: Props) => {
-  const { type, face, body, hat } = props
-
+const PlayerFit: React.FC<PlayerFitProps> = ({ type, face, body, hat }) => {
   // Get Draw Functions
   const drawBody = Body[body].draw
   const drawFace = Face[face].draw

@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 
-interface ButtonProps {
+export interface ButtonProps {
   color: ButtonColors
   children: React.ReactNode
   onClick: () => void
