@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react'
-import Navbar, { NavbarProps } from './index'
+import Navbar, { NavbarProps } from '.'
 
 export default {
   title: 'HUD/Navbar',

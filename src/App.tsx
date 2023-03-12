@@ -4,7 +4,7 @@ import { auth, getAccount, getHighscore } from './apis/firebase'
 import Canvas from '@Components/Canvas'
 import Score from '@Components/Score'
 import Coins from '@Components/Coins'
-import Navbar from '@Components/Navbar'
+import Navbar from '@Components/Navbar/index'
 import Views, { View } from '@Views/index.tsx'
 
 import { Game } from '@Game/game'
@@ -35,7 +35,7 @@ const App: React.FC = () => {
       />
       <Score />
 
-      <div className='app'>
+      <div className='flex h-screen w-screen items-center justify-center'>
         <Views page={page} setPage={setPage} />
       </div>
 

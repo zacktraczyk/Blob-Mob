@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PlayerStat from '@Components/PlayerStat'
 import { player, PlayerAttributes } from '@Game/entities/player'
-import './index.scss'
 import shop from '@Game/shop'
 
 const Stats: React.FC = () => {
@@ -10,7 +9,7 @@ const Stats: React.FC = () => {
   shop.setPlayerStats = setPlayerStats
 
   return (
-    <div className='stats'>
+    <div className='grid h-full w-full grid-cols-2 grid-rows-2 items-center justify-center text-3xl'>
       <PlayerStat type={'maxSpeed'} stats={playerStats} />
       <PlayerStat type={'maxHealth'} stats={playerStats} />
       <PlayerStat type={'maxPower'} stats={playerStats} />

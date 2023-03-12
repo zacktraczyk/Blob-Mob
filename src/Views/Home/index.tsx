@@ -1,22 +1,21 @@
 import React from 'react'
-import Login from '@Views/Home/Login'
-import Scoreboard from '@Views/Home/Scoreboard'
-import ShopCard from '@Views/Home/ShopCard'
-import './index.scss'
+import Login from './Login'
+import Scoreboard from './Scoreboard'
+import ShopCard from './ShopCard'
 
-interface Props {
+interface HomeProps {
   navPlay: () => void
   navTutorial: () => void
   navShop: () => void
 }
 
-const Home: React.FC<Props> = (props: Props) => {
-  const { navPlay, navTutorial, navShop } = props
-
+const Home: React.FC<HomeProps> = ({ navPlay, navTutorial, navShop }) => {
   return (
-    <div className='home'>
-      <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
-      <ShopCard navShop={() => navShop()} />
+    <div className='flex h-[500px] w-[600px] items-stretch gap-5'>
+      <div className='flex w-full flex-col gap-5'>
+        <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
+        <ShopCard navShop={() => navShop()} />
+      </div>
       <Scoreboard />
     </div>
   )

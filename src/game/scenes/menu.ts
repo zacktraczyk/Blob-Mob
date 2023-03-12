@@ -1,6 +1,6 @@
 import { game } from '@App'
 
-export function Menu() {
+export const Menu = () => {
   const ctx = game.ctx
   if (ctx == null) return
 

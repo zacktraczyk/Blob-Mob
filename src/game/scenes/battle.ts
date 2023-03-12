@@ -11,7 +11,7 @@ import { drawController } from '../entities/draw'
 let transTimer = 0 // after death change scene timer
 const duration = 100
 
-export function Battle() {
+export const Battle = () => {
   if (!game.paused) update()
   game.pause()
 
@@ -27,7 +27,7 @@ export function Battle() {
   }
 }
 
-function update() {
+const update = () => {
   const ctx = game.ctx
   if (ctx == null) return
 
@@ -45,7 +45,7 @@ function update() {
   drawController.controller()
 }
 
-function draw() {
+const draw = () => {
   const ctx = game.ctx
   if (ctx == null) return
 

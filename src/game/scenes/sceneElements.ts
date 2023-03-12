@@ -2,7 +2,7 @@ import { game } from '@App'
 import { Body } from '@Game/shop/bodies'
 import { player } from '../entities/player'
 
-export function drawHUD() {
+export const drawHUD = () => {
   const ctx = game.ctx
   if (ctx == null) return
 
@@ -83,7 +83,7 @@ export function drawHUD() {
   // ctx.fillText(text, 20, 60);
 }
 
-export function drawPauseMenu(ctx: CanvasRenderingContext2D) {
+export const drawPauseMenu = (ctx: CanvasRenderingContext2D) => {
   const w = ctx.canvas.width
   const h = ctx.canvas.height
 

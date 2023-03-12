@@ -1,33 +1,24 @@
 import React from 'react'
-import './index.scss'
 
 export interface ButtonProps {
-  color: ButtonColors
+  size: string
+  color: string
+  textstyle?: string
   children: React.ReactNode
   onClick: () => void
-  height: string
-  width: string
 }
 
-type ButtonColors =
-  | 'play'
-  | 'signout'
-  | 'google'
-  | 'facebook'
-  | 'tutorial'
-  | 'upgrade'
-  | 'github'
-  | 'website'
-
-const Button: React.FC<ButtonProps> = ({ color, children, onClick, height, width }) => {
+const Button: React.FC<ButtonProps> = ({ color, children, onClick, size, textstyle }) => {
   return (
-    <button
-      className={`button__back opt-${color}`}
-      style={{ height: height, width: width }}
-      onClick={() => onClick()}
-    >
-      <span className={`button__front opt-${color}`}>{children}</span>
-    </button>
+    <div className={`relative ${size}`}>
+      <div className={`absolute mt-2 rounded-lg brightness-50 ${size} ${color}`}></div>
+      <button
+        className={`absolute mt-0 flex items-center justify-center gap-1 p-2 font-bold text-text-alt active:mt-1 ${size} ${color} ${textstyle}`}
+        onClick={() => onClick()}
+      >
+        {children}
+      </button>
+    </div>
   )
 }
 

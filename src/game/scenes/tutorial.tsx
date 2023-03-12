@@ -8,7 +8,7 @@ import { drawController } from '@Game/entities/draw'
 import { coins } from '@Game/entities/coin'
 import { View } from '@Views/index.tsx'
 
-export function Tutorial(setPage: React.Dispatch<React.SetStateAction<View>>) {
+export const Tutorial = (setPage: React.Dispatch<React.SetStateAction<View>>) => {
   update()
   draw()
 
@@ -19,7 +19,7 @@ export function Tutorial(setPage: React.Dispatch<React.SetStateAction<View>>) {
   }
 }
 
-function update() {
+const update = () => {
   const ctx = game.ctx
   if (!ctx) return
 
@@ -38,7 +38,7 @@ function update() {
   if (player.health <= player.maxHealth * 0.1) player.health = player.maxHealth
 }
 
-function draw() {
+const draw = () => {
   const ctx = game.ctx
   if (!ctx) return
 

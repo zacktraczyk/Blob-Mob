@@ -8,7 +8,7 @@ import { damagePoints } from '../entities/damagePoints'
 
 let playerDeathCool = 200
 
-export function Shop() {
+export const Shop = () => {
   draw()
   update()
 
@@ -25,7 +25,7 @@ export function Shop() {
 
 let spawnEnemyRelease = true
 
-function update() {
+const update = () => {
   const ctx = game.ctx
   if (!ctx) return
 
@@ -44,7 +44,7 @@ function update() {
   }
 }
 
-function draw() {
+const draw = () => {
   const ctx = game.ctx
   if (ctx == null) return
 

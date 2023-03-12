@@ -8,25 +8,17 @@ import { enemies } from '@Game/entities/enemy'
 import Stats from './Stats'
 import Fit from './Fit'
 
-import './index.scss'
-
-interface Props {
+interface ShopProps {
   navPlay: () => void
 }
 
 enum Tabs {
   Stats,
-  // Powerups,
   Fit,
 }
 
-const Shop: React.FC<Props> = (props: Props) => {
-  const { navPlay } = props
+const Shop: React.FC<ShopProps> = ({ navPlay }) => {
   const [tab, setTab] = useState<Tabs>(Tabs.Stats)
-
-  const navStatsClass = tab == Tabs.Stats ? 'active' : 'inactive'
-  // const navPowerupsClass = tab == Tabs.Powerups ? "active" : "inactive";
-  const navFitClass = tab == Tabs.Fit ? 'active' : 'inactive'
 
   useEffect(() => {
     return () => {
@@ -35,75 +27,72 @@ const Shop: React.FC<Props> = (props: Props) => {
   }, [])
 
   return (
-    <div className='shop'>
-      <div className='shop__left'></div>
+    <div className='flex h-full w-full items-center justify-start'>
+      {/* Left Gap */}
+      <div className='h-full w-1/2'></div>
 
-      <div className='shop__right'>
-        <div className='tab-stats-click tab-label' onClick={() => setTab(Tabs.Stats)}>
-          Stats
-          <i className='fa-solid fa-arrow-up-9-1'></i>
-        </div>
-        {/* <div
-          className="tab-powerups-click tab-label"
-          onClick={() => setTab(Tabs.Powerups)}
-        >
-          Powerups
-          <i className="fa-brands fa-superpowers"></i>
-        </div> */}
-        <div className='tab-fit-click tab-label' onClick={() => setTab(Tabs.Fit)}>
-          Fit
-          <i className='fa-solid fa-glasses'></i>
-        </div>
-        <div className={`nav-top tab-stats ${navStatsClass}`}></div>
-        {/* <div className={`nav-top tab-powerups ${navPowerupsClass}`}></div> */}
-        <div className={`nav-top tab-fit ${navFitClass}`}></div>
-        {/* <h2>{displayName}</h2> */}
-        <div className='shop__right-main'>
-          {tab == Tabs.Stats ? (
-            <Stats />
-          ) : (
-            // ) : tab == Tabs.Powerups ? (
-            //   <Powerups />
-            <Fit />
-          )}
-        </div>
-        <div className='shop__right-card-background'></div>
-        <div className='shop__right-nav-bottom'>
-          <i
-            className={`fa-solid fa-angle-left fa-2xl ${
-              tab == 0 ? 'arrow-inactive' : 'arrow-active'
-            }`}
-            onClick={() => setTab(tab > 0 ? tab - 1 : tab)}
-          ></i>
-          <i
-            className={`fa-solid fa-angle-right fa-2xl ${
-              tab == Tabs.Fit ? 'arrow-inactive' : 'arrow-active'
-            }`}
-            onClick={() => setTab(tab < Tabs.Fit ? tab + 1 : tab)}
-          ></i>
-        </div>
+      <div className='flex h-full w-full items-center justify-center pb-20 pt-24'>
+        {/* Right Shop */}
+        <div className='flex h-full w-[500px] flex-col items-stretch justify-start gap-3 rounded-3xl bg-card px-10 py-7 shadow-2xl'>
+          {/* Tabs */}
+          <div className='flex items-center justify-center gap-5 rounded-2xl bg-gray'>
+            <div
+              className={`flex h-10 w-full items-center justify-center gap-2 rounded-2xl ${
+                tab === Tabs.Stats && 'bg-main'
+              }`}
+              onClick={() => setTab(Tabs.Stats)}
+            >
+              Stats
+              <i className='fa-solid fa-arrow-up-9-1'></i>
+            </div>
+            <div
+              className={`flex h-10 w-full items-center justify-center gap-2 rounded-2xl ${
+                tab === Tabs.Fit && 'bg-main'
+              }`}
+              onClick={() => setTab(Tabs.Fit)}
+            >
+              Fit
+              <i className='fa-solid fa-glasses'></i>
+            </div>
+          </div>
 
-        <div className='shop__right-buttons'>
-          <Button
-            width='50%'
-            height='auto'
-            color='upgrade'
-            onClick={() => {
-              const ctx = game.ctx
-              if (!ctx) return
+          <div className='flex h-[300rem] items-center justify-center'>
+            {tab == Tabs.Stats ? <Stats /> : <Fit />}
+          </div>
 
-              enemies.spawn(ctx.canvas.width, ctx.canvas.height, player)
-            }}
-          >
-            Spawn Enemy
-          </Button>
-          <Button width='50%' height='auto' color='play' onClick={() => navPlay()}>
-            Play
-          </Button>
+          <div className='flex w-full items-center justify-evenly py-6'>
+            <i
+              className={`fa-solid fa-angle-left fa-2xl ${tab == 0 ? 'text-gray' : 'text-main'}`}
+              onClick={() => setTab(tab > 0 ? tab - 1 : tab)}
+            ></i>
+            <i
+              className={`fa-solid fa-angle-right fa-2xl ${
+                tab == Tabs.Fit ? 'text-gray' : 'text-main'
+              }`}
+              onClick={() => setTab(tab < Tabs.Fit ? tab + 1 : tab)}
+            ></i>
+          </div>
+
+          <div className='flex items-center justify-evenly'>
+            <Button
+              color='bg-upgrade'
+              size='w-44 h-10'
+              onClick={() => {
+                const ctx = game.ctx
+                if (!ctx) return
+
+                enemies.spawn(ctx.canvas.width, ctx.canvas.height, player)
+              }}
+            >
+              Spawn Enemy
+            </Button>
+            <Button size='w-44 h-10' color='bg-main' onClick={() => navPlay()}>
+              Play
+            </Button>
+          </div>
         </div>
       </div>
     </div>
   )
 }
-
 export default Shop

@@ -2,16 +2,16 @@ import { game } from '@App'
 import { player } from '../entities/player'
 import { enemies } from '../entities/enemy'
 
-export function Gameover() {
+export const Gameover = () => {
   update()
   draw()
 }
 
-function update() {
+const update = () => {
   enemies.controller()
 }
 
-function draw() {
+const draw = () => {
   const ctx = game.ctx
   if (ctx == null) return
 

@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { game } from '@App'
 
-import './index.scss'
-
 const Coins: React.FC = () => {
   const [coins, setCoins] = useState(game.coins)
   game.setCoins = setCoins
 
   return (
-    <div className='coins'>
+    <div className='absolute bottom-6 left-6 text-4xl'>
       <p>${'' + coins}</p>
     </div>
   )

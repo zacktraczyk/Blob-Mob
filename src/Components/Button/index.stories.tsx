@@ -9,8 +9,7 @@ export default {
 
 export const Primary: Story<ButtonProps> = (args) => <Button {...args} />
 Primary.args = {
-  color: 'play',
+  color: 'bg-main',
   children: 'Button',
-  width: '200px',
-  height: '50px',
+  size: 'w-30 h-20',
 }

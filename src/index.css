@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+	@variants responsive {
+		.text-shadow-main {
+    text-shadow: 2px 2px 0px theme('colors.main');
+		}
+
+		.text-shadow-gameover {
+    text-shadow: 4px 4px 0px theme('colors.gameover');
+		}
+	}
+}
+
+:root {
+	overflow: hidden;
+
+	box-shadow: inset 0 0 300px #000;
+	background-image: url("./assets/images/paper.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}

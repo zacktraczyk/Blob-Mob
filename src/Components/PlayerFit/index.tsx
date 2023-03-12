@@ -33,6 +33,7 @@ const PlayerFit: React.FC<PlayerFitProps> = ({ type, face, body, hat }) => {
   let name = ''
   let purchased = false
   let selected = false
+
   if (type == PlayerFitType.Body) {
     cost = Body[body].cost
     name = Body[body].name

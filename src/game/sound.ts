@@ -40,13 +40,10 @@ class Sound {
   }
 
   play(theme: Themes): void {
-    console.log('theme vs currTheme', theme, this.currTheme)
     if (this.currTheme && this.currTheme == theme) {
-      console.log('Sound: controller: already playing theme')
       return
     }
 
-    console.log('Sound: controller: stopping all themes')
     this.mainTheme.stop()
     this.titleTheme.stop()
     this.shopTheme.stop()
@@ -55,19 +52,15 @@ class Sound {
     switch (theme) {
       case Themes.Title:
         this.titleTheme.play()
-        console.log('Sound: controller: playing Home')
         break
       case Themes.Shop:
         this.shopTheme.play()
-        console.log('Sound: controller: playing Shop')
         break
       case Themes.Main:
         this.mainTheme.play()
-        console.log('Sound: controller: playing Battle')
         break
       case Themes.Gameover:
         this.gameoverTheme.play()
-        console.log('Sound: controller: playing gameover')
         break
     }
 
