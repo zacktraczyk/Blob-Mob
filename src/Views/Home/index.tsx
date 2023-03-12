@@ -1,25 +1,25 @@
-import { saveHighscore } from "../../apis/firebase";
-import Login from "@Views/Home/Login";
-import Scoreboard from "@Views/Home/Scoreboard";
-import ShopCard from "@Views/Home/ShopCard";
-import "./index.scss";
+import React from 'react'
+import Login from '@Views/Home/Login'
+import Scoreboard from '@Views/Home/Scoreboard'
+import ShopCard from '@Views/Home/ShopCard'
+import './index.scss'
 
 interface Props {
-  navPlay: Function;
-  navTutorial: Function;
-  navShop: Function;
+  navPlay: () => void
+  navTutorial: () => void
+  navShop: () => void
 }
 
 const Home: React.FC<Props> = (props: Props) => {
-  const { navPlay, navTutorial, navShop } = props;
+  const { navPlay, navTutorial, navShop } = props
 
   return (
-    <div className="home">
+    <div className='home'>
       <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
       <ShopCard navShop={() => navShop()} />
       <Scoreboard />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

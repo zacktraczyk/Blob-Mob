@@ -1,27 +1,25 @@
-import React from "react";
-import "./index.scss";
+import React from 'react'
+import './index.scss'
 
-interface Props {
-  color: ButtonColors;
-  children: React.ReactNode;
-  onClick: Function;
-  height: string;
-  width: string;
+interface ButtonProps {
+  color: ButtonColors
+  children: React.ReactNode
+  onClick: () => void
+  height: string
+  width: string
 }
 
 type ButtonColors =
-  | "play"
-  | "signout"
-  | "google"
-  | "facebook"
-  | "tutorial"
-  | "upgrade"
-  | "github"
-  | "website";
+  | 'play'
+  | 'signout'
+  | 'google'
+  | 'facebook'
+  | 'tutorial'
+  | 'upgrade'
+  | 'github'
+  | 'website'
 
-const Button: React.FC<Props> = (props: React.PropsWithChildren<Props>) => {
-  const { color, children, onClick, height, width } = props;
-
+const Button: React.FC<ButtonProps> = ({ color, children, onClick, height, width }) => {
   return (
     <button
       className={`button__back opt-${color}`}
@@ -30,7 +28,7 @@ const Button: React.FC<Props> = (props: React.PropsWithChildren<Props>) => {
     >
       <span className={`button__front opt-${color}`}>{children}</span>
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

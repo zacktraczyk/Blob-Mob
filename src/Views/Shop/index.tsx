@@ -1,22 +1,17 @@
-import { auth, updateAccount } from "@Apis/firebase";
-import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import Login from "@Views/Home/Login";
-import PlayerStat from "@Components/PlayerStat";
-import Scoreboard from "@Views/Home/Scoreboard";
-import { game } from "@App";
-import { player, PlayerAttributes } from "@Game/entities/player";
-import { enemies } from "@Game/entities/enemy";
-import Stats from "./Stats";
-// import Powerups from "./Powerups";
-import Fit from "./Fit";
+import React from 'react'
+import { updateAccount } from '@Apis/firebase'
+import { useEffect, useState } from 'react'
+import { game } from '@App'
+import Button from '@Components/Button'
+import { player } from '@Game/entities/player'
+import { enemies } from '@Game/entities/enemy'
+import Stats from './Stats'
+import Fit from './Fit'
 
-import "./index.scss";
-import Button from "@Components/Button";
+import './index.scss'
 
 interface Props {
-  navHome: Function;
-  navPlay: Function;
+  navPlay: () => void
 }
 
 enum Tabs {
@@ -26,37 +21,27 @@ enum Tabs {
 }
 
 const Shop: React.FC<Props> = (props: Props) => {
-  const { navHome, navPlay } = props;
-  const [tab, setTab] = useState<Tabs>(Tabs.Stats);
+  const { navPlay } = props
+  const [tab, setTab] = useState<Tabs>(Tabs.Stats)
 
-  const navStatsClass = tab == Tabs.Stats ? "active" : "inactive";
+  const navStatsClass = tab == Tabs.Stats ? 'active' : 'inactive'
   // const navPowerupsClass = tab == Tabs.Powerups ? "active" : "inactive";
-  const navFitClass = tab == Tabs.Fit ? "active" : "inactive";
-
-  const [user] = useAuthState(auth);
-
-  let displayName = "Gerald";
-  if (user && user.displayName) {
-    displayName = user.displayName;
-  }
+  const navFitClass = tab == Tabs.Fit ? 'active' : 'inactive'
 
   useEffect(() => {
     return () => {
-      updateAccount();
-    };
-  }, []);
+      updateAccount()
+    }
+  }, [])
 
   return (
-    <div className="shop">
-      <div className="shop__left"></div>
+    <div className='shop'>
+      <div className='shop__left'></div>
 
-      <div className="shop__right">
-        <div
-          className="tab-stats-click tab-label"
-          onClick={() => setTab(Tabs.Stats)}
-        >
+      <div className='shop__right'>
+        <div className='tab-stats-click tab-label' onClick={() => setTab(Tabs.Stats)}>
           Stats
-          <i className="fa-solid fa-arrow-up-9-1"></i>
+          <i className='fa-solid fa-arrow-up-9-1'></i>
         </div>
         {/* <div
           className="tab-powerups-click tab-label"
@@ -65,18 +50,15 @@ const Shop: React.FC<Props> = (props: Props) => {
           Powerups
           <i className="fa-brands fa-superpowers"></i>
         </div> */}
-        <div
-          className="tab-fit-click tab-label"
-          onClick={() => setTab(Tabs.Fit)}
-        >
+        <div className='tab-fit-click tab-label' onClick={() => setTab(Tabs.Fit)}>
           Fit
-          <i className="fa-solid fa-glasses"></i>
+          <i className='fa-solid fa-glasses'></i>
         </div>
         <div className={`nav-top tab-stats ${navStatsClass}`}></div>
         {/* <div className={`nav-top tab-powerups ${navPowerupsClass}`}></div> */}
         <div className={`nav-top tab-fit ${navFitClass}`}></div>
         {/* <h2>{displayName}</h2> */}
-        <div className="shop__right-main">
+        <div className='shop__right-main'>
           {tab == Tabs.Stats ? (
             <Stats />
           ) : (
@@ -85,48 +67,43 @@ const Shop: React.FC<Props> = (props: Props) => {
             <Fit />
           )}
         </div>
-        <div className="shop__right-card-background"></div>
-        <div className="shop__right-nav-bottom">
+        <div className='shop__right-card-background'></div>
+        <div className='shop__right-nav-bottom'>
           <i
             className={`fa-solid fa-angle-left fa-2xl ${
-              tab == 0 ? "arrow-inactive" : "arrow-active"
+              tab == 0 ? 'arrow-inactive' : 'arrow-active'
             }`}
             onClick={() => setTab(tab > 0 ? tab - 1 : tab)}
           ></i>
           <i
             className={`fa-solid fa-angle-right fa-2xl ${
-              tab == Tabs.Fit ? "arrow-inactive" : "arrow-active"
+              tab == Tabs.Fit ? 'arrow-inactive' : 'arrow-active'
             }`}
             onClick={() => setTab(tab < Tabs.Fit ? tab + 1 : tab)}
           ></i>
         </div>
 
-        <div className="shop__right-buttons">
+        <div className='shop__right-buttons'>
           <Button
-            width="50%"
-            height="auto"
-            color="upgrade"
+            width='50%'
+            height='auto'
+            color='upgrade'
             onClick={() => {
-              const ctx = game.ctx;
-              if (!ctx) return;
+              const ctx = game.ctx
+              if (!ctx) return
 
-              enemies.spawn(ctx.canvas.width, ctx.canvas.height, player);
+              enemies.spawn(ctx.canvas.width, ctx.canvas.height, player)
             }}
           >
             Spawn Enemy
           </Button>
-          <Button
-            width="50%"
-            height="auto"
-            color="play"
-            onClick={() => navPlay()}
-          >
+          <Button width='50%' height='auto' color='play' onClick={() => navPlay()}>
             Play
           </Button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Shop;
+export default Shop

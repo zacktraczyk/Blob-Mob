@@ -1,29 +1,26 @@
-import hatNormal from "./hatNormal";
-import hatTopHat from "./hatTopHat";
+import hatNormal from './hatNormal'
+import hatTopHat from './hatTopHat'
 
 export interface HatAttr {
-  x: number; // center of face
-  y: number; // center of face
-  w: number;
-  h: number;
-  xdir: number;
-  ydir: number;
+  x: number // center of face
+  y: number // center of face
+  w: number
+  h: number
+  xdir: number
+  ydir: number
 }
 
-export type HatFunction = (
-  ctx: CanvasRenderingContext2D,
-  hatAttr: HatAttr
-) => void;
+export type HatFunction = (ctx: CanvasRenderingContext2D, hatAttr: HatAttr) => void
 
 export const Hat = {
   normal: {
-    name: "Default",
+    name: 'Default',
     draw: hatNormal,
     cost: 0,
   },
   topHat: {
-    name: "Top Hat",
+    name: 'Top Hat',
     draw: hatTopHat,
     cost: 1000,
   },
-};
+}

@@ -1,22 +1,22 @@
-import { game } from "@App";
-import { player } from "../entities/player";
-import { enemies } from "../entities/enemy";
+import { game } from '@App'
+import { player } from '../entities/player'
+import { enemies } from '../entities/enemy'
 
 export function Gameover() {
-  update();
-  draw();
+  update()
+  draw()
 }
 
 function update() {
-  enemies.controller();
+  enemies.controller()
 }
 
 function draw() {
-  const ctx = game.ctx;
-  if (ctx == null) return;
+  const ctx = game.ctx
+  if (ctx == null) return
 
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-  player.draw(ctx);
-  enemies.draw(ctx);
+  player.draw(ctx)
+  enemies.draw(ctx)
 }

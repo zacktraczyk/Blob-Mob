@@ -1,11 +1,8 @@
-import { game } from "@App";
-import { drawController } from "../entities/draw";
-import { input } from "../input";
-import { drawHUD } from "./sceneElements";
+import { game } from '@App'
 
 export function Menu() {
-  const ctx = game.ctx;
-  if (ctx == null) return;
+  const ctx = game.ctx
+  if (ctx == null) return
 
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 }

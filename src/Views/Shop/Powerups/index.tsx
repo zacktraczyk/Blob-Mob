@@ -1,11 +1,8 @@
-import "./index.scss";
+import React from 'react'
+import './index.scss'
 
 const Powerups: React.FC = () => {
-  return (
-    <div className="powerups">
-powerups
-    </div>
-  )
+  return <div className='powerups'>powerups</div>
 }
 
-export default Powerups;
+export default Powerups

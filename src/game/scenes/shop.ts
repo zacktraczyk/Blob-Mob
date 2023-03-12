@@ -1,58 +1,58 @@
-import { game } from "@App";
-import { input } from "../input";
-import { drawHUD } from "./sceneElements";
-import { State } from "../entities/entity";
-import { player } from "../entities/player";
-import { enemies } from "../entities/enemy";
-import { damagePoints } from "../entities/damagePoints";
+import { game } from '@App'
+import { input } from '../input'
+import { drawHUD } from './sceneElements'
+import { State } from '../entities/entity'
+import { player } from '../entities/player'
+import { enemies } from '../entities/enemy'
+import { damagePoints } from '../entities/damagePoints'
 
-let playerDeathCool = 200;
+let playerDeathCool = 200
 
 export function Shop() {
-  draw();
-  update();
+  draw()
+  update()
 
   // Pause before reset
   if (player.state == State.Dead) {
     if (playerDeathCool < 0) {
-      playerDeathCool = 200;
-      game.reset();
+      playerDeathCool = 200
+      game.reset()
     } else {
-      playerDeathCool--;
+      playerDeathCool--
     }
   }
 }
 
-let spawnEnemyRelease = true;
+let spawnEnemyRelease = true
 
 function update() {
-  const ctx = game.ctx;
-  if (!ctx) return;
+  const ctx = game.ctx
+  if (!ctx) return
 
   // Confine to half of screen
-  player.controller(ctx.canvas.width / 3, ctx.canvas.height);
-  enemies.controller();
-  damagePoints.controller();
+  player.controller(ctx.canvas.width / 3, ctx.canvas.height)
+  enemies.controller()
+  damagePoints.controller()
 
   if (input.keyState.enemySpawn) {
     if (spawnEnemyRelease) {
-      enemies.spawn(ctx.canvas.width, ctx.canvas.height, player);
+      enemies.spawn(ctx.canvas.width, ctx.canvas.height, player)
     }
-    spawnEnemyRelease = false;
+    spawnEnemyRelease = false
   } else {
-    spawnEnemyRelease = true;
+    spawnEnemyRelease = true
   }
 }
 
 function draw() {
-  const ctx = game.ctx;
-  if (ctx == null) return;
+  const ctx = game.ctx
+  if (ctx == null) return
 
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-  player.draw(ctx);
-  enemies.draw(ctx);
-  damagePoints.draw(ctx);
+  player.draw(ctx)
+  enemies.draw(ctx)
+  damagePoints.draw(ctx)
 
-  drawHUD();
+  drawHUD()
 }

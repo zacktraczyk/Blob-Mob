@@ -1,149 +1,142 @@
-import { Scenes } from "./scenes/scenes";
-import { player } from "./entities/player";
-import { damagePoints } from "./entities/damagePoints";
-import { enemies } from "./entities/enemy";
-import { coins } from "./entities/coin";
-import { input } from "./input";
-import { drawController } from "./entities/draw";
-import { Face } from "./shop/faces";
+import { Scenes } from './scenes/scenes'
+import { player } from './entities/player'
+import { damagePoints } from './entities/damagePoints'
+import { enemies } from './entities/enemy'
+import { coins } from './entities/coin'
+import { input } from './input'
+import { drawController } from './entities/draw'
 
 export class Game {
-  public ctx: CanvasRenderingContext2D | null;
-  public frame: number;
-  public paused: boolean;
-  private pauseKeyRelease: boolean;
+  public ctx: CanvasRenderingContext2D | null
+  public frame: number
+  public paused: boolean
+  private pauseKeyRelease: boolean
 
-  private scoreVal: number;
-  public setScore: React.Dispatch<React.SetStateAction<number>> | undefined;
+  private scoreVal: number
+  public setScore: React.Dispatch<React.SetStateAction<number>> | undefined
 
-  public highscoreVal: number;
-  public setHighscore: React.Dispatch<React.SetStateAction<number>> | undefined;
+  public highscoreVal: number
+  public setHighscore: React.Dispatch<React.SetStateAction<number>> | undefined
 
-  public difficulty: number; // not used
+  public difficulty: number // not used
 
-  private coinVal: number;
-  public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined;
+  private coinVal: number
+  public setCoins: React.Dispatch<React.SetStateAction<number>> | undefined
 
-  private fxSound: number;
-  private musSound: number;
+  private fxSound: number
+  private musSound: number
 
-  public scene: Scenes;
+  public scene: Scenes
 
   constructor() {
-    this.ctx = null;
-    this.difficulty = 5;
+    this.ctx = null
+    this.difficulty = 5
 
-    this.scoreVal = 0;
-    this.highscoreVal = 0;
-    this.coinVal = 0;
+    this.scoreVal = 0
+    this.highscoreVal = 0
+    this.coinVal = 0
 
-    this.frame = 0;
-    this.paused = false;
-    this.pauseKeyRelease = true;
+    this.frame = 0
+    this.paused = false
+    this.pauseKeyRelease = true
 
-    this.fxSound = 1;
-    this.musSound = 0.5;
+    this.fxSound = 1
+    this.musSound = 0.5
 
-    this.scene = Scenes.menu;
+    this.scene = Scenes.menu
   }
 
   // Score getter/setter
   public set score(val: number) {
-    this.scoreVal = val;
-    this.syncReactScore();
+    this.scoreVal = val
+    this.syncReactScore()
   }
 
   public get score() {
-    return this.scoreVal;
+    return this.scoreVal
   }
 
   // Coins getter/setter
   public set coins(val: number) {
-    this.coinVal = val;
-    this.syncReactCoins();
+    this.coinVal = val
+    this.syncReactCoins()
   }
 
   public get coins() {
-    return this.coinVal;
+    return this.coinVal
   }
 
   // Highscore getter/setter
   public set highscore(val: number) {
-    this.highscoreVal = val;
-    this.syncReactHighscore();
+    this.highscoreVal = val
+    this.syncReactHighscore()
   }
 
   public get highscore() {
-    return this.highscoreVal;
+    return this.highscoreVal
   }
   // React hook calls
   public syncReactCoins() {
     if (!this.setCoins) {
-      console.error(
-        "Game: syncReactCoins: setCoins hook not passed to game Object"
-      );
-      return;
+      console.error('Game: syncReactCoins: setCoins hook not passed to game Object')
+      return
     }
 
-    this.setCoins(this.coins);
+    this.setCoins(this.coins)
   }
 
   public syncReactScore() {
     if (!this.setScore) {
-      console.error(
-        "Game: syncReactScore: setScore hook not passed to game Object"
-      );
-      return;
+      console.error('Game: syncReactScore: setScore hook not passed to game Object')
+      return
     }
 
-    this.setScore(this.score);
+    this.setScore(this.score)
   }
 
   public syncReactHighscore() {
     if (!this.setHighscore) {
-      console.error(
-        "Game: syncReactScore: setHighscore hook not passed to game Object"
-      );
-      return;
+      console.error('Game: syncReactScore: setHighscore hook not passed to game Object')
+      return
     }
 
-    this.setHighscore(this.highscoreVal);
+    this.setHighscore(this.highscoreVal)
   }
 
   // Scene changes
   public gameOver() {
-    this.scene = Scenes.gameOver;
+    this.scene = Scenes.gameOver
   }
 
   public pause() {
     if (this.scene != Scenes.battle) {
-      return;
+      return
     }
 
     if (input.keyState.pause) {
       if (this.pauseKeyRelease) {
-        this.paused = !this.paused;
+        this.paused = !this.paused
       }
-      this.pauseKeyRelease = false;
+      this.pauseKeyRelease = false
     } else {
-      this.pauseKeyRelease = true;
+      this.pauseKeyRelease = true
     }
   }
 
   public reset() {
-    player.reset();
-    enemies.reset();
-    damagePoints.reset();
-    coins.reset();
-    drawController.reset();
+    player.reset()
+    enemies.reset()
+    damagePoints.reset()
+    coins.reset()
+    drawController.reset()
 
-    this.paused = false;
-    this.score = 0;
-    this.frame = 0;
+    this.paused = false
+    this.score = 0
+    this.frame = 0
 
-    if (!this.ctx) return;
-    player.x = this.ctx.canvas.width / 2;
-    player.y = this.ctx.canvas.height / 2;
+    if (!this.ctx) return
+    player.x = this.ctx.canvas.width / 2
+    player.y = this.ctx.canvas.height / 2
   }
 
   // public debug() {

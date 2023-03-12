@@ -1,19 +1,19 @@
-import { game } from "@App";
-import Button from "@Components/Button";
-import "./index.scss";
+import React from 'react'
+import { game } from '@App'
+import Button from '@Components/Button'
+import './index.scss'
 
 interface Props {
-  blobsKilled: number;
-  coins: number;
+  blobsKilled: number
 
-  navPlay: Function;
-  navShop: Function;
+  navPlay: () => void
+  navShop: () => void
 }
 
 const Gameover: React.FC<Props> = (props: Props) => {
-  const { blobsKilled, coins, navPlay, navShop } = props;
+  const { blobsKilled, navPlay, navShop } = props
   return (
-    <div className="gameover">
+    <div className='gameover'>
       <h2>GAMEOVER</h2>
       <ul>
         <li>
@@ -24,31 +24,17 @@ const Gameover: React.FC<Props> = (props: Props) => {
           <p>Highscore</p>
           <p>{game.highscore}</p>
         </li>
-        {/* <li>
-          <p>Coins Aquired</p>
-          <p>{coins}</p>
-        </li> */}
       </ul>
-      <div className="gameover__buttons">
-        <Button
-          width="100%"
-          height="auto"
-          color="play"
-          onClick={() => navPlay()}
-        >
+      <div className='gameover__buttons'>
+        <Button width='100%' height='auto' color='play' onClick={() => navPlay()}>
           Play Again
         </Button>
-        <Button
-          width="100%"
-          height="auto"
-          color="upgrade"
-          onClick={() => navShop()}
-        >
+        <Button width='100%' height='auto' color='upgrade' onClick={() => navShop()}>
           Upgrade
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Gameover;
+export default Gameover

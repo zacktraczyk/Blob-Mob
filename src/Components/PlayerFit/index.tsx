@@ -1,12 +1,13 @@
-import Canvas from "@Components/Canvas";
-import { game } from "@App";
-import { player } from "@Game/entities/player";
-import { Face, FaceAttr } from "@Game/shop/faces";
-import { Body, BodyAttr } from "@Game/shop/bodies";
-import { Hat, HatAttr } from "@Game/shop/hats";
-import shop from "@Game/shop";
+import React from 'react'
+import Canvas from '@Components/Canvas'
+import { game } from '@App'
+import { player } from '@Game/entities/player'
+import { Face } from '@Game/shop/faces'
+import { Body } from '@Game/shop/bodies'
+import { Hat } from '@Game/shop/hats'
+import shop from '@Game/shop'
 
-import "./index.scss";
+import './index.scss'
 
 export enum PlayerFitType {
   Body,
@@ -15,78 +16,78 @@ export enum PlayerFitType {
 }
 
 interface Props {
-  type: PlayerFitType;
-  face: keyof typeof Face;
-  body: keyof typeof Body;
-  hat: keyof typeof Hat;
+  type: PlayerFitType
+  face: keyof typeof Face
+  body: keyof typeof Body
+  hat: keyof typeof Hat
 }
 
 const PlayerFit: React.FC<Props> = (props: Props) => {
-  const { type, face, body, hat } = props;
+  const { type, face, body, hat } = props
 
   // Get Draw Functions
-  const drawBody = Body[body].draw;
-  const drawFace = Face[face].draw;
-  const drawHat = Hat[hat].draw;
+  const drawBody = Body[body].draw
+  const drawFace = Face[face].draw
+  const drawHat = Hat[hat].draw
 
   // Get Cost
-  let cost = 0;
-  let name = "";
-  let purchased = false;
-  let selected = false;
+  let cost = 0
+  let name = ''
+  let purchased = false
+  let selected = false
   if (type == PlayerFitType.Body) {
-    cost = Body[body].cost;
-    name = Body[body].name;
-    purchased = shop.checkPurchaseBody(body);
-    selected = player.body === body;
+    cost = Body[body].cost
+    name = Body[body].name
+    purchased = shop.checkPurchaseBody(body)
+    selected = player.body === body
   } else if (type == PlayerFitType.Face) {
-    cost = Face[face].cost;
-    name = Face[face].name;
-    purchased = shop.checkPurchaseFace(face);
-    selected = player.face === face;
+    cost = Face[face].cost
+    name = Face[face].name
+    purchased = shop.checkPurchaseFace(face)
+    selected = player.face === face
   } else if (type == PlayerFitType.Hat) {
-    cost = Hat[hat].cost;
-    name = Hat[hat].name;
-    purchased = shop.checkPurchaseHat(hat);
-    selected = player.hat === hat;
+    cost = Hat[hat].cost
+    name = Hat[hat].name
+    purchased = shop.checkPurchaseHat(hat)
+    selected = player.hat === hat
   }
 
-  let frameClass = "frame-normal";
-  let label = "";
+  let frameClass = 'frame-normal'
+  let label = ''
 
   if (cost < 0) {
-    frameClass = "frame-locked";
-    label = "LOCKED";
+    frameClass = 'frame-locked'
+    label = 'LOCKED'
   } else if (purchased) {
     if (selected) {
-      frameClass = "frame-selected";
-      label = "SELECTED";
+      frameClass = 'frame-selected'
+      label = 'SELECTED'
     }
   } else {
     if (game.coins < cost) {
-      frameClass = "frame-cant-afford";
-      label = "$" + cost;
+      frameClass = 'frame-cant-afford'
+      label = '$' + cost
     } else if (game.coins >= cost) {
-      frameClass = "frame-afford";
-      label = "$" + cost;
+      frameClass = 'frame-afford'
+      label = '$' + cost
     }
   }
 
   const click = () => {
-    shop.purchaseFace(face);
-    shop.purchaseBody(body);
-    shop.purchaseHat(hat);
+    shop.purchaseFace(face)
+    shop.purchaseBody(body)
+    shop.purchaseHat(hat)
     if (purchased) {
-      player.face = face;
-      player.body = body;
-      player.hat = hat;
+      player.face = face
+      player.body = body
+      player.hat = hat
     }
-    shop.syncReactFitShop();
-  };
+    shop.syncReactFitShop()
+  }
 
   return (
     <div className={`playerFit ${frameClass}`} onClick={() => click()}>
-      <p className="playerFit-name">{cost >= 0 ? name : "LOCKED"}</p>
+      <p className='playerFit-name'>{cost >= 0 ? name : 'LOCKED'}</p>
       <Canvas
         draw={(ctx: CanvasRenderingContext2D) => {
           const pos = {
@@ -94,7 +95,7 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
             y: ctx.canvas.height / 2,
             w: ctx.canvas.width * (5 / 8),
             h: ctx.canvas.width * (5 / 8),
-          };
+          }
 
           if (type == PlayerFitType.Hat) {
             drawHat(ctx, {
@@ -102,8 +103,8 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
               y: ctx.canvas.height * (6 / 7),
               xdir: player.xdir,
               ydir: player.ydir,
-            });
-            return;
+            })
+            return
           }
 
           drawBody(ctx, {
@@ -111,7 +112,7 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
             cool: player.cool,
             maxCool: player.maxCool,
             damaging: player.damaging,
-          });
+          })
 
           drawFace(ctx, {
             ...pos,
@@ -119,12 +120,12 @@ const PlayerFit: React.FC<Props> = (props: Props) => {
             ydir: player.ydir,
             frownCount: player.frownCount,
             frownCountMax: player.frownCountMax,
-          });
+          })
         }}
       />
-      <p className="playerFit-label">{label}</p>
+      <p className='playerFit-label'>{label}</p>
     </div>
-  );
-};
+  )
+}
 
-export default PlayerFit;
+export default PlayerFit

@@ -1,49 +1,46 @@
-import faceNormal from "./faceNormal";
-import faceOoo from "./faceOoo";
-import faceTooth from "./faceTooth";
-import faceCyclops from "./faceCyclops";
-import faceGlasses from "./faceGlasses";
+import faceNormal from './faceNormal'
+import faceOoo from './faceOoo'
+import faceTooth from './faceTooth'
+import faceCyclops from './faceCyclops'
+import faceGlasses from './faceGlasses'
 
 export interface FaceAttr {
-  x: number; // center of face
-  y: number; // center of face
-  w: number;
-  h: number;
-  xdir: number;
-  ydir: number;
-  frownCount: number;
-  frownCountMax: number;
+  x: number // center of face
+  y: number // center of face
+  w: number
+  h: number
+  xdir: number
+  ydir: number
+  frownCount: number
+  frownCountMax: number
 }
 
-export type FaceFunction = (
-  ctx: CanvasRenderingContext2D,
-  faceAttr: FaceAttr
-) => void;
+export type FaceFunction = (ctx: CanvasRenderingContext2D, faceAttr: FaceAttr) => void
 
 export const Face = {
   normal: {
-    name: "Default",
+    name: 'Default',
     draw: faceNormal,
     cost: 0,
   },
   nervous: {
-    name: "Ooo",
+    name: 'Ooo',
     draw: faceOoo,
     cost: 10,
   },
   tooth: {
-    name: "Baby",
+    name: 'Baby',
     draw: faceTooth,
     cost: 100,
   },
   cyclops: {
-    name: "Cyclops",
+    name: 'Cyclops',
     draw: faceCyclops,
     cost: 300,
   },
   glasses: {
-    name: "Goggles",
+    name: 'Goggles',
     draw: faceGlasses,
     cost: 500,
   },
-};
+}

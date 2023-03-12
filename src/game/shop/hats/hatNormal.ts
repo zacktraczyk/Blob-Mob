@@ -1,10 +1,7 @@
-import { HatAttr, HatFunction } from ".";
+import { HatAttr, HatFunction } from '.'
 
-const hatNormal: HatFunction = (
-  ctx: CanvasRenderingContext2D,
-  hatAttr: HatAttr
-) => {
-  return;
-};
+const hatNormal: HatFunction = (_ctx: CanvasRenderingContext2D, _hatAttr: HatAttr) => {
+  return
+}
 
-export default hatNormal;
+export default hatNormal
