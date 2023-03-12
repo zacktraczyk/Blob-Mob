@@ -11,8 +11,6 @@ env:
 on:
   push:
     branches: [production]
-  pull_request:
-    branches: [production]
 
 permissions:
   contents: write
