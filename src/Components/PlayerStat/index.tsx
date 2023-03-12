@@ -5,14 +5,12 @@ import './index.scss'
 import Stat from '@Game/shop/stats'
 import shop from '@Game/shop'
 
-interface Props {
+export interface PlayerStatProps {
   type: keyof PlayerAttributes
   stats: PlayerAttributes
 }
 
-const PlayerStat: React.FC<Props> = (props: Props) => {
-  const { type, stats } = props
-
+const PlayerStat: React.FC<PlayerStatProps> = ({ type, stats }) => {
   const cost = Stat[type].priceScale[shop.purchasedStatsIdx[type]]
   const name = Stat[type].name
   const value = stats[type]

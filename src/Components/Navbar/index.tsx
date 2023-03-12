@@ -5,13 +5,12 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, signOut } from '../../apis/firebase'
 import './index.scss'
 
-interface Props {
+export interface NavbarProps {
   navHome: () => void
   navInfo: () => void
 }
 
-const Navbar: React.FC<Props> = (props: Props) => {
-  const { navHome, navInfo } = props
+const Navbar: React.FC<NavbarProps> = ({ navHome, navInfo }) => {
   const [user] = useAuthState(auth)
   const [mute, setMute] = useState(false)
 

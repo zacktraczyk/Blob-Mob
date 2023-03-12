@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { game } from '../../App'
+import { game } from '@App'
 
 import './index.scss'
 
