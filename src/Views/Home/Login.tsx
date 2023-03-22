@@ -13,7 +13,7 @@ const Login: React.FC<LoginProps> = ({ navPlay, navTutorial }) => {
 
   return (
     <div className='flex grow flex-col items-stretch justify-start gap-4 rounded-3xl bg-card p-10 shadow-2xl'>
-      <h2 className='text-shadow text-center text-2xl font-bold uppercase'>Blob Mob</h2>
+      <h2 className='text-shadow-main text-center text-2xl font-bold uppercase'>Blob Mob</h2>
 
       <div className='flex flex-col gap-3'>
         <Button color='bg-main' size='h-10 w-full' onClick={() => navPlay()}>

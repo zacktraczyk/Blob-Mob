@@ -3,14 +3,12 @@
 @tailwind utilities;
 
 @layer utilities {
-	@variants responsive {
-		.text-shadow-main {
-    text-shadow: 2px 2px 0px theme('colors.main');
-		}
+	.text-shadow-main {
+		text-shadow: 2px 2px 0px theme('colors.main');
+	}
 
-		.text-shadow-gameover {
-    text-shadow: 4px 4px 0px theme('colors.gameover');
-		}
+	.text-shadow-gameover {
+		text-shadow: 4px 4px 0px theme('colors.gameover');
 	}
 }
 
