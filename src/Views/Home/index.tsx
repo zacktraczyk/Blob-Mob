@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import Login from './Login'
 import Scoreboard from './Scoreboard'
 import ShopCard from './ShopCard'
@@ -11,13 +12,18 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ navPlay, navTutorial, navShop }) => {
   return (
-    <div className='flex h-[500px] w-[600px] items-stretch gap-5'>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className='flex h-[500px] w-[600px] items-stretch gap-5'
+    >
       <div className='flex w-full flex-col gap-5'>
         <Login navPlay={() => navPlay()} navTutorial={() => navTutorial()} />
         <ShopCard navShop={() => navShop()} />
       </div>
       <Scoreboard />
-    </div>
+    </motion.div>
   )
 }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, useIsPresent } from 'framer-motion'
 import { game } from '@App'
 import { Scenes } from '@Game/scenes/scenes'
 import Home from './Home'

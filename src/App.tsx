@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { auth, getAccount, getHighscore } from './apis/firebase'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import Canvas from '@Components/Canvas'
 import Score from '@Components/Score'
@@ -36,9 +37,10 @@ const App: React.FC = () => {
       <Score />
 
       <div className='flex h-screen w-screen items-center justify-center'>
-        <Views page={page} setPage={setPage} />
+        <AnimatePresence mode='wait' initial={false}>
+          <Views key={page} page={page} setPage={setPage} />
+        </AnimatePresence>
       </div>
-
       <Coins />
       <Navbar navHome={() => setPage(View.Home)} navInfo={() => setPage(View.Info)} />
     </>

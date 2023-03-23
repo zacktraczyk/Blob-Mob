@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { Difficulties, difficultyScalar } from '@Game/difficulty'
 import { useState } from 'react'
 import Button from '@Components/Button'
@@ -44,7 +45,12 @@ const Difficulty: React.FC<DifficultyProps> = ({ navPlay }) => {
   const [selected, setSelected] = useState<Difficulties>(Difficulties.Medium)
 
   return (
-    <div className='flex w-[600px] flex-col items-center justify-center gap-3 rounded-3xl bg-card p-10 shadow-2xl'>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className='flex w-[600px] flex-col items-center justify-center gap-3 rounded-3xl bg-card p-10 shadow-2xl'
+    >
       <h2 className='text-center text-xl font-bold'>Difficulty</h2>
       <div className='my-4 flex w-full grow items-stretch justify-center gap-5'>
         {difficulies.map((diff, key) => (
@@ -68,7 +74,7 @@ const Difficulty: React.FC<DifficultyProps> = ({ navPlay }) => {
       >
         Play
       </Button>
-    </div>
+    </motion.div>
   )
 }
 
