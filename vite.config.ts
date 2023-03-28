@@ -5,7 +5,10 @@ import react from '@vitejs/plugin-react'
 import * as path from 'path'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  esbuild: {
+    drop: mode === 'production' ? ['console', 'debugger'] : [],
+  },
   plugins: [tsconfigPaths(), react(), visualizer()],
   resolve: {
     alias: {
@@ -18,4 +21,4 @@ export default defineConfig({
       '@Views': path.resolve(__dirname, 'src/Views'),
     },
   },
-})
+}))
