@@ -3,15 +3,13 @@ import { sound } from '@Game/sound'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, signOut } from '../../apis/firebase'
+import useNavigation from '@Components/useNavigation'
+import { View } from '@Views/index'
 
-export interface NavbarProps {
-  navHome: () => void
-  navInfo: () => void
-}
-
-const Navbar: React.FC<NavbarProps> = ({ navHome, navInfo }) => {
+const Navbar: React.FC = () => {
   const [user] = useAuthState(auth)
   const [mute, setMute] = useState(false)
+  const { setView } = useNavigation()
 
   const muteAudio = () => {
     sound.mute(!mute)
@@ -20,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ navHome, navInfo }) => {
 
   return (
     <div className='absolute bottom-6 right-6 flex items-center justify-end gap-6'>
-      <div className='w-10' onClick={() => navHome()}>
+      <div className='w-10' onClick={() => setView(View.Home)}>
         <i className='fa-solid fa-house fa-2xl'></i>
       </div>
       <div className='w-10' onClick={() => muteAudio()}>
@@ -30,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ navHome, navInfo }) => {
           <i className='fa-solid fa-volume-high fa-2xl'></i>
         )}
       </div>
-      <div className='w-10' onClick={() => navInfo()}>
+      <div className='w-10' onClick={() => setView(View.Info)}>
         <i className='fa-solid fa-circle-info fa-2xl'></i>
       </div>
       {user && (

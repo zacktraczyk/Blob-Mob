@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
+import useNavigation from '@Components/useNavigation'
 import { Difficulties, difficultyScalar } from '@Game/difficulty'
-import { useState } from 'react'
+import { View } from '.'
 import Button from '@Components/Button'
 
 import difficulyEasy from '@Assets/images/difficulty-easy.jpg'
@@ -36,12 +37,10 @@ const difficulies = [
     ],
   },
 ]
-interface DifficultyProps {
-  navPlay: () => void
-}
 
-const Difficulty: React.FC<DifficultyProps> = ({ navPlay }) => {
+const Difficulty: React.FC = () => {
   const [selected, setSelected] = useState<Difficulties>(Difficulties.Medium)
+  const { setView } = useNavigation()
 
   return (
     <div className='flex w-[600px] flex-col items-center justify-center gap-3 rounded-3xl bg-card p-10 shadow-2xl'>
@@ -62,8 +61,7 @@ const Difficulty: React.FC<DifficultyProps> = ({ navPlay }) => {
         size='w-60 h-10'
         onClick={() => {
           difficultyScalar.difficulty = selected
-
-          navPlay()
+          setView(View.Play)
         }}
       >
         Play
@@ -96,7 +94,10 @@ const DifficultyPanel: React.FC<DifficultyPanelProps> = ({
       }`}
       onClick={() => setSelected(difficulty)}
     >
-      <img className='col-start-1 row-start-1' src={preview} />
+      <img
+        className='bg-text 68xt-main col-start-1 row-start-1 h-[304px] w-[684px]'
+        src={preview}
+      />
       <div className='col-start-1 row-start-1 flex h-full flex-col items-center justify-between py-4'>
         <h3 className='text-xl font-bold text-main'>{title}</h3>
         <ul>

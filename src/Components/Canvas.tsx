@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react'
-import './index.scss'
 
 const FramesPerSecond = 60
 const FrameMinTime = (1000 / 60) * (60 / FramesPerSecond) - (1000 / 60) * 0.5
@@ -44,7 +43,7 @@ const Canvas: React.FC<CanvasProps> = ({ draw, ...rest }) => {
     }
   }, [draw])
 
-  return <canvas ref={canvasRef} {...rest} className='canvas' />
+  return <canvas ref={canvasRef} {...rest} className='fixed top-0 left-0 -z-50 h-screen w-screen' />
 }
 
 export default Canvas

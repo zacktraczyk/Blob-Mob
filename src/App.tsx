@@ -5,6 +5,7 @@ import Canvas from '@Components/Canvas'
 import Score from '@Components/Score'
 import Coins from '@Components/Coins'
 import Navbar from '@Components/Navbar/index'
+import { ViewContext } from '@Components/useNavigation'
 import Views, { View } from '@Views/index.tsx'
 
 import { Game } from '@Game/game'
@@ -13,7 +14,7 @@ import { Main } from '@Game/main'
 export const game = new Game()
 
 const App: React.FC = () => {
-  const [page, setPage] = useState<View>(View.Home)
+  const [view, setView] = useState<View>(View.Home)
 
   const onAuthStateChanged = () => {
     getAccount()
@@ -30,17 +31,20 @@ const App: React.FC = () => {
       <Canvas
         draw={(ctx: CanvasRenderingContext2D) => {
           game.ctx = ctx
-          Main(game, page, setPage)
+          Main(game, view, setView)
         }}
       />
-      <Score />
 
-      <div className='flex h-screen w-screen items-center justify-center'>
-        <Views page={page} setPage={setPage} />
-      </div>
+      <ViewContext.Provider value={{ view, setView }}>
+        <Score />
 
-      <Coins />
-      <Navbar navHome={() => setPage(View.Home)} navInfo={() => setPage(View.Info)} />
+        <div className='flex h-screen w-screen items-center justify-center'>
+          <Views />
+        </div>
+
+        <Coins />
+        <Navbar />
+      </ViewContext.Provider>
     </>
   )
 }

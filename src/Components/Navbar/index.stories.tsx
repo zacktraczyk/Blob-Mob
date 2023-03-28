@@ -1,10 +1,10 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react'
-import Navbar, { NavbarProps } from '.'
+import Navbar from '.'
 
 export default {
   title: 'HUD/Navbar',
   component: Navbar,
 } as Meta
 
-export const Primary: Story<NavbarProps> = (args) => <Navbar {...args} />
+export const Primary: Story = () => <Navbar />

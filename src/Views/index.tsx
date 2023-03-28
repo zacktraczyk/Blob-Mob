@@ -1,4 +1,5 @@
 import React from 'react'
+import useNavigation from '@Components/useNavigation'
 import { game } from '@App'
 import { Scenes } from '@Game/scenes/scenes'
 import Home from './Home'
@@ -8,6 +9,7 @@ import About from './About'
 import Difficulty from './Difficulty'
 import FirstTime from './FirstTime'
 import { sound, Themes } from '@Game/sound'
+import Button from '@Components/Button'
 
 export enum View {
   Home,
@@ -20,32 +22,14 @@ export enum View {
   Gameover,
 }
 
-interface Props {
-  page: View
-  setPage: React.Dispatch<React.SetStateAction<View>>
-}
+const Views: React.FC = () => {
+  const { view, setView } = useNavigation()
 
-const Views: React.FC<Props> = (props: Props) => {
-  const { page, setPage } = props
-
-  switch (page) {
+  switch (view) {
     case View.Home:
       game.scene = Scenes.menu
       sound.play(Themes.Title)
-      return (
-        <Home
-          navPlay={() => {
-            const firstTime = localStorage.getItem('firstTime')
-            if (firstTime === 'false') {
-              setPage(View.Difficulty)
-            } else {
-              setPage(View.FirstTime)
-            }
-          }}
-          navTutorial={() => setPage(View.Tutorial)}
-          navShop={() => setPage(View.Shop)}
-        />
-      )
+      return <Home />
       break
 
     case View.Info:
@@ -57,12 +41,7 @@ const Views: React.FC<Props> = (props: Props) => {
     case View.FirstTime:
       game.scene = Scenes.menu
       sound.play(Themes.Title)
-      return (
-        <FirstTime
-          navPlay={() => setPage(View.Difficulty)}
-          navTutorial={() => setPage(View.Tutorial)}
-        />
-      )
+      return <FirstTime />
       break
 
     case View.Tutorial:
@@ -73,36 +52,39 @@ const Views: React.FC<Props> = (props: Props) => {
     case View.Difficulty:
       game.scene = Scenes.menu
       sound.play(Themes.Title)
-      return <Difficulty navPlay={() => setPage(View.Play)} />
+      return <Difficulty />
       break
 
     case View.Play:
       localStorage.setItem('firstTime', 'false')
       sound.play(Themes.Main)
       game.scene = Scenes.play
+      return <></>
       break
 
     case View.Shop:
       game.scene = Scenes.shop
       sound.play(Themes.Shop)
-      return <Shop navPlay={() => setPage(View.Difficulty)}></Shop>
+      return <Shop />
       break
 
     case View.Gameover:
-      return (
-        <Gameover
-          blobsKilled={game.score}
-          navPlay={() => setPage(View.Play)}
-          navShop={() => {
-            setPage(View.Shop)
-            game.scene = Scenes.shop
-          }}
-        />
-      )
+      return <Gameover blobsKilled={game.score} />
       break
   }
 
-  return <></>
+  return (
+    <div className='flex w-[500px] flex-col items-center justify-start gap-3 rounded-3xl bg-card p-10 shadow-2xl'>
+      <h1 className='text-center text-3xl'>Oops! Routing Error ☹️</h1>
+      <h2 className='text-center text-xl italic text-gameover'>
+        &qout;Invalid Page Route Enum {view}&qout;
+      </h2>
+      <div className='h-5'></div>
+      <Button size='w-60 h-10' color='bg-main' onClick={() => setView(View.Home)}>
+        Back To Home
+      </Button>
+    </div>
+  )
 }
 
 export default Views
