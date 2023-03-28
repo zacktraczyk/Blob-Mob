@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import visualizer from 'rollup-plugin-visualizer'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import react from '@vitejs/plugin-react'
@@ -9,7 +10,7 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     drop: mode === 'production' ? ['console', 'debugger'] : [],
   },
-  plugins: [tsconfigPaths(), react(), visualizer()],
+  plugins: [tsconfigPaths(), react(), visualizer(), ViteImageOptimizer()],
   resolve: {
     alias: {
       '@Styles': path.resolve(__dirname, 'src/assets/styles'),
