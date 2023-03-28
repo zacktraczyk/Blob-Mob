@@ -108,7 +108,7 @@ export class Game {
     this.scene = Scenes.gameOver
   }
 
-  public pause() {
+  public pauseController() {
     if (this.scene != Scenes.battle) {
       return
     }
@@ -116,6 +116,7 @@ export class Game {
     if (input.keyState.pause) {
       if (this.pauseKeyRelease) {
         this.paused = !this.paused
+        input.resetKeyStates() // prevent missed keyup glitch
       }
       this.pauseKeyRelease = false
     } else {
@@ -129,6 +130,7 @@ export class Game {
     damagePoints.reset()
     coins.reset()
     drawController.reset()
+    input.resetKeyStates()
 
     this.paused = false
     this.score = 0

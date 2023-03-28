@@ -165,7 +165,6 @@ class Coin extends Entity {
 
     if (this.w == 0 || this.h == 0) {
       game.coins += this.value
-      console.log('INCREASING COINS BY', this.value)
       this.state = State.Dead
     }
   }

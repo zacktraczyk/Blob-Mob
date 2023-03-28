@@ -73,6 +73,17 @@ export class Input {
     this.keyState[key as keyof keyState] = false
   }
 
+  public resetKeyStates() {
+    Object.keys(this.keyState).forEach((k) => {
+      const key = k as keyof keyState
+      if (key === 'pause') {
+        return
+      }
+
+      this.keyState[key] = false
+    })
+  }
+
   public mousePosition(event: MouseEvent) {
     // <++> TODO: Fix canvas scaling
     // *2 is janky fix for scaling in canvas component

@@ -13,7 +13,7 @@ const duration = 100
 
 export const Battle = () => {
   if (!game.paused) update()
-  game.pause()
+  game.pauseController()
 
   draw()
 

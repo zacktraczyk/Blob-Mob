@@ -22,7 +22,6 @@ export const drawHUD = () => {
   ctx.fillStyle = playerBody.colorNorm
   if (player && player.damaging) {
     ctx.fillStyle = playerBody.colorDamg
-    console.log('SCENE DRAW DAMAGE')
   }
   ctx.font = `${fontSize}px monospace`
   ctx.fillText(player.health + '/' + player.maxHealth, w * (3 / 4) - 10, fontSize * (7 / 3))
