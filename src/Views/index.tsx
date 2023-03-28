@@ -47,6 +47,7 @@ const Views: React.FC = () => {
     case View.Tutorial:
       game.scene = Scenes.tutorial
       sound.play(Themes.Title)
+      return <></>
       break
 
     case View.Difficulty:
@@ -77,7 +78,7 @@ const Views: React.FC = () => {
     <div className='flex w-[500px] flex-col items-center justify-start gap-3 rounded-3xl bg-card p-10 shadow-2xl'>
       <h1 className='text-center text-3xl'>Oops! Routing Error ☹️</h1>
       <h2 className='text-center text-xl italic text-gameover'>
-        &qout;Invalid Page Route Enum {view}&qout;
+        &#34;Invalid Page Route Enum {view}&#34;
       </h2>
       <div className='h-5'></div>
       <Button size='w-60 h-10' color='bg-main' onClick={() => setView(View.Home)}>
