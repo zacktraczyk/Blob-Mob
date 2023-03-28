@@ -8,7 +8,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:storybook/recommended',
     'plugin:tailwindcss/recommended',
     'prettier',
   ],

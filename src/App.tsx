@@ -4,7 +4,7 @@ import { auth, getAccount, getHighscore } from './apis/firebase'
 import Canvas from '@Components/Canvas'
 import Score from '@Components/Score'
 import Coins from '@Components/Coins'
-import Navbar from '@Components/Navbar/index'
+import Navbar from '@Components/Navbar'
 import { ViewContext } from '@Components/useNavigation'
 import Views, { View } from '@Views/index.tsx'
 
