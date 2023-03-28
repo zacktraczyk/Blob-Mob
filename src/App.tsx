@@ -62,7 +62,7 @@ const ResizeScreenWarning: React.FC = () => {
   game.paused = true
 
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-main'>
+    <div className='fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-main'>
       <h1 className='text-center text-2xl font-bold text-text-alt'>Screen Size Not Supported</h1>
       <div className='h-5'></div>
       <h1 className='text-center text-xl italic'>Please Resize the Screen</h1>
