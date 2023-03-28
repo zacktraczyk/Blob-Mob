@@ -11,7 +11,7 @@ const FirstTime: React.FC = () => {
       <h2 className='text-center text-xl font-bold '>Need a Tutorial?</h2>
       <div className='h-2'></div>
       <div className='flex items-center gap-5'>
-        <Button color='bg-main' size='w-40 h-10' onClick={() => setView(View.Play)}>
+        <Button color='bg-main' size='w-40 h-10' onClick={() => setView(View.Difficulty)}>
           Nah, Play
         </Button>
         <Button color='bg-tutorial' size='w-44 h-10' onClick={() => setView(View.Tutorial)}>
