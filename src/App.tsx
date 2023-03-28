@@ -62,7 +62,7 @@ const ResizeScreenWarning: React.FC = () => {
       <div className='fixed -z-10 h-screen w-screen bg-main opacity-50'></div>
       <h1 className='text-center text-2xl font-bold text-text-alt'>Screen Size Not Supported</h1>
       <div className='h-5'></div>
-      <h1 className='text-center text-xl italic'>Please Resize the Screen️</h1>
+      <h1 className='text-center text-xl italic'>Please Resize the Screen</h1>
     </div>
   )
 }
