@@ -16,7 +16,6 @@ export const game = new Game()
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>(View.Home)
-  const { width, height } = useWindowDimensions()
 
   const onAuthStateChanged = () => {
     getAccount()
@@ -28,13 +27,10 @@ const App: React.FC = () => {
     return subscriber
   }, [])
 
-  // Resize Screen Warning
-  if (width < 700 || height < 700) {
-    return <ResizeScreenWarning />
-  }
-
   return (
     <>
+      <ResizeScreenWarning />
+
       <Canvas
         draw={(ctx: CanvasRenderingContext2D) => {
           game.ctx = ctx
@@ -57,9 +53,14 @@ const App: React.FC = () => {
 }
 
 const ResizeScreenWarning: React.FC = () => {
+  const { width, height } = useWindowDimensions()
+
+  if (width > 700 && height > 700) {
+    return <></>
+  }
+
   return (
-    <div className='flex h-screen w-screen flex-col items-center justify-center'>
-      <div className='fixed -z-10 h-screen w-screen bg-main opacity-50'></div>
+    <div className='fixed z-50 flex h-screen w-screen flex-col items-center justify-center bg-main'>
       <h1 className='text-center text-2xl font-bold text-text-alt'>Screen Size Not Supported</h1>
       <div className='h-5'></div>
       <h1 className='text-center text-xl italic'>Please Resize the Screen</h1>
