@@ -3,7 +3,7 @@ import { sound } from '@Game/sound'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, signOut } from '../apis/firebase'
-import useNavigation from '@Components/useNavigation'
+import useNavigation from 'hooks/useNavigation'
 import { View } from '@Views/index'
 
 const Navbar: React.FC = () => {

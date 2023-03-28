@@ -1,5 +1,5 @@
 import React from 'react'
-import useNavigation from '@Components/useNavigation'
+import useNavigation from 'hooks/useNavigation'
 import { View } from '.'
 import { game } from '@App'
 import Button from '@Components/Button'

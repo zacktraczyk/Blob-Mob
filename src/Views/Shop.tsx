@@ -11,7 +11,7 @@ import { Body } from '@Game/shop/bodies'
 import { Face } from '@Game/shop/faces'
 import { Hat } from '@Game/shop/hats'
 import { enemies } from '@Game/entities/enemy'
-import useNavigation from '@Components/useNavigation'
+import useNavigation from 'hooks/useNavigation'
 import { View } from '.'
 
 enum Tabs {

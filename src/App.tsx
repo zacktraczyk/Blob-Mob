@@ -5,8 +5,9 @@ import Canvas from '@Components/Canvas'
 import Score from '@Components/Score'
 import Coins from '@Components/Coins'
 import Navbar from '@Components/Navbar'
-import { ViewContext } from '@Components/useNavigation'
+import { ViewContext } from 'hooks/useNavigation'
 import Views, { View } from '@Views/index.tsx'
+import useWindowDimensions from 'hooks/useWindowDimensions'
 
 import { Game } from '@Game/game'
 import { Main } from '@Game/main'
@@ -15,6 +16,7 @@ export const game = new Game()
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>(View.Home)
+  const { width, height } = useWindowDimensions()
 
   const onAuthStateChanged = () => {
     getAccount()
@@ -25,6 +27,11 @@ const App: React.FC = () => {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged)
     return subscriber
   }, [])
+
+  // Resize Screen Warning
+  if (width < 700 || height < 700) {
+    return <ResizeScreenWarning />
+  }
 
   return (
     <>
@@ -46,6 +53,17 @@ const App: React.FC = () => {
         <Navbar />
       </ViewContext.Provider>
     </>
+  )
+}
+
+const ResizeScreenWarning: React.FC = () => {
+  return (
+    <div className='flex h-screen w-screen flex-col items-center justify-center'>
+      <div className='fixed -z-10 h-screen w-screen bg-main opacity-50'></div>
+      <h1 className='text-center text-2xl font-bold text-text-alt'>Screen Size Not Supported</h1>
+      <div className='h-5'></div>
+      <h1 className='text-center text-xl italic'>Please Resize the Screen️</h1>
+    </div>
   )
 }
 

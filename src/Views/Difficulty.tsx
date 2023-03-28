@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import useNavigation from '@Components/useNavigation'
+import useNavigation from 'hooks/useNavigation'
 import { Difficulties, difficultyScalar } from '@Game/difficulty'
 import { View } from '.'
 import Button from '@Components/Button'
