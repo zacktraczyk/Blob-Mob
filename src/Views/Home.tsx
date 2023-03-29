@@ -6,6 +6,8 @@ import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { collection, limit, orderBy, query } from '@firebase/firestore'
 import { auth, db, signInFacebook, signInGoogle, signOut } from '@Apis/firebase'
 import Button from '@Components/Button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGoogle, faSquareFacebook } from '@fortawesome/free-brands-svg-icons'
 
 // Container Home View
 const Home: React.FC = () => {
@@ -56,7 +58,7 @@ const Login: React.FC = () => {
                 onClick={() => signInGoogle()}
               >
                 Google
-                <i className='fa-brands fa-google'></i>
+                <FontAwesomeIcon icon={faGoogle} />
               </Button>
               <Button
                 color='bg-facebook'
@@ -65,7 +67,7 @@ const Login: React.FC = () => {
                 onClick={() => signInFacebook()}
               >
                 Facebook
-                <i className='fa-brands fa-square-facebook'></i>
+                <FontAwesomeIcon icon={faSquareFacebook} />
               </Button>
             </div>
           )}

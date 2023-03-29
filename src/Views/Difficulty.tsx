@@ -94,10 +94,7 @@ const DifficultyPanel: React.FC<DifficultyPanelProps> = ({
       }`}
       onClick={() => setSelected(difficulty)}
     >
-      <img
-        className='bg-text 68xt-main col-start-1 row-start-1 h-[304px] w-[684px]'
-        src={preview}
-      />
+      <img className='col-start-1 row-start-1 h-[304px] w-[684px] bg-text-main' src={preview} />
       <div className='col-start-1 row-start-1 flex h-full flex-col items-center justify-between py-4'>
         <h3 className='text-xl font-bold text-main'>{title}</h3>
         <ul>

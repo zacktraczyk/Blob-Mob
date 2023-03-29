@@ -28,16 +28,16 @@ module.exports = {
       upgrade: '#399c54',
 
       cool: 'blue',
-      health: '$color-main',
+      health: '#e2aedd',
       power: '#33cc33',
       speed: '#f3b14e',
 
       'shop-afford-main': '$color-game-power',
       'shop-afford-secondary': '#d2ebd2',
-      'shop-cant-afford-main': '$color-signout-main',
+      'shop-cant-afford-main': '#e24a4a',
       'shop-cant-afford-secondary': '#f3d4d4',
       'shop-selected': '$color-facebook-main',
     },
     extend: {},
-  }
+  },
 }

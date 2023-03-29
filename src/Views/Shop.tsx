@@ -13,6 +13,8 @@ import { Hat } from '@Game/shop/hats'
 import { enemies } from '@Game/entities/enemy'
 import useNavigation from 'hooks/useNavigation'
 import { View } from '.'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUp91, faGlasses } from '@fortawesome/free-solid-svg-icons'
 
 enum Tabs {
   Stats,
@@ -47,7 +49,7 @@ const Shop: React.FC = () => {
               onClick={() => setTab(Tabs.Stats)}
             >
               Stats
-              <i className='fa-solid fa-arrow-up-9-1'></i>
+              <FontAwesomeIcon icon={faArrowUp91} />
             </div>
             <div
               className={`flex h-10 w-full items-center justify-center gap-2 rounded-2xl ${
@@ -56,25 +58,12 @@ const Shop: React.FC = () => {
               onClick={() => setTab(Tabs.Fit)}
             >
               Fit
-              <i className='fa-solid fa-glasses'></i>
+              <FontAwesomeIcon icon={faGlasses} />
             </div>
           </div>
 
           <div className='flex h-[300rem] items-center justify-center'>
             {tab == Tabs.Stats ? <Stats /> : <Fit />}
-          </div>
-
-          <div className='flex w-full items-center justify-evenly py-6'>
-            <i
-              className={`fa-solid fa-angle-left fa-2xl ${tab == 0 ? 'text-gray' : 'text-main'}`}
-              onClick={() => setTab(tab > 0 ? tab - 1 : tab)}
-            ></i>
-            <i
-              className={`fa-solid fa-angle-right fa-2xl ${
-                tab == Tabs.Fit ? 'text-gray' : 'text-main'
-              }`}
-              onClick={() => setTab(tab < Tabs.Fit ? tab + 1 : tab)}
-            ></i>
           </div>
 
           <div className='flex items-center justify-evenly'>

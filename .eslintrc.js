@@ -29,7 +29,6 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
-    'tailwindcss/no-custom-classname': 'off',
   },
   settings: {
     'import/resolver': {

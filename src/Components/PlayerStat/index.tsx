@@ -4,6 +4,8 @@ import { game } from '@App'
 import './index.scss'
 import Stat from '@Game/shop/stats'
 import shop from '@Game/shop'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 export interface PlayerStatProps {
   type: keyof PlayerAttributes
@@ -15,25 +17,8 @@ const PlayerStat: React.FC<PlayerStatProps> = ({ type, stats }) => {
   const name = Stat[type].name
   const value = stats[type]
 
-  let dir = 'up'
-  let arrowClass = 'default'
-  switch (type) {
-    case 'maxSpeed':
-      arrowClass = 'speed'
-      break
-    case 'maxHealth':
-      arrowClass = 'health'
-      break
-    case 'maxPower':
-      arrowClass = 'power'
-      break
-    case 'maxCool':
-      arrowClass = 'cool'
-      dir = 'down'
-      break
-  }
-
-  const afford = cost <= game.coins ? 'afford' : 'cant-afford'
+  const afford = cost <= game.coins
+  const affordClass = afford ? 'afford' : 'cant-afford'
 
   const purchaseUpdate = () => {
     shop.purchaseStat(type)
@@ -45,14 +30,65 @@ const PlayerStat: React.FC<PlayerStatProps> = ({ type, stats }) => {
         <p className='playerStat__stat-name'>{name}</p>
         <p className='playerStat__stat-number'>{value}</p>
       </div>
-      <div className={`playerStat__upgrade ${dir} ${afford} ${arrowClass}`}>
-        <i className='fa-solid fa-arrow-up fa-2xl' onClick={purchaseUpdate}></i>
+      <div className={`playerStat__upgrade ${affordClass}`}>
+        <Arrow type={type} afford={afford} onClick={purchaseUpdate} />
         <span className='playerStat__upgrade-cost'>
           <p>{'$' + cost}</p>
         </span>
       </div>
     </div>
   )
+}
+
+interface ArrowProps {
+  type: keyof PlayerAttributes
+  afford: boolean
+  onClick: () => void
+}
+
+const Arrow: React.FC<ArrowProps> = ({ type, afford, onClick }) => {
+  switch (type) {
+    case 'maxSpeed':
+      return (
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          className={afford ? 'text-speed' : 'text-gray'}
+          size='2xl'
+          onClick={onClick}
+        />
+      )
+      break
+    case 'maxHealth':
+      return (
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          className={afford ? 'text-health' : 'text-gray'}
+          size='2xl'
+          onClick={onClick}
+        />
+      )
+      break
+    case 'maxPower':
+      return (
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          className={afford ? 'text-power' : 'text-gray'}
+          size='2xl'
+          onClick={onClick}
+        />
+      )
+      break
+    case 'maxCool':
+      return (
+        <FontAwesomeIcon
+          icon={faArrowDown}
+          className={afford ? 'text-cool' : 'text-gray'}
+          size='2xl'
+          onClick={onClick}
+        />
+      )
+      break
+  }
 }
 
 export default PlayerStat

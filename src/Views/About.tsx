@@ -1,5 +1,7 @@
 import React from 'react'
 import logo from '@Assets/favicon.svg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
 const About: React.FC = () => {
   return (
@@ -22,18 +24,19 @@ const About: React.FC = () => {
         <a
           href='https://github.com/xxzbuckxx/Blob-Mob'
           target='_blank'
-          className='flex items-center gap-2 rounded-xl border-4 border-text-main py-2 px-3'
+          className='flex items-center gap-2 rounded-xl border-4 border-text-main py-2 px-3 font-bold'
           rel='noreferrer'
         >
-          View Code <i className='fa-brands fa-github fa-2xl'></i>
+          View Code
+          <FontAwesomeIcon icon={faGithub} size='2xl' />
         </a>
         <a
           href='http://zacktraczyk.com'
           target='_blank'
-          className='flex items-center gap-2 rounded-xl border-4 border-orange py-2 px-3 text-orange'
+          className='flex items-center gap-2 rounded-xl border-4 border-orange py-2 px-3 font-bold text-orange'
           rel='noreferrer'
         >
-          My Website <img src={logo} alt='Zack Traczyk logo' className='h-7' />
+          My Website <img src={logo} alt='Zack Traczyk logo' className='h-8' />
         </a>
       </div>
     </div>
